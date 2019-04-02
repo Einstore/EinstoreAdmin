@@ -1,0 +1,67 @@
+.sheet
+	max-width: 800px
+	background: #fff
+	margin: 1em auto
+	box-shadow: 0 0 4px rgba(#000, .1)
+	border-radius: 4px
+
+	&-title
+		margin: 0
+		padding: 0
+		margin-bottom: .5em
+
+	&-main
+		padding: 1em
+
+
+.systemSettingsForm
+	margin-bottom: 1em
+
+	&-control
+		margin-bottom: 1em
+
+		.textInput
+			margin: 0
+
+		&.view-configControl
+			display: flex
+			flex-wrap: wrap
+			border: solid 1px #eee
+			border-radius: 4px
+			padding: 1em
+			align-items: center
+
+		&-label
+			font-family: monospace
+			margin-right: 1em
+			font-size: 1.25em
+
+		&-actions
+			margin-left: 1em
+
+		&-input
+			margin-left: auto
+
+			&.view-iconInput
+				display: flex
+				align-items: center
+
+	&.view-image
+		padding: 1em
+		text-align: center
+		border: solid 1px #eee
+		border-radius: 4px
+
+		label
+			cursor: pointer
+
+			img
+				max-width: 100%
+				width: 256px
+
+			input[type="file"]
+				display: none
+
+		button
+			display: inline-block
+

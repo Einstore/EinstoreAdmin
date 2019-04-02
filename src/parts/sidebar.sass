@@ -1,0 +1,108 @@
+@import '../vars'
+
+$space: 10px
+
+.sidebar
+	display: flex
+	flex-direction: column
+	height: 100%
+
+	&-note
+		text-align: center
+		opacity: .2
+
+	&-head,
+	&-body,
+	&-foot
+		padding: $space
+
+	&-head,
+	&-foot
+		text-align: center
+
+	&-foot
+		margin-top: auto
+
+	&-menu
+		display: flex
+		flex-direction: column
+
+		&-item
+			text-decoration: none
+			color: inherit
+			display: block
+			font-size: 1.5em
+			padding: .25em 0
+			margin: .25em 0
+			transition: all ease-in-out .2s
+
+			&.is-inactive
+				pointer-events: none
+				opacity: .2
+
+			&:before
+				display: inline-block
+				content: ''
+				opacity: 0
+				transition: all ease-in-out .2s
+				line-height: 0
+				background: $c-main
+				background: var(--style-primary-action-background-color)
+				width: .5em
+				height: .5em
+				line-height: 1
+				border-radius: 2em
+				margin-right: .5em
+				transform: translateY(-.125em)
+
+			&[aria-current="page"]
+				color: $c-main
+				color: var(--style-primary-action-background-color)
+
+				&:before
+					opacity: 1
+
+	&-addTeam,
+	&-user
+		padding-left: 24px
+
+	&-addTeam
+		margin: 1em 0
+		text-align: left
+
+		a
+			display: block
+			margin: .25em 0
+			color: $c-main
+			color: var(--style-primary-action-background-color)
+
+	&-user
+		text-align: left
+		text-transform: uppercase
+		font-size: .75em
+		font-weight: bold
+		padding-bottom: 1em
+
+		.menu-user-icon
+			display: inline-block
+			border-radius: 100em
+			overflow: hidden
+			width: 70px
+			margin-bottom: .5em
+
+			img
+				display: block
+				line-height: 1
+				width: 100%
+				height: auto
+
+		a
+			color: inherit
+			text-decoration: none
+			display: block
+			padding-bottom: .5em
+
+		&-logoutButton
+			color: $c-main
+			color: var(--style-primary-action-background-color)
+			cursor: pointer

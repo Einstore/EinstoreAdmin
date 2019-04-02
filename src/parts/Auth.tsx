@@ -1,0 +1,254 @@
+import { Link, RouteComponentProps } from '@reach/router'
+import cn from 'classnames'
+import React, { ChangeEvent, FormEvent } from 'react'
+import Button from '../components/button'
+import Login from '../components/Login'
+import TextInput from '../components/textInput'
+import { Auth } from '../connector/Model/Auth'
+import { Token } from '../connector/Model/Token'
+import { ServerIcon } from '../ServerIcon'
+import IconEnter from '../shapes/enter'
+import { ServerContext } from '../App'
+
+export enum AuthView {
+	RESET_PASSWORD = 'reset-password',
+	REGISTRATION = 'register',
+	LOGIN = 'login',
+}
+
+export interface AuthRouteProps {
+	view: AuthView
+	onLogin: (auth: Auth, token: Token) => void
+	onRegister: (email: string) => void
+	onResetPassword: (email: string) => void
+}
+
+interface AuthComponentProps {
+	onSuccess?: (email: string) => void
+}
+
+class Registration extends React.Component<AuthComponentProps> {
+	state = {
+		working: false,
+		email: '',
+		username: '',
+		lastname: '',
+		firstname: '',
+		password: '',
+	}
+
+	handleSubmit = (e: FormEvent) => {
+		e.preventDefault()
+
+		const { email, username, lastname, firstname, password } = this.state
+		if (email && username && lastname && firstname && password)
+			window.Boost.register({
+				email,
+				username,
+				lastname,
+				firstname,
+				password,
+			}).then((res) => {
+				if (res && res.error) {
+					alert(res.description)
+					console.error(res)
+				} else {
+					alert('Your registration went OK. Check your email.')
+				}
+			})
+	}
+
+	handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+		this.setState({ [event.target.name]: event.target.value } as any)
+	}
+
+	render() {
+		return (
+			<div className="login">
+				<ServerContext.Consumer>
+					{(server) => (
+						<form onSubmit={this.handleSubmit} className="form">
+							<fieldset disabled={this.state.working}>
+								<div className="form-icon">
+									<ServerIcon />
+								</div>
+								{server &&
+									server.config.allowed_registration_domains &&
+									!!server.config.allowed_registration_domains.length && (
+										<div className="login-allowedDomains">
+											<h4 className="login-allowedDomains">Allowed email domains:</h4>
+											<ul>
+												{server.config.allowed_registration_domains.map((domain: string) => (
+													<li key={domain}>@{domain}</li>
+												))}
+											</ul>
+										</div>
+									)}
+
+								<div>
+									<TextInput
+										name="email"
+										type="email"
+										placeholder="E-mail"
+										value={this.state.email}
+										onChange={this.handleChange}
+									/>
+								</div>
+
+								<div>
+									<TextInput
+										name="username"
+										type="text"
+										placeholder="Username"
+										value={this.state.username}
+										onChange={this.handleChange}
+									/>
+								</div>
+
+								<div>
+									<TextInput
+										name="firstname"
+										type="text"
+										placeholder="First name"
+										value={this.state.firstname}
+										onChange={this.handleChange}
+									/>
+								</div>
+
+								<div>
+									<TextInput
+										name="lastname"
+										type="text"
+										placeholder="Last name"
+										value={this.state.lastname}
+										onChange={this.handleChange}
+									/>
+								</div>
+
+								<div>
+									<TextInput
+										name="password"
+										type="password"
+										placeholder="Password"
+										value={this.state.password}
+										onChange={this.handleChange}
+									/>
+								</div>
+								<div className="login-links">
+									<div className="login-links-left">
+										<Link className="login-link" to="/">
+											Login
+										</Link>
+										<Link className="login-link" to="/reset-password">
+											Reset password
+										</Link>
+									</div>
+									<Button>
+										<IconEnter /> Register
+									</Button>
+								</div>
+							</fieldset>
+						</form>
+					)}
+				</ServerContext.Consumer>
+			</div>
+		)
+	}
+}
+
+class ResetPassword extends React.Component<AuthComponentProps> {
+	state = {
+		working: false,
+		email: '',
+	}
+
+	handleSubmit = (e: FormEvent) => {
+		e.preventDefault()
+		if (this.state.email) {
+			window.Boost.resetPassword(this.state.email).then((res: any) => {
+				if (res && res.error) {
+					alert(res.description)
+					console.error(res)
+				} else {
+					if (this.props.onSuccess) {
+						alert('Your password has been reset. Check your email for further instructions.')
+						this.props.onSuccess(this.state.email)
+					}
+				}
+			})
+		}
+	}
+
+	handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+		this.setState({ [event.target.name]: event.target.value } as any)
+	}
+
+	render() {
+		return (
+			<div className="login">
+				<form onSubmit={this.handleSubmit} className="form">
+					<fieldset disabled={this.state.working}>
+						<div className="form-icon">
+							<ServerIcon />
+						</div>
+						<TextInput
+							name="email"
+							type="email"
+							placeholder="E-mail"
+							value={this.state.email}
+							onChange={this.handleChange}
+						/>
+						<div className="login-links">
+							<div className="login-links-left">
+								<Link className="login-link" to="/">
+									Login
+								</Link>
+
+								<ServerContext.Consumer>
+									{(server) =>
+										server && server.config.allow_registrations ? (
+											<Link className="login-link" to="/register">
+												Registration
+											</Link>
+										) : (
+											<span className="login-link" />
+										)
+									}
+								</ServerContext.Consumer>
+							</div>
+							<Button>
+								<IconEnter /> Reset password
+							</Button>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		)
+	}
+}
+
+export class AuthRoute extends React.Component<RouteComponentProps<AuthRouteProps>> {
+	render() {
+		switch (this.props.view) {
+			case AuthView.LOGIN:
+				return (
+					<div className={cn('auth', 'view-' + this.props.view)}>
+						<Login onSuccess={this.props.onLogin} />
+					</div>
+				)
+			case AuthView.REGISTRATION:
+				return (
+					<div className={cn('auth', 'view-' + this.props.view)}>
+						<Registration onSuccess={this.props.onRegister} />
+					</div>
+				)
+			case AuthView.RESET_PASSWORD:
+				return (
+					<div className={cn('auth', 'view-' + this.props.view)}>
+						<ResetPassword onSuccess={this.props.onResetPassword} />
+					</div>
+				)
+		}
+		return null
+	}
+}

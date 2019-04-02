@@ -1,0 +1,94 @@
+
+$brand-primary:         darken(#428bca, 6.5%);
+$brand-success:         #5cb85c;
+$brand-info:            #5bc0de;
+$brand-warning:         #f0ad4e;
+$brand-danger:          #d9534f;
+
+$state-success-text:             #3c763d;
+$state-success-bg:               #dff0d8;
+$state-success-border:           darken(adjust-hue($state-success-bg, -10), 5%);
+
+$state-info-text:                #31708f;
+$state-info-bg:                  #d9edf7;
+$state-info-border:              darken(adjust-hue($state-info-bg, -10), 7%);
+
+$state-warning-text:             #8a6d3b;
+$state-warning-bg:               #fcf8e3;
+$state-warning-border:           darken(adjust-hue($state-warning-bg, -10), 5%);
+
+$state-danger-text:              #a94442;
+$state-danger-bg:                #f2dede;
+$state-danger-border:            darken(adjust-hue($state-danger-bg, -10), 5%);
+
+$alert-success-bg:            $state-success-bg;
+$alert-success-text:          $state-success-text;
+$alert-success-border:        $state-success-border;
+
+$alert-info-bg:               $state-info-bg;
+$alert-info-text:             $state-info-text;
+$alert-info-border:           $state-info-border;
+
+$alert-warning-bg:            $state-warning-bg;
+$alert-warning-text:          $state-warning-text;
+$alert-warning-border:        $state-warning-border;
+
+$alert-danger-bg:             $state-danger-bg;
+$alert-danger-text:           $state-danger-text;
+$alert-danger-border:         $state-danger-border;
+
+.alert
+	margin: 5px
+	border: solid 1px
+	border-radius: 5px
+	background: #eee
+	display: flex
+
+	&-text
+		padding: 10px
+
+		p
+			margin: 0
+			padding: 0
+
+			a
+				font-weight: bold
+				text-decoration: none
+
+	&-actions
+		margin-left: auto
+
+	&-close-button
+		appearance: none
+		color: inherit
+		background: transparent
+		border: none
+		display: inline-block
+		font-size: 2em
+		line-height: 1
+		padding-right: 10px
+		padding-top: 2px
+		cursor: pointer
+		outline: none
+
+	&,
+	&.view-info
+		color: $state-info-text
+		background: $state-info-bg
+		border-color: $state-info-border
+
+	&.view-success
+		color: $state-success-text
+		background: $state-success-bg
+		border-color: $state-success-border
+
+	&.view-warning
+		color: $state-warning-text
+		background: $state-warning-bg
+		border-color: $state-warning-border
+
+	&.view-danger
+		color: $state-danger-text
+		background: $state-danger-bg
+		border-color: $state-danger-border
+

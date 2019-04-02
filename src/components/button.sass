@@ -1,0 +1,57 @@
+.button
+	font-family: 'Open Sans', sans-serif
+	font-size: 13px
+	background-color: #236aea
+	background-color: var(--style-primary-action-background-color)
+	color: white
+	color: var(--style-primary-action-color)
+	border: 1px solid #ddddde
+	border-radius: 4px
+	padding: 10px 15px
+	cursor: pointer
+	display: flex
+	align-items: center
+	justify-content: center
+	transition: 0.2s background
+	white-space: nowrap
+	text-decoration: none
+
+	svg
+		fill: currentColor
+		margin-right: 0.5em
+		transition: 0.2s fill
+
+	.icon
+		margin-right: 0.75em
+
+	&:hover
+		filter: brightness(90%)
+
+	&.inactive
+		background: transparent
+		border: 1px solid #2a6ee7
+		border-color: var(--style-primary-action-background-color)
+		color: var(--style-primary-action-background-color)
+
+		svg
+			fill: currentColor
+
+		&:hover
+			background-color: #236aea
+			background-color: var(--style-primary-action-background-color)
+			color: white
+			color: var(--style-primary-action-color)
+
+	&.faded:not(:hover)
+		color: #ccc
+		border-color: #ccc
+		background-color: #FFF
+
+	outline: none
+
+	&.danger
+		color: white
+		background-color: #d63031
+		border: 1px solid darken(#d63031, .2)
+		svg
+			fill: darken(#d63031, .2)

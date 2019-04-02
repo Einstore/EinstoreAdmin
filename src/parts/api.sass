@@ -1,0 +1,46 @@
+.api
+	width: 100%
+	border-collapse: collapse
+
+	&-action
+		cursor: pointer
+		display: inline-block
+		&:not(:last-child)
+			margin-right: 20px
+		&-red
+			color: #df4545
+		&-blue
+			color: #236aea
+			color: var(--style-primary-action-background-color)
+
+	tr
+		th, td
+			padding: 10px
+
+		td:last-child
+			text-align: right
+
+	thead
+		td
+			font-size: 11px
+			color: #364041
+			font-weight: 700
+			text-transform: uppercase
+			border-bottom: 1px solid #ddddde
+
+	@media (max-width: 600px)
+		thead
+			display: none
+
+		tr, th, td
+			display: block
+
+		tr td:last-child
+			text-align: left
+
+		tr:not(:last-child)
+			border-bottom: 1px solid #ddddde
+
+		.apiKey-date
+			opacity: .5
+			font-size: 12px

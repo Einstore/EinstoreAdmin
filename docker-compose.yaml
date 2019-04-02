@@ -1,0 +1,54 @@
+version: '3.4'
+
+services:
+  postgres:
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_USER: einstore
+      POSTGRES_PASSWORD: einstore
+      POSTGRES_DB: einstore
+    volumes:
+      - pgsql-data:/var/lib/postgresql/data
+
+  adminer:
+    image: michalhosna/adminer:master
+    ports: ['8082:8080']
+    environment:
+      ADMINER_DRIVER: pgsql
+      ADMINER_SERVER: postgres
+      ADMINER_DB: einstore
+      ADMINER_USERNAME: einstore
+      ADMINER_PASSWORD: einstore
+      ADMINER_AUTOLOGIN: 1
+      ADMINER_NAME: einstore
+
+  api:
+    image: einstore/einstore-core:master
+    restart: on-failure
+    depends_on: [postgres]
+    ports: ['8080:8080']
+    environment:
+      APICORE_SERVER_NAME: einstore
+      APICORE_SERVER_URL: http://0.0.0.0:8080
+      APICORE_SERVER_PATH_PREFIX: ''
+      APICORE_DATABASE_HOST: postgres
+      APICORE_DATABASE_USER: einstore
+      APICORE_DATABASE_PASSWORD: einstore
+      APICORE_DATABASE_DATABASE: einstore
+      APICORE_DATABASE_PORT: 5432
+      APICORE_JWT_SECRET: secret
+      APICORE_STORAGE_S3_ENABLED: 0
+      APICORE_STORAGE_LOCAL_ROOT: /home/einstore
+
+  admin:
+    image: node:11-alpine
+    ports: ['8081:3000']
+    command: yarn run start
+    working_dir: /src
+    environment:
+      REACT_APP_API_URL: http://127.0.0.1:8080
+    volumes:
+      - .:/src:cached
+
+volumes:
+  pgsql-data: ~

@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  adminer:
+    ports:
+      - 8082:8080
+
+  api:
+    ports:
+      - 8080:8080
+
+  admin:
+    ports:
+      - 8081:3000
+
+volumes:
+  pgsql-data: ~

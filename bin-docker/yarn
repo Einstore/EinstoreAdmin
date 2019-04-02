@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT="$(dirname "$DIR")"
+
+source ${DIR}/_tty.sh
+
+docker_run \
+	--init \
+	--volume "$PROJECT_ROOT":"$PROJECT_ROOT":cached \
+	--workdir "$(pwd)" \
+	--user "1000:1000" \
+	--entrypoint yarn \
+	node:11-alpine "$@"

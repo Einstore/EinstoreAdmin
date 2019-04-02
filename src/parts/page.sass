@@ -1,0 +1,144 @@
+.page
+	box-sizing: border-box
+	padding-top: 20px
+	padding-bottom: 40px
+
+	&-controls
+		max-width: 1200px
+		margin: 0 auto
+		padding: 0 10px
+		display: flex
+	&-control
+		font-size: 0.875rem
+		text-transform: uppercase
+		font-weight: 700
+		color: #575757
+		border-left: 2px solid #575757
+		padding: 0 0.5rem
+		display: flex
+		align-items: center
+
+		&.is-active
+			cursor: pointer
+
+		&:first-child,
+		&.view-primary + &
+			border: none
+			padding-left: 0
+
+		&.view-primary + &
+			margin-left: auto
+
+		&.view-primary
+			margin-left: 0
+			flex-grow: 1
+			border-left: 0
+			display: block
+			max-width: 700px
+			text-transform: none
+
+			@media (min-width: 400px)
+				margin-right: 1em
+				min-width: 250px
+
+		&.view-platformSwitch
+			text-align: center
+			margin: 0 auto
+
+		&.view-platformSwitch + &
+			border-left: 0
+
+		svg
+			height: 1em
+			width: 1.2em
+			margin-right: 0.5rem
+
+		select
+			padding-right: 2em
+
+		&-value
+			background: none
+			-webkit-appearance: none
+			border: none
+			font-size: inherit
+			font-weight: inherit
+			color: #292929
+			text-transform: uppercase
+			cursor: pointer
+			margin-left: 0.2rem
+			&:focus
+				outline: none
+			&-wrap
+				display: block
+				position: relative
+				border: solid 1px rgba(#888, .2)
+				padding: .25em
+				margin-left: .5em
+				border-radius: 2px
+				&:after
+					position: absolute
+					right: .5em
+					top: .7em
+					border: solid 7px transparent
+					border-top-color: #000
+					content: ''
+					display: block
+					pointer-events: none
+	&-upload
+		display: flex
+		width: 100%
+		height: 100%
+		align-items: center
+		justify-content: center
+		flex-direction: column
+		&-text
+			font-weight: 700
+			color: rgb(41, 49, 50)
+
+.page-cards-list
+	max-width: 1220px
+	margin: 0 auto
+	display: block
+	margin-top: 10px
+	display: flex
+	flex-wrap: wrap
+	box-sizing: border-box
+
+	&-item
+		padding: 10px
+		box-sizing: border-box
+		flex-shrink: 0
+		flex-grow: 0
+		width: 100%
+
+		.card
+			box-sizing: border-box
+			margin: 0
+			overflow: hidden
+			display: flex
+			flex-direction: column
+			width: 100%
+			height: 100%
+			flex-grow: 0
+			flex-shrink: 0
+
+		@media (min-width: 700px)
+			width: 50%
+
+		@media (min-width: 1100px)
+			width: 33.333%
+
+.login
+	&-allowedDomains
+		margin: .5em
+		opacity: .75
+
+		ul, li, h4
+			font-size: 1em
+			margin: 0
+			padding: 0
+
+		ul
+			margin: .25em 0
+			margin-left: 1em
+			font-family: monospace
