@@ -195,7 +195,7 @@ export class Boost {
 	}
 
 	public server = async (): Promise<Response> => {
-		const promise = this.networking.get('/infox')
+		const promise = this.networking.get('/info')
 		const res = await promise
 		const json = await res.json()
 		return json
