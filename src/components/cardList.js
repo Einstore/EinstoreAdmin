@@ -29,7 +29,7 @@ export default class CardList extends Component {
 	}
 
 	componentDidMount() {
-		window.Boost.clusterApps(this.props.cluster_id, 3).then((builds) => this.setState({ builds }))
+		window.Einstore.clusterApps(this.props.cluster_id, 3).then((builds) => this.setState({ builds }))
 	}
 
 	render() {

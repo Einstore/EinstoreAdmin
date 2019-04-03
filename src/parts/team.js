@@ -31,13 +31,13 @@ export default class Team extends Component {
 	counter = 1
 
 	componentDidMount() {
-		window.Boost.teams().then((teams) => this.setState({ teams }))
+		window.Einstore.teams().then((teams) => this.setState({ teams }))
 		this.refreshUsers()
 	}
 
 	refreshUsers = () => {
 		const c = ++this.counter
-		window.Boost.teamUsers(this.state.activeTeam)
+		window.Einstore.teamUsers(this.state.activeTeam)
 			.then((result) => {
 				if (this.counter === c) {
 					this.setState({
@@ -57,7 +57,7 @@ export default class Team extends Component {
 				searchMembers: [],
 			})
 		} else {
-			window.Boost.users(e.target.value)
+			window.Einstore.users(e.target.value)
 				.then((result) => {
 					this.setState({
 						searchMembers: result.map((item) => item.username),
@@ -80,9 +80,9 @@ export default class Team extends Component {
 				email: this.emailRef.current.value,
 			}
 
-			window.Boost.invite(data)
+			window.Einstore.invite(data)
 				.then((user) => {
-					return window.Boost.addUserToTeam(teamId, user.id)
+					return window.Einstore.addUserToTeam(teamId, user.id)
 				})
 				.then(() => window.location.reload())
 		}
@@ -92,7 +92,7 @@ export default class Team extends Component {
 		e.preventDefault()
 		const teamId = this.state.activeTeam
 		usure('Are you really sure you want to delete team ' + teamId).then(() => {
-			window.Boost.deleteTeam(teamId).then(() => (window.location.href = '/'))
+			window.Einstore.deleteTeam(teamId).then(() => (window.location.href = '/'))
 		})
 	}
 

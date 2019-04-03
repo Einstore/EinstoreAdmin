@@ -151,7 +151,7 @@ export class Networking implements Networkable {
 		if (this.jwt) {
 			headers = this.appendHeader(headers, 'Authorization', this.jwt)
 		}
-		headers = this.appendHeader(headers, 'User-Agent', 'BoostSDK/1.0-JS')
+		headers = this.appendHeader(headers, 'User-Agent', 'EinstoreSDK/1.0-JS')
 		return headers
 	}
 

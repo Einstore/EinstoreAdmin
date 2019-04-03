@@ -67,7 +67,7 @@ export class Layout extends React.Component<RouteComponentProps<LayoutProps>, La
 				this.setState({ uploading: true })
 				Promise.all(
 					acceptedFiles.map((file) =>
-						window.Boost.upload(file, teamId)
+						window.Einstore.upload(file, teamId)
 							.then((result: any) => {
 								if (typeof result.error !== 'undefined') {
 									throw new Error()

@@ -12,7 +12,7 @@ export default class Account extends Component {
 	}
 
 	componentDidMount() {
-		window.Boost.me().then((me) => {
+		window.Einstore.me().then((me) => {
 			this.setState({ old: me, form: { ...me } })
 		})
 	}
@@ -42,7 +42,7 @@ export default class Account extends Component {
 
 		if (values) {
 			this.setState({ working: true })
-			window.Boost.updateUser(this.state.old.id, values)
+			window.Einstore.updateUser(this.state.old.id, values)
 				.catch()
 				.then(() => {
 					this.setState({ working: false })

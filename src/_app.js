@@ -8,7 +8,7 @@ import './app.sass'
 import Header from './components/header'
 import TeamItem from './components/teamItem'
 import TeamSelect from './components/TeamSelect'
-import { Boost } from './connector/Boost.ts'
+import { Einstore } from './connector/Einstore.ts'
 import { Config } from './connector/Config.ts'
 import Account from './parts/account'
 import Api from './parts/api'
@@ -65,7 +65,7 @@ class App extends Component {
 			route: window.location.pathname,
 			menuIsVisible: false,
 			icons: {},
-			name: 'Boost',
+			name: 'Einstore',
 			teamName: null,
 			switchIsVisible: false,
 			filteringIsVisible: false,
@@ -83,8 +83,8 @@ class App extends Component {
 			el.setAttribute('href', `${this.config.url}/server/favicon/`)
 		}
 
-		this.connector = new Boost(this.config, this.state.token)
-		window.boostApp = this.connector
+		this.connector = new Einstore(this.config, this.state.token)
+		window.einstoreApp = this.connector
 		window.rootApp = this
 
 		this.changeRoute = this.changeRoute.bind(this)

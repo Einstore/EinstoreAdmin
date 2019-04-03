@@ -23,7 +23,7 @@ class SystemImageForm extends React.Component<
 
 		if (this.fileInputRef.current && this.fileInputRef.current.files) {
 			for (let i = 0; i < this.fileInputRef.current.files.length; i++) {
-				window.Boost.uploadServerImage(this.fileInputRef.current.files[i]).then(() =>
+				window.Einstore.uploadServerImage(this.fileInputRef.current.files[i]).then(() =>
 					window.location.reload()
 				)
 			}
@@ -31,7 +31,7 @@ class SystemImageForm extends React.Component<
 	}
 
 	componentDidMount() {
-		window.Boost.server().then((s: any) => this.setState({ oldValue: s.icons[5].url }))
+		window.Einstore.server().then((s: any) => this.setState({ oldValue: s.icons[5].url }))
 	}
 
 	handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -87,7 +87,7 @@ class SystemConfigForm extends React.Component<{
 	handleSubmit = (e: FormEvent) => {
 		e.preventDefault()
 
-		window.Boost.setServerSettings(
+		window.Einstore.setServerSettings(
 			this.props.config.id,
 			this.props.config.name,
 			this.state.value
@@ -124,7 +124,7 @@ class SystemConfigsForm extends React.Component {
 		current: undefined,
 	}
 	componentDidMount() {
-		window.Boost.serverSettings().then((current: any) => this.setState({ current }))
+		window.Einstore.serverSettings().then((current: any) => this.setState({ current }))
 	}
 	render() {
 		return (

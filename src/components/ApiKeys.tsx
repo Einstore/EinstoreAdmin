@@ -107,19 +107,19 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 	}
 
 	handleDeleteKey = (id: string) => {
-		window.Boost.deleteApiKey(id).then(() => {
+		window.Einstore.deleteApiKey(id).then(() => {
 			this.refresh()
 		})
 	}
 
 	handleChangeKey = (data: any) => {
-		window.Boost.editApiKey(data.id, { name: data.name }).then(() => {
+		window.Einstore.editApiKey(data.id, { name: data.name }).then(() => {
 			this.refresh()
 		})
 	}
 
 	refresh = () => {
-		window.Boost.apiKeys()
+		window.Einstore.apiKeys()
 			.then((result) => {
 				this.setState({
 					keys: result,

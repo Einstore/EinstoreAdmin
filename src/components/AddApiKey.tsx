@@ -55,7 +55,7 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 	}
 
 	componentDidMount() {
-		window.Boost.teams().then((teams) => this.setState({ teams }))
+		window.Einstore.teams().then((teams) => this.setState({ teams }))
 	}
 
 	handleChangeTeam = (value: string) => {
@@ -71,7 +71,7 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 
 		if (this.state.activeTeam && this.state.name) {
 			this.setState({ working: true })
-			window.Boost.createApiKey(this.state.activeTeam, this.state.name).then((newKey: any) => {
+			window.Einstore.createApiKey(this.state.activeTeam, this.state.name).then((newKey: any) => {
 				this.setState((state) => ({
 					...state,
 					name: '',

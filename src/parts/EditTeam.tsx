@@ -50,7 +50,7 @@ export default class EditTeam extends React.Component<EditTeamProps, EditTeamSta
 	}
 
 	componentDidMount() {
-		window.Boost.team(this.props.teamId).then((team) =>
+		window.Einstore.team(this.props.teamId).then((team) =>
 			this.setState({ current: team, changed: pick(team, this.editable) })
 		)
 	}
@@ -60,10 +60,10 @@ export default class EditTeam extends React.Component<EditTeamProps, EditTeamSta
 
 		const promises = []
 
-		promises.push(window.Boost.editTeam(this.props.teamId, pick(this.state.changed, this.editable)))
+		promises.push(window.Einstore.editTeam(this.props.teamId, pick(this.state.changed, this.editable)))
 
 		if (this.state.newIcon) {
-			promises.push(window.Boost.uploadTeamIcon(this.props.teamId, this.state.newIcon))
+			promises.push(window.Einstore.uploadTeamIcon(this.props.teamId, this.state.newIcon))
 		}
 
 		Promise.all(promises).then(() => {

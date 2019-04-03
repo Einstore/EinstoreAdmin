@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import { unregister } from './registerServiceWorker'
 
-import { BoostApp } from './App'
+import { EinstoreApp } from './App'
 
-ReactDOM.render(<BoostApp />, document.getElementById('root'))
+ReactDOM.render(<EinstoreApp />, document.getElementById('root'))
 
 unregister()

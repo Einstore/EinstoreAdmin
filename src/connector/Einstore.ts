@@ -16,7 +16,7 @@ import { splitToIdentifiersAndRegularTags } from '../utils/splitToIdentifiersAnd
 
 import uniqBy from 'lodash-es/uniqBy'
 
-export class Boost {
+export class Einstore {
 	public networking: Networking
 
 	public _token?: string

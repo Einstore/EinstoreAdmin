@@ -22,7 +22,7 @@ export default class AppBuilds extends Component {
 	}
 
 	componentDidMount() {
-		window.Boost.clusterApps(this.props.appId)
+		window.Einstore.clusterApps(this.props.appId)
 			.then((result) => {
 				console.log(result)
 				this.setState({
@@ -54,7 +54,7 @@ export default class AppBuilds extends Component {
 
 	handleDelete = () => {
 		usure().then(() => {
-			window.Boost.deleteCluster(this.props.appId).then(() => navigate('/apps'))
+			window.Einstore.deleteCluster(this.props.appId).then(() => navigate('/apps'))
 		})
 	}
 

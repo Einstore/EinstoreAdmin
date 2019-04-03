@@ -20,7 +20,7 @@ export default class TeamName extends React.PureComponent<TeamNameProps, TeamNam
 	}
 
 	componentDidMount() {
-		window.Boost.team(this.props.teamId).then((data: any) => this.setState({ team: data }))
+		window.Einstore.team(this.props.teamId).then((data: any) => this.setState({ team: data }))
 	}
 
 	render() {

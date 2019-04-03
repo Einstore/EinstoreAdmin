@@ -14,7 +14,7 @@ export default class AddTeam extends React.Component {
 	handleSubmit = (e: FormEvent) => {
 		e.preventDefault()
 
-		window.Boost.addTeam(this.state.name, this.state.identifier).then((team: any) => {
+		window.Einstore.addTeam(this.state.name, this.state.identifier).then((team: any) => {
 			window.dispatchEvent(new Event('teamsChanged'))
 			navigate(`/apps/${team.id}`)
 		})

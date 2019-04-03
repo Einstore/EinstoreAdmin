@@ -52,7 +52,7 @@ export default class WithCallbacks extends React.Component<Props, State> {
 		if (!inputValue || inputValue.length < 3) {
 			return Promise.resolve([])
 		}
-		return window.Boost.getSuggestions(inputValue, this.props.teamId).then((suggestions) => {
+		return window.Einstore.getSuggestions(inputValue, this.props.teamId).then((suggestions) => {
 			if (this.lastInput === inputValue) {
 				return suggestions.slice(0, 100).map((item: SearchSuggestion) => {
 					switch (item.type) {
@@ -85,7 +85,7 @@ export default class WithCallbacks extends React.Component<Props, State> {
 	}
 
 	componentDidMount() {
-		window.Boost.commonTags(this.props.teamId || undefined).then((commonTags: any) => {
+		window.Einstore.commonTags(this.props.teamId || undefined).then((commonTags: any) => {
 			this.setState({
 				defaultOptions: commonTags.map((item: any) => ({
 					label: item.identifier,

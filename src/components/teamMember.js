@@ -7,7 +7,7 @@ export default class TeamMember extends Component {
 	removeFromTeam = (e) => {
 		e.preventDefault()
 		usure().then(() => {
-			window.Boost.removeUserFromTeam(this.props.teamId, this.props.id).then(() => {
+			window.Einstore.removeUserFromTeam(this.props.teamId, this.props.id).then(() => {
 				window.location.reload()
 			})
 		})

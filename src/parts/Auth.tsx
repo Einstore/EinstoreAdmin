@@ -42,7 +42,7 @@ class Registration extends React.Component<AuthComponentProps> {
 
 		const { email, username, lastname, firstname, password } = this.state
 		if (email && username && lastname && firstname && password)
-			window.Boost.register({
+			window.Einstore.register({
 				email,
 				username,
 				lastname,
@@ -165,7 +165,7 @@ class ResetPassword extends React.Component<AuthComponentProps> {
 	handleSubmit = (e: FormEvent) => {
 		e.preventDefault()
 		if (this.state.email) {
-			window.Boost.resetPassword(this.state.email).then((res: any) => {
+			window.Einstore.resetPassword(this.state.email).then((res: any) => {
 				if (res && res.error) {
 					alert(res.description)
 					console.error(res)

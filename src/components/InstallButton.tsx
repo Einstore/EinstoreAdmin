@@ -13,7 +13,7 @@ export enum InstallButtonView {
 const downloadBuild = (build: App) => (e: React.MouseEvent<HTMLDivElement>) => {
 	e.preventDefault()
 	if (build.id && build.platform) {
-		window.Boost.downloadCurrentPlatform(build.id, build.platform)
+		window.Einstore.downloadCurrentPlatform(build.id, build.platform)
 	}
 }
 

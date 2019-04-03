@@ -4,7 +4,7 @@ import posed, { PoseGroup } from 'react-pose'
 import AddApiKey from './components/AddApiKey'
 import ApiKeys from './components/ApiKeys'
 import Overview from './components/Overview'
-import { Boost } from './connector/Boost'
+import { Einstore } from './connector/Einstore'
 import { Config } from './connector/Config'
 import { Auth } from './connector/Model/Auth'
 import { Token } from './connector/Model/Token'
@@ -97,7 +97,7 @@ interface AppState {
 	settings?: any
 }
 
-export class BoostApp extends React.Component<{}, AppState> {
+export class EinstoreApp extends React.Component<{}, AppState> {
 	mounted = false
 
 	state: AppState = {
@@ -117,11 +117,11 @@ export class BoostApp extends React.Component<{}, AppState> {
 			el.setAttribute('href', `${config.url}/server/favicon/`)
 		}
 
-		const boost = new Boost(config, this.state.token || undefined)
-		window.Boost = boost
+		const einstore = new Einstore(config, this.state.token || undefined)
+		window.Einstore = einstore
 
 		if (window.location.hash === '#auth') {
-			boost._token = localStorage.getItem('authToken') || undefined
+			einstore._token = localStorage.getItem('authToken') || undefined
 		}
 
 		config.onLoggedOut = this.handleLoggedOut
@@ -135,7 +135,7 @@ export class BoostApp extends React.Component<{}, AppState> {
 		if (name) {
 			document.title = name
 		}
-		if (window.Boost) {
+		if (window.Einstore) {
 			this.refreshServer()
 			if (this.state.token && this.state.authToken) {
 				this.refreshMe()
@@ -155,20 +155,20 @@ export class BoostApp extends React.Component<{}, AppState> {
 	}
 
 	refreshServer = () => {
-		window.Boost.server().then((server: any) => {
+		window.Einstore.server().then((server: any) => {
 			if (this.mounted) {
 				this.setState({ server })
 				document.title = server.name
 				localStorage.setItem('serverName', server.name)
 			}
 		})
-		window.Boost.serverSettingsPlain().then((settings: any) => {
+		window.Einstore.serverSettingsPlain().then((settings: any) => {
 			this.setState({ settings })
 		})
 	}
 
 	refreshMe = () => {
-		window.Boost.me()
+		window.Einstore.me()
 			.then((me) => {
 				if (this.mounted) {
 					this.setState({ me })

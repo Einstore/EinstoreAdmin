@@ -23,7 +23,7 @@ class SearchResults extends Component<{ tags: string[] }, { apps: any[] }> {
 		apps: [],
 	}
 	componentDidMount() {
-		window.Boost.filterApps({ limit: 10, tags: this.props.tags }).then((apps) => {
+		window.Einstore.filterApps({ limit: 10, tags: this.props.tags }).then((apps) => {
 			this.setState({ apps })
 		})
 	}
@@ -100,7 +100,7 @@ export default class Overview extends Component<OverviewProps> {
 			isFetchingAdditionalApps: true,
 		})
 		const shouldHandleScroll = this.state.appsOffset === 0
-		window.Boost.overview(
+		window.Einstore.overview(
 			this.props.teamId,
 			9,
 			this.state.appsOffset,

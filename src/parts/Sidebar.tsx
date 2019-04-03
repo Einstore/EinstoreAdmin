@@ -26,7 +26,7 @@ export class Sidebar extends React.Component<SidebarProps> {
 	}
 
 	refreshTeams = () => {
-		window.Boost.teams().then((teams) => this.setState({ teams }))
+		window.Einstore.teams().then((teams) => this.setState({ teams }))
 	}
 
 	handleChangeTeam = (team: string) => {
@@ -78,7 +78,7 @@ export class Sidebar extends React.Component<SidebarProps> {
 					</div>
 				</div>
 				<div className="sidebar-foot">
-					{window.Boost && (
+					{window.Einstore && (
 						<>
 							<div className="sidebar-user">
 								<Link onClick={this.props.onChoice} className="sidebar-user-avatar" to={'/me'}>

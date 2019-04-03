@@ -21,7 +21,7 @@ export default class AppDetail extends Component {
 	}
 
 	componentDidMount() {
-		window.Boost.build(this.state.id)
+		window.Einstore.build(this.state.id)
 			.then((result) => {
 				console.log(result)
 				if (typeof result.error !== 'undefined') {
@@ -41,7 +41,7 @@ export default class AppDetail extends Component {
 		const current = (this.state.tags && this.state.tags.current) || []
 		if (!this.state.tags || force) {
 			this.setState({ tags: { loading: true, current } }, () => {
-				window.Boost.getAppTags(this.state.id).then((tags) => {
+				window.Einstore.getAppTags(this.state.id).then((tags) => {
 					this.setState((state) => ({
 						...state,
 						tags: {
@@ -69,11 +69,11 @@ export default class AppDetail extends Component {
 				},
 			}
 		})
-		window.Boost.deleteAppTag(this.state.id, tag.id)
+		window.Einstore.deleteAppTag(this.state.id, tag.id)
 	}
 
 	addTag = (tag) => {
-		window.Boost.addAppTag(this.state.id, tag).then((tags) => {
+		window.Einstore.addAppTag(this.state.id, tag).then((tags) => {
 			this.setState((state) => {
 				return {
 					...state,
@@ -88,7 +88,7 @@ export default class AppDetail extends Component {
 
 	handleDelete = () => {
 		usure().then(() => {
-			window.Boost.deleteApp(this.state.id).then(() => navigate('/apps'))
+			window.Einstore.deleteApp(this.state.id).then(() => navigate('/apps'))
 		})
 	}
 

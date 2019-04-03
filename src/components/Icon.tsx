@@ -12,7 +12,7 @@ interface IconProps {
 export default class Icon extends React.Component<IconProps> {
 	render() {
 		return (
-			<div className={cn('boostIcon', this.props.className)}>
+			<div className={cn('einstoreIcon', this.props.className)}>
 				<img src={this.props.src} srcSet={this.props.srcSet} alt={this.props.alt} />
 			</div>
 		)

@@ -34,7 +34,7 @@ export default class AppIcon extends Component<Props, State> {
 		(empty: any, context: string, id: string) => {
 			if (!empty && id) {
 				const url = `/${context}/${id}/icon`
-				window.Boost.networking
+				window.Einstore.networking
 					.memoizedGet(url)
 					.then((res: Response) => {
 						if (res.status === 500) {

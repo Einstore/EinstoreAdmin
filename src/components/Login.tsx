@@ -34,13 +34,13 @@ export default class Login extends React.Component<LoginProps, LoginState> {
 
 	handleLogin = (event: FormEvent) => {
 		event.preventDefault()
-		if (window.Boost && this.state.email && this.state.password) {
+		if (window.Einstore && this.state.email && this.state.password) {
 			this.setState({ working: true })
 			const mem: { auth?: Auth; token?: Token } = {}
-			window.Boost.auth(this.state.email, this.state.password)
+			window.Einstore.auth(this.state.email, this.state.password)
 				.then((auth: Auth) => {
 					mem.auth = auth
-					return window.Boost.token(auth.token || '')
+					return window.Einstore.token(auth.token || '')
 				})
 				.then((token: Token) => {
 					mem.token = token
