@@ -1,4 +1,4 @@
 export class Config {
-	public url = (window as any).API_URL as string;
+	public url = window.API_URL
 	public onLoggedOut: any
 }
