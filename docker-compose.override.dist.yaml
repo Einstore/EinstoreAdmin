@@ -1,4 +1,4 @@
-version: '3.4'
+version: '2.4'
 
 services:
   adminer:
@@ -8,10 +8,12 @@ services:
   api:
     ports:
       - 8080:8080
+    environment:
+      APICORE_SERVER_URL: http://127.0.0.1:8080 # Url on which this service is available
+      APICORE_SERVER_INTERFACE: http://localhost:8081 # Url on which admin is available
 
   admin:
     ports:
       - 8081:3000
-
-volumes:
-  pgsql-data: ~
+    environment:
+      REACT_APP_API_URL: http://127.0.0.1:8080 # Url on which is api available from outside
