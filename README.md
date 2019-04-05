@@ -1,8 +1,11 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Docker-compose
 
-To expose ports, create your local `docker-compose.override.yaml` from `docker-compose.override.dist.yaml`
+Use `make`, `make help` prints all avaible commands.
+
+Ports are exposed using `docker-compose.override.yaml`
+
+For initial login in basic data is email `core@liveui.io`, password: `sup3rS3cr3t`
 
 ## Available Scripts
 
