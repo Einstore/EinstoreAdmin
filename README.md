@@ -3,6 +3,8 @@
 
 Use `make`, `make help` prints all avaible commands.
 
+[Direnv](https://direnv.net) is used for adding `bin-docker` to PATH
+
 Ports are exposed using `docker-compose.override.yaml`
 
 For initial login in basic data is email `core@liveui.io`, password: `sup3rS3cr3t`
