@@ -1,7 +1,7 @@
 version: 2
 jobs:
 
-  build-branch:
+  build:
     working_directory: /src
     docker:
       - image: docker:stable
@@ -9,50 +9,42 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - checkout
+      - restore_cache:
+          keys:
+            - docker-build-v1
+          paths:
+            - /caches/app.tar
+      - run:
+          name: Load Docker image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /caches/.tar | true
       - run:
           command: |
-            echo "export BRANCH_SLUG=\"$(echo ${CIRCLE_BRANCH} | sed -r s/[~\^]+//g | sed -r s/[^a-zA-Z0-9]+/-/g | sed -r s/^-+\|-+$//g | tr A-Z a-z)\"" >> $BASH_ENV
+            docker build --cache-from=einstore/einstore-admin -t einstore/einstore-admin:${CIRCLE_SHA1} .
       - run:
-          command: |
-            docker build -t einstore/einstore-admin:${CIRCLE_SHA1} .
-      - run:
-          name: docker login
           command: docker login -u $DOCKER_USER -p $DOCKER_PASS
       - run:
+          command: docker push einstore/einstore-admin:${CIRCLE_SHA1}
+      - run:
+         name: docker tag and push
+         command: /src/.circleci/tag-and-push.sh ${CIRCLE_SHA1}
+      - run:
+          name: Save Docker image layer cache
           command: |
-            source $BASH_ENV
-            docker tag einstore/einstore-admin:${CIRCLE_SHA1} einstore/einstore-admin:${BRANCH_SLUG}
-            docker tag einstore/einstore-admin:${CIRCLE_SHA1} einstore/einstore-admin:${BRANCH_SLUG}_${CIRCLE_SHA1}
-            docker push einstore/einstore-admin:${BRANCH_SLUG}
-            docker push einstore/einstore-admin:${BRANCH_SLUG}_${CIRCLE_SHA1}
-
-
-  build-tag:
-    working_directory: /src
-    docker:
-      - image: docker:stable
-    steps:
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - checkout
-      - run:
-          command: docker build -t einstore/einstore-admin:${CIRCLE_TAG} .
-      - run:
-          name: docker login
-          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - run:
-          command: docker push einstore/einstore-admin:${CIRCLE_TAG}
-
+            mkdir -p /caches
+            docker save -o /caches/app.tar einstore/einstore-admin
+      - save_cache:
+          key: docker-build-v1
+          paths:
+            - /caches/app.tar
 
 workflows:
   version: 2
-  test-build-publish:
+  build-publish:
     jobs:
-      - build-branch
-      - build-tag:
+
+      - build:
           filters:
             tags:
               only: /.*/
-            branches:
-              ignore: /.*/
-
