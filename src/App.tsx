@@ -89,6 +89,8 @@ interface AppState {
 			allow_registrations: boolean
 			domain_invitations_restricted: boolean
 			single_team: boolean
+			github_enabled: boolean
+			allowed_github_teams: string[]
 		}
 	}
 	token: string | null
@@ -163,7 +165,9 @@ export class EinstoreApp extends React.Component<{}, AppState> {
 			}
 		})
 		window.Einstore.serverSettingsPlain().then((settings: any) => {
-			this.setState({ settings })
+			if (this.mounted) {
+				this.setState({ settings })
+			}
 		})
 	}
 
@@ -236,6 +240,10 @@ body {
 							view={AuthView.RESET_PASSWORD}
 							onResetPassword={console.log}
 						/>
+
+						{this.state.server && this.state.server.config.github_enabled && (
+							<AuthRoute path="github-auth-result" view={AuthView.GITHUB_AUTH_RESULT} />
+						)}
 
 						{this.state.server && this.state.server.config.allow_registrations && (
 							<AuthRoute path="register" view={AuthView.REGISTRATION} onRegister={console.log} />

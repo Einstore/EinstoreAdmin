@@ -9,11 +9,14 @@ import { Token } from '../connector/Model/Token'
 import { ServerIcon } from '../ServerIcon'
 import IconEnter from '../shapes/enter'
 import { ServerContext } from '../App'
+import { parse } from 'query-string'
+import jwtDecode from 'jwt-decode'
 
 export enum AuthView {
 	RESET_PASSWORD = 'reset-password',
 	REGISTRATION = 'register',
 	LOGIN = 'login',
+	GITHUB_AUTH_RESULT = 'github-auth-result',
 }
 
 export interface AuthRouteProps {
@@ -228,6 +231,8 @@ class ResetPassword extends React.Component<AuthComponentProps> {
 }
 
 export class AuthRoute extends React.Component<RouteComponentProps<AuthRouteProps>> {
+	lastInfo: string = ''
+
 	render() {
 		switch (this.props.view) {
 			case AuthView.LOGIN:
@@ -248,6 +253,15 @@ export class AuthRoute extends React.Component<RouteComponentProps<AuthRouteProp
 						<ResetPassword onSuccess={this.props.onResetPassword} />
 					</div>
 				)
+			case AuthView.GITHUB_AUTH_RESULT:
+				const info = parse(location.search).info as string
+				if (this.lastInfo !== info) {
+					this.lastInfo = info
+					window.Einstore.token(jwtDecode(info).token).then(() => {
+						window.location.href = '/'
+					})
+				}
+				return <div className={cn('auth', 'view-' + this.props.view)}></div>
 		}
 		return null
 	}
