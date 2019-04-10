@@ -98,12 +98,24 @@ export class Einstore {
 			})
 	}
 
-	public invite = (data: { username?: string, password?: string, firstname: string; lastname: string; email: string }): Promise<any> => {
+	public invite = (data: {
+		username?: string
+		password?: string
+		firstname: string
+		lastname: string
+		email: string
+	}): Promise<any> => {
 		const promise = this.networking.postJson('/users/invite', data)
 		return promise.then((res) => res.json())
 	}
 
-	public register = (data: { username?: string, password?: string, firstname: string; lastname: string; email: string }): Promise<any> => {
+	public register = (data: {
+		username?: string
+		password?: string
+		firstname: string
+		lastname: string
+		email: string
+	}): Promise<any> => {
 		const promise = this.networking.postJson('/users', data)
 		return promise.then((res) => res.json())
 	}
@@ -467,5 +479,12 @@ export class Einstore {
 		const promise = this.networking.get(teamId ? `/teams/${teamId}/tags/common` : `/tags/common`)
 		const res = await promise
 		return res.json()
+	}
+
+	public authViaGithub = () => {
+		const link = `${window.location.origin}/github-auth-result`
+		window.location.href = `${
+			this.networking.config.url
+		}/auth/github/login?link=${encodeURIComponent(link)}`
 	}
 }

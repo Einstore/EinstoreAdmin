@@ -59,6 +59,11 @@ export default class Login extends React.Component<LoginProps, LoginState> {
 		this.setState({ [event.target.name]: event.target.value } as any)
 	}
 
+	handleGithubLogin = (event: MouseEvent) => {
+		event.preventDefault()
+		window.Einstore.authViaGithub()
+	}
+
 	render() {
 		return (
 			<div className="login">
@@ -93,15 +98,23 @@ export default class Login extends React.Component<LoginProps, LoginState> {
 						</div>
 						<div className="login-links">
 							<ServerContext.Consumer>
-								{(server) =>
-									server && server.config.allow_registrations ? (
-										<Link className="login-link" to="/register">
-											<IconNewUser /> Register
-										</Link>
-									) : (
-										<span className="login-link" />
-									)
-								}
+								{(server) => (
+									<>
+										{server && server.config.allow_registrations ? (
+											<Link className="login-link" to="/register">
+												<IconNewUser /> Register
+											</Link>
+										) : (
+											<span className="login-link" />
+										)}
+
+										{!!(server && server.config.github_enabled) && (
+											<Button onClick={this.handleGithubLogin}>
+												<IconEnter /> GitHub
+											</Button>
+										)}
+									</>
+								)}
 							</ServerContext.Consumer>
 
 							<Button>
