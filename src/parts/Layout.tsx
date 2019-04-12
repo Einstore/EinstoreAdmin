@@ -115,10 +115,6 @@ export class Layout extends React.Component<RouteComponentProps<LayoutProps>, La
 		return null
 	}
 
-	disableDropzoneClick = (e: any) => {
-		return e.preventDefault()
-	}
-
 	render() {
 		const params = {
 			teamId: this.props.teamId,
@@ -132,7 +128,7 @@ export class Layout extends React.Component<RouteComponentProps<LayoutProps>, La
 		const rev = this.state.rev
 
 		return (
-			<Dropzone onDrop={this.handleDrop} onClick={this.disableDropzoneClick}>
+			<Dropzone onDrop={this.handleDrop} disableClick>
 				{({ getRootProps, getInputProps, open }: any) => (
 					(this.openDropzone = open),
 					(
