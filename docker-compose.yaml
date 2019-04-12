@@ -27,7 +27,7 @@ services:
       ADMINER_NAME: einstore
 
   api:
-    image: einstore/einstore-core:dev.fix-github
+    image: einstore/einstore-core:dev.master.debug
     restart: on-failure
     environment:
       APICORE_STORAGE_LOCAL_ROOT: /home/einstore
@@ -62,7 +62,7 @@ services:
 
   admin:
     image: node:11-alpine
-    command: yarn run prod
+    command: yarn start
     working_dir: /src
     volumes:
       - .:/src:cached
