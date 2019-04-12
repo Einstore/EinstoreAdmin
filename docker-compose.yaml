@@ -62,7 +62,7 @@ services:
 
   admin:
     image: node:11-alpine
-    command: yarn run prod
+    command: yarn start
     working_dir: /src
     volumes:
       - .:/src:cached
