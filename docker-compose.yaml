@@ -27,7 +27,7 @@ services:
       ADMINER_NAME: einstore
 
   api:
-    image: einstore/einstore-core:dev.fix-github
+    image: einstore/einstore-core:dev.master.debug
     restart: on-failure
     environment:
       APICORE_STORAGE_LOCAL_ROOT: /home/einstore
