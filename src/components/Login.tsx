@@ -92,34 +92,39 @@ export default class Login extends React.Component<LoginProps, LoginState> {
 									<IconInfo color="#ff0000" /> Incorrect credentials
 								</div>
 							) : null}
-							<Link className="login-forgot" to="/reset-password">
-								Forgotten password
-							</Link>
 						</div>
 						<div className="login-links">
 							<ServerContext.Consumer>
 								{(server) => (
 									<>
-										{server && server.config.allow_registrations ? (
-											<Link className="login-link" to="/register">
-												<IconNewUser /> Register
-											</Link>
-										) : (
-											<span className="login-link" />
-										)}
+										<div className="login-links-left">
+											{server && server.config.allow_registrations ? (
+												<Link className="login-link" to="/register">
+													<IconNewUser /> Register
+												</Link>
+											) : (
+												<span className="login-link" />
+											)}
 
-										{!!(server && server.config.github_enabled) && (
-											<Button onClick={this.handleGithubLogin}>
-												<IconEnter /> GitHub
+											<Link className="login-link" to="/reset-password">
+												Reset password
+											</Link>
+										</div>
+
+										<div className="login-links-right">
+											{!!(server && server.config.github_enabled) && (
+												<Button onClick={this.handleGithubLogin} className="view-github">
+													<IconEnter /> GitHub
+												</Button>
+											)}
+
+											<Button>
+												<IconEnter /> Login
 											</Button>
-										)}
+										</div>
 									</>
 								)}
 							</ServerContext.Consumer>
-
-							<Button>
-								<IconEnter /> Login
-							</Button>
 						</div>
 					</fieldset>
 				</form>
