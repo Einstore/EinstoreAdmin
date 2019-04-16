@@ -285,14 +285,6 @@ body {
 						{auth && <Layout path="me" body={MeRoute} header={Header} />}
 						{auth && (
 							<Layout
-								path="api-keys"
-								body={ApiKeysRoute}
-								header={Header}
-								headerButtonView={HeaderButtonView.ADD_API_KEY}
-							/>
-						)}
-						{auth && (
-							<Layout
 								path="api-keys/:teamId"
 								body={ApiKeysRoute}
 								header={Header}
