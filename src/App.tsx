@@ -17,6 +17,7 @@ import Team from './parts/team'
 import { ServerIcon } from './ServerIcon'
 import AddTeam from './parts/AddTeam'
 import SystemSettings from './parts/SystemSettings'
+import TeamName from './components/TeamName';
 
 const FadeInOut = posed.div({
 	enter: { opacity: 1 },
@@ -27,9 +28,10 @@ export const MeContext = React.createContext<any>(null)
 export const ServerContext = React.createContext<any>(null)
 
 function Header({ params }: { params: any }) {
+	console.log({ Header: params })
 	return (
 		<Link to={`/apps${params.teamId ? `/${params.teamId}` : ''}`}>
-			<ServerIcon />
+			{params.teamId ? <TeamName key={params.teamId} teamId={params.teamId} iconSize={48} withoutName /> : <ServerIcon />}
 		</Link>
 	)
 }

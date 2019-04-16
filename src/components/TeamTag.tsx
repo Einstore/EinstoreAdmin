@@ -54,11 +54,11 @@ export const TeamIcon = ({ team, iconSize }: { team: any; iconSize?: number }) =
 	)
 }
 
-export const TeamTag = ({ team, iconSize }: { team: any; iconSize?: number }) => {
+export const TeamTag = ({ team, iconSize, withoutName }: { team: any; iconSize?: number, withoutName?: boolean }) => {
 	return (
 		<div className="teamTag">
 			<TeamIcon team={team} iconSize={iconSize} />
-			<span className="teamTag-label">{team.name}</span>
+			{!withoutName && <span className="teamTag-label">{team.name}</span>}
 		</div>
 	)
 }
