@@ -32,8 +32,14 @@ export class Sidebar extends React.Component<SidebarProps> {
 	handleChangeTeam = (team: string) => {
 		if (team === 'all') {
 			navigate(`/apps`)
+		} else if (team === 'new') {
+			navigate(`/team/new`)
 		} else {
 			navigate(`/apps/${team}`)
+		}
+
+		if (this.props.onChoice) {
+			this.props.onChoice()
 		}
 	}
 
@@ -46,6 +52,7 @@ export class Sidebar extends React.Component<SidebarProps> {
 					{teams && (
 						<TeamSelect
 							allowAll
+							allowNew
 							activeTeam={activeTeam || 'all'}
 							teams={teams}
 							onChangeTeam={this.handleChangeTeam}
@@ -86,9 +93,12 @@ export class Sidebar extends React.Component<SidebarProps> {
 								</Link>
 							</div>
 							<div className="sidebar-addTeam">
-								<Link onClick={this.props.onChoice} to="/me">My profile</Link>
-								<Link onClick={this.props.onChoice} to="/team/new">Create a new team</Link>
-								<Link to="/" onClick={window.logout}>Logout</Link>
+								<Link onClick={this.props.onChoice} to="/me">
+									My profile
+								</Link>
+								<Link to="/" onClick={window.logout}>
+									Logout
+								</Link>
 							</div>
 						</>
 					)}

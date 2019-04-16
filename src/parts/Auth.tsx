@@ -11,6 +11,7 @@ import IconEnter from '../shapes/enter'
 import { ServerContext } from '../App'
 import { parse } from 'query-string'
 import jwtDecode from 'jwt-decode'
+import IconNewUser from '../shapes/newUser'
 
 export enum AuthView {
 	RESET_PASSWORD = 'reset-password',
@@ -140,14 +141,14 @@ class Registration extends React.Component<AuthComponentProps> {
 								<div className="login-links">
 									<div className="login-links-left">
 										<Link className="login-link" to="/">
-											Login
+											<IconEnter /> Login
 										</Link>
 										<Link className="login-link" to="/reset-password">
 											Reset password
 										</Link>
 									</div>
 									<Button>
-										<IconEnter /> Register
+										<IconNewUser /> Register
 									</Button>
 								</div>
 							</fieldset>
@@ -204,6 +205,7 @@ class ResetPassword extends React.Component<AuthComponentProps> {
 						<div className="login-links">
 							<div className="login-links-left">
 								<Link className="login-link" to="/">
+									<IconEnter />
 									Login
 								</Link>
 
@@ -211,7 +213,7 @@ class ResetPassword extends React.Component<AuthComponentProps> {
 									{(server) =>
 										server && server.config.allow_registrations ? (
 											<Link className="login-link" to="/register">
-												Registration
+												<IconNewUser /> Register
 											</Link>
 										) : (
 											<span className="login-link" />
@@ -219,9 +221,7 @@ class ResetPassword extends React.Component<AuthComponentProps> {
 									}
 								</ServerContext.Consumer>
 							</div>
-							<Button>
-								<IconEnter /> Reset password
-							</Button>
+							<Button>Reset password</Button>
 						</div>
 					</fieldset>
 				</form>
@@ -261,7 +261,7 @@ export class AuthRoute extends React.Component<RouteComponentProps<AuthRouteProp
 						window.location.href = '/'
 					})
 				}
-				return <div className={cn('auth', 'view-' + this.props.view)}></div>
+				return <div className={cn('auth', 'view-' + this.props.view)} />
 		}
 		return null
 	}

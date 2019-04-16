@@ -9,6 +9,18 @@ const colors = ['#000', '#FFF']
 const getContrastColor = (original: string) => bestContrast(`#${original}`, colors)
 
 export const TeamIcon = ({ team, iconSize }: { team: any; iconSize?: number }) => {
+	if (team.id === 'new') {
+		return (
+			<span className="teamTag-img" style={{ fontSize: iconSize }}>
+
+				<div
+					className="teamIcon view-add"
+				>
+					<div className="teamIcon-initials">+</div>
+				</div>
+			</span>
+		)
+	}
 
 	if (team.id === 'all') {
 		return (
@@ -23,7 +35,13 @@ export const TeamIcon = ({ team, iconSize }: { team: any; iconSize?: number }) =
 		)
 	}
 	return team.icon ? (
-		<AppIcon iconSize={iconSize} context="teams" id={team.id} className="teamTag-img" name={team.initials} />
+		<AppIcon
+			iconSize={iconSize}
+			context="teams"
+			id={team.id}
+			className="teamTag-img"
+			name={team.initials}
+		/>
 	) : (
 		<span className="teamTag-img" style={{ fontSize: iconSize }}>
 			<div
