@@ -128,7 +128,7 @@ export class Layout extends React.Component<RouteComponentProps<LayoutProps>, La
 		const rev = this.state.rev
 
 		return (
-			<Dropzone onDrop={this.handleDrop} disableClick>
+			<Dropzone onDrop={this.handleDrop} noClick noKeyboard>
 				{({ getRootProps, getInputProps, open }: any) => (
 					(this.openDropzone = open),
 					(
