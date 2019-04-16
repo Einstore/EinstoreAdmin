@@ -8,6 +8,7 @@ interface TeamNameProps {
 	teamId: string
 	className?: string
 	iconSize?: number
+	withoutName: boolean
 }
 
 interface TeamNameState {
@@ -15,6 +16,10 @@ interface TeamNameState {
 }
 
 export default class TeamName extends React.PureComponent<TeamNameProps, TeamNameState> {
+	static defaultProps = {
+		withoutName: false
+	}
+
 	state = {
 		team: undefined
 	}
@@ -26,7 +31,7 @@ export default class TeamName extends React.PureComponent<TeamNameProps, TeamNam
 	render() {
 		return (
 			<div className={cn('teamName', this.props.className)}>
-				{this.state.team && <TeamTag team={this.state.team} iconSize={this.props.iconSize} />}
+				{this.state.team && <TeamTag team={this.state.team} withoutName={this.props.withoutName} iconSize={this.props.iconSize} />}
 			</div>
 		)
 	}
