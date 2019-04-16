@@ -206,10 +206,15 @@ export class EinstoreApp extends React.Component<{}, AppState> {
 
 	getStyleVars() {
 		if (this.state.settings) {
-			let rows = []
+			let rows = [
+				'--style-primary-action-background-color: #236aea;',
+				'--style-primary-action-color: #fff;',
+			]
 			const keys = Object.keys(this.state.settings)
 			for (let key of keys) {
-				rows.push(`--${key.split('_').join('-')}: ${this.state.settings[key]};`)
+				if (this.state.settings[key] !== 'color') {
+					rows.push(`--${key.split('_').join('-')}: ${this.state.settings[key]};`)
+				}
 			}
 			return rows.join('\n')
 		}
