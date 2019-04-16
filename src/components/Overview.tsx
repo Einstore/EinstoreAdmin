@@ -218,10 +218,16 @@ export default class Overview extends Component<OverviewProps> {
 			</div>
 		) : (
 			<div className="page">
-				<div className="page-upload">
-					<p className="page-upload-text">No apps here yet.</p>
-					<Button onClick={this.props.layout.openDropzone}>Upload app</Button>
-				</div>
+				{this.props.teamId ? (
+					<div className="page-upload">
+						<p className="page-upload-text">No apps here yet.</p>
+						<Button onClick={this.props.layout.openDropzone}>Upload app</Button>
+					</div>
+				) : (
+					<div className="page-upload">
+						<p className="page-upload-text">No apps here yet. Select a team and upload some.</p>
+					</div>
+				)}
 			</div>
 		)
 	}
