@@ -225,7 +225,7 @@ export default class Overview extends Component<OverviewProps> {
 					</div>
 				) : (
 					<div className="page-upload">
-						<p className="page-upload-text">No apps here yet. Select a team and upload some.</p>
+						<p className="page-upload-text">No apps here yet. Select team to add new build.</p>
 					</div>
 				)}
 			</div>
