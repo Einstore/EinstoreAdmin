@@ -239,18 +239,13 @@ export class Einstore {
 		const json = await res.json()
 		return json
 	}
+
 	public deleteCluster = async (id: string): Promise<Response> => {
-		const promise = this.networking.delete('/cluster/' + id)
-		const res = await promise
-		const json = await res.json()
-		return json
+		return this.networking.delete('/clusters/' + id)
 	}
 
 	public deleteApp = async (id: string): Promise<Response> => {
-		const promise = this.networking.delete('/apps/' + id)
-		const res = await promise
-		const json = await res.json()
-		return json
+		return this.networking.delete('/apps/' + id)
 	}
 
 	public addTeam = async (name: string, identifier: string): Promise<Response> => {
