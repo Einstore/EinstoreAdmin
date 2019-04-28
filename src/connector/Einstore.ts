@@ -39,26 +39,29 @@ export class Einstore {
 			password,
 		}
 		const promise = this.networking.postJson('/auth', object)
-		return promise
-			.then((res) => {
-				const jwt = res.headers.get('authorization')
-				if (jwt) {
-					this.networking.jwt = jwt
-					return res.json().then((json) => {
+		return promise.then((res) => {
+			const jwt = res.headers.get('authorization')
+			if (jwt) {
+				this.networking.jwt = jwt
+				return res
+					.json()
+					.then((json) => {
 						return {
 							json,
 							jwt,
 						}
 					})
-				} else {
-					throw TypeError('Missing JWT token')
-				}
-			})
-			.then((data) => {
-				const obj = Object.assign(new Auth(), data.json)
-				obj.jwt = data.jwt
-				return obj
-			})
+					.then((data) => {
+						const obj = Object.assign(new Auth(), data.json)
+						obj.jwt = data.jwt
+						return obj
+					})
+			} else {
+				return res.json().then((data: any) => {
+					throw new Error(data.description)
+				})
+			}
+		})
 	}
 
 	public refreshAuth = () => {
@@ -88,7 +91,7 @@ export class Einstore {
 						}
 					})
 				} else {
-					throw TypeError('Missing JWT token')
+					throw new TypeError('Missing JWT token')
 				}
 			})
 			.then((data) => {

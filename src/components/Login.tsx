@@ -45,7 +45,9 @@ export default class Login extends React.Component<LoginProps, LoginState> {
 		if (window.Einstore && this.state.email && this.state.password) {
 			this.setState({ working: true })
 			const mem: { auth?: Auth; token?: Token } = {}
-			window.Einstore.auth(this.state.email, this.state.password)
+			const auth = window.Einstore.auth(this.state.email, this.state.password)
+
+			auth
 				.then((auth: Auth) => {
 					mem.auth = auth
 					return window.Einstore.token(auth.token || '')
@@ -56,8 +58,11 @@ export default class Login extends React.Component<LoginProps, LoginState> {
 						this.props.onSuccess(mem.auth, mem.token)
 					}
 				})
-				.catch(() => {})
 				.then(() => {
+					this.setState({ working: false })
+				})
+				.catch((e: any) => {
+					alert(e.message)
 					this.setState({ working: false })
 				})
 		}
@@ -121,7 +126,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
 
 										<div className="login-links-right">
 											{!!(server && server.config.github_enabled) && (
-												<Button onClick={this.handleGithubLogin} className="view-github">
+												<Button tyúe="button" onClick={this.handleGithubLogin} className="view-github">
 													<IconEnter /> GitHub
 												</Button>
 											)}
