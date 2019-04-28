@@ -29,7 +29,6 @@ export default class PlatformSwitch extends React.Component<PlatformSwitchProps>
 		return (
 			<div className="platformSwitch">
 				<button
-					role="button"
 					value={PlatformSwitchValue.ALL}
 					className={this.props.value === PlatformSwitchValue.ALL ? 'view-active' : undefined}
 					onClick={this.handleChange}
@@ -37,7 +36,6 @@ export default class PlatformSwitch extends React.Component<PlatformSwitchProps>
 					All
 				</button>
 				<button
-					role="button"
 					value={PlatformSwitchValue.ANDROID}
 					className={this.props.value === PlatformSwitchValue.ANDROID ? 'view-active' : undefined}
 					onClick={this.handleChange}
@@ -45,7 +43,6 @@ export default class PlatformSwitch extends React.Component<PlatformSwitchProps>
 					<IconAndroid />
 				</button>
 				<button
-					role="button"
 					value={PlatformSwitchValue.IOS}
 					className={this.props.value === PlatformSwitchValue.IOS ? 'view-active' : undefined}
 					onClick={this.handleChange}

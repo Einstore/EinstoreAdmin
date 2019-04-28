@@ -52,8 +52,8 @@ class SystemImageForm extends React.Component<
 			>
 				<label htmlFor="server-icon">
 					<div className="systemSettingsForm-current">
-						{this.state.oldValue && !this.state.previewValue && <img src={this.state.oldValue} />}
-						{this.state.previewValue && <img src={this.state.previewValue} />}
+						{this.state.oldValue && !this.state.previewValue && <img src={this.state.oldValue} alt="" />}
+						{this.state.previewValue && <img src={this.state.previewValue} alt="" />}
 					</div>
 					<div className="systemSettingsForm-control">
 						<input

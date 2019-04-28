@@ -254,7 +254,7 @@ export class AuthRoute extends React.Component<RouteComponentProps<AuthRouteProp
 					</div>
 				)
 			case AuthView.GITHUB_AUTH_RESULT:
-				const info = parse(location.search).info as string
+				const info = parse(window.location.search).info as string
 				if (this.lastInfo !== info) {
 					this.lastInfo = info
 					window.Einstore.token(jwtDecode(info).token).then(() => {
@@ -262,7 +262,8 @@ export class AuthRoute extends React.Component<RouteComponentProps<AuthRouteProp
 					})
 				}
 				return <div className={cn('auth', 'view-' + this.props.view)} />
+			default:
+				return null
 		}
-		return null
 	}
 }
