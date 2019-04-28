@@ -21,7 +21,12 @@ export default class CardTags extends Component {
 		this.searchRef.current.value = ''
 	}
 
+	componentDidMount() {
+		console.log(this.props.tags)
+	}
+
 	render() {
+		console.log({ lastAddedTag: this.props.lastAddedTag })
 		return (
 			<div className="card card-columns">
 				<div className="card-filtering card-column">
@@ -39,13 +44,11 @@ export default class CardTags extends Component {
 						</form>
 						<div className="card-filtering-list">
 							{this.props.tags.map((tag) => (
-								<div key={tag.id} className="card-filtering-item">
+								<div key={tag.id} className={`card-filtering-item ${tag.identifier === this.props.lastAddedTag ? 'is-latest' : ''}`}>
 									{tag.identifier}{' '}
-									{!tag.optimistic && (
-										<span role="button" onClick={() => this.props.onDeleteTag(tag)}>
-											<IconTimes />
-										</span>
-									)}
+									<span role="button" onClick={() => this.props.onDeleteTag(tag)}>
+										<IconTimes />
+									</span>
 								</div>
 							))}
 						</div>

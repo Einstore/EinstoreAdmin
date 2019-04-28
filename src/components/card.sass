@@ -223,3 +223,25 @@
 		flex-grow: 1
 		margin: 0
 		margin-right: .5em
+
+@keyframes fadeIn
+	0%
+		background-color: yellow
+		transform: scale(0)
+		opacity: 0.0
+
+	60%
+		transform: scale(1.1)
+
+	80%
+		transform: scale(0.9)
+		opacity: 1
+
+	100%
+		transform: scale(1)
+		opacity: 1
+		background-color: inherit
+
+.card-filtering-item.is-latest
+	animation-name: fadeIn
+	animation-duration: .7s

@@ -72,7 +72,10 @@ export default class AppDetail extends Component {
 		window.Einstore.deleteAppTag(this.state.id, tag.id)
 	}
 
+	lastAddedTag = null
+
 	addTag = (tag) => {
+		this.lastAddedTag = tag
 		window.Einstore.addAppTag(this.state.id, tag).then((tags) => {
 			this.setState((state) => {
 				return {
@@ -113,7 +116,7 @@ export default class AppDetail extends Component {
 					uuid={this.state.id}
 					size={this.state.size}
 				/>
-				<CardTags tags={tags} onDeleteTag={this.deleteTag} onAddTag={this.addTag} />
+				<CardTags tags={tags} lastAddedTag={this.lastAddedTag} onDeleteTag={this.deleteTag} onAddTag={this.addTag} />
 
 				<div
 					style={{
