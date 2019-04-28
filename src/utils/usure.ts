@@ -1,6 +1,6 @@
 export default function usure(message: string = 'Are you sure?') {
 	return new Promise((res, rej) => {
-		if (confirm(message)) {
+		if (window.confirm(message)) {
 			res()
 		} else {
 			rej()

@@ -49,7 +49,7 @@ export default class WithCallbacks extends React.Component<Props, State> {
 
 	loadOptions = (inputValue: any) => {
 		this.lastInput = inputValue
-		if (!inputValue || inputValue.length < 3) {
+		if (!inputValue || inputValue.length < 2) {
 			return Promise.resolve([])
 		}
 		return window.Einstore.getSuggestions(inputValue, this.props.teamId).then((suggestions) => {
@@ -58,12 +58,18 @@ export default class WithCallbacks extends React.Component<Props, State> {
 					switch (item.type) {
 						case SearchSuggestionType.APP:
 							const app = item.current as App
-							return { label: <AppLabel app={app} />, value: '@@'+app.identifier, entity: app, type: item.type }
+							return {
+								label: <AppLabel app={app} />,
+								value: '@@' + app.identifier,
+								entity: app,
+								type: item.type,
+							}
 						case SearchSuggestionType.TAG:
 							const tag = item.current as AppTag
 							return { label: tag.identifier, value: tag.identifier, entity: tag, type: item.type }
+						default:
+							return null
 					}
-					return {}
 				})
 			} else {
 				console.log('wrong lastinput', this.lastInput, inputValue)

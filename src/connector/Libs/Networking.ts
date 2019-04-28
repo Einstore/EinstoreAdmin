@@ -12,6 +12,10 @@ export class Networking implements Networkable {
 
 	public constructor(public conf: Config) {
 		this.config = conf
+
+		if (this.config.url === '%REACT_APP_API_URL%') {
+			throw new Error('Please set `REACT_APP_API_URL` env variable.')
+		}
 	}
 
 	// Requests

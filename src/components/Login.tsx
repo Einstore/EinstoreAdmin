@@ -24,10 +24,18 @@ interface LoginState {
 	working: boolean
 }
 
+const prefilled =
+	window.PREFILLED_CREDENTIALS && window.PREFILLED_CREDENTIALS.indexOf(':')
+		? window.PREFILLED_CREDENTIALS.split(':')
+		: ['', '']
+
+const prefilledEmail = prefilled[0] || ''
+const prefilledPassword = prefilled[1] || ''
+
 export default class Login extends React.Component<LoginProps, LoginState> {
 	state = {
-		email: '',
-		password: '',
+		email: prefilledEmail,
+		password: prefilledPassword,
 		showError: false,
 		working: false,
 	}

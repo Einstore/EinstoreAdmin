@@ -1,11 +1,12 @@
 import { Link } from '@reach/router'
-import React, { Component, ChangeEvent } from 'react'
+import React, { Component } from 'react'
 import Button from '../components/button'
 import CardList from '../components/cardList'
 import TagSearch from '../components/TagSearch'
 import { Layout } from '../parts/Layout'
 import '../parts/page.sass'
 import './searchResults.sass'
+import './Sort.sass'
 import AppIcon from './AppIcon'
 import TeamName from './TeamName'
 import bytes from 'pretty-bytes'
@@ -16,6 +17,49 @@ import InstallButton, { InstallButtonView } from './InstallButton'
 export interface OverviewProps {
 	teamId?: string
 	layout: Layout
+}
+
+export enum SortDirection {
+	ASC = 'asc',
+	DESC = 'desc',
+}
+
+export enum SortValue {
+	NAME = 'name',
+	DATE = 'date',
+}
+
+export interface SortProps {
+	value: SortValue
+	direction: SortDirection
+	onChange: (value: SortValue, direction: SortDirection) => void
+}
+
+const switchSortDirection = {
+	[SortDirection.ASC]: SortDirection.DESC,
+	[SortDirection.DESC]: SortDirection.ASC,
+}
+
+function Sort({ value, direction, onChange }: SortProps) {
+	return (
+		<span className="Sort">
+			Sort by{' '}
+			<span
+				className={`Sort-key is-${value === SortValue.DATE ? 'active' : 'inactive'}`}
+				onClick={() => onChange(SortValue.DATE, switchSortDirection[direction])}
+			>
+				<span className="Sort-key-name">date</span>{' '}
+				<span className={`Sort-direction view-${direction}`}>►</span>
+			</span>{' '}
+			<span
+				className={`Sort-key is-${value === SortValue.NAME ? 'active' : 'inactive'}`}
+				onClick={() => onChange(SortValue.NAME, switchSortDirection[direction])}
+			>
+				<span className="Sort-key-name">name</span>{' '}
+				<span className={`Sort-direction view-${direction}`}>►</span>
+			</span>
+		</span>
+	)
 }
 
 class SearchResults extends Component<{ tags: string[] }, { apps: any[] }> {
@@ -83,7 +127,10 @@ export default class Overview extends Component<OverviewProps> {
 		noApps: false,
 		searchTags: [],
 		platform: PlatformSwitchValue.ALL,
-		sort: 'date',
+		sort: {
+			value: SortValue.DATE,
+			direction: SortDirection.DESC,
+		},
 	}
 
 	componentDidMount() {
@@ -106,7 +153,7 @@ export default class Overview extends Component<OverviewProps> {
 			this.state.appsOffset,
 			undefined,
 			this.state.platform,
-			this.state.sort
+			this.state.sort.value + ':' + this.state.sort.direction
 		)
 			.then((result: any) => {
 				if (typeof result.error !== 'undefined') {
@@ -158,8 +205,8 @@ export default class Overview extends Component<OverviewProps> {
 		this.setState({ platform }, this.refresh)
 	}
 
-	handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		this.setState({ sort: e.currentTarget.value }, this.refresh)
+	handleSortChange = (value: SortValue, direction: SortDirection) => {
+		this.setState({ sort: { value, direction } }, this.refresh)
 	}
 
 	render() {
@@ -181,17 +228,11 @@ export default class Overview extends Component<OverviewProps> {
 						<PlatformSwitch value={this.state.platform} onChange={this.handlePlatformChange} />
 					</div>
 					<div className="page-control hide-s">
-						Sort by{' '}
-						<span className="page-control-value-wrap">
-							<select
-								className="page-control-value"
-								value={this.state.sort}
-								onChange={this.handleSortChange}
-							>
-								<option value="date">upload date</option>
-								<option value="name">name</option>
-							</select>
-						</span>
+						<Sort
+							value={this.state.sort.value}
+							direction={this.state.sort.direction}
+							onChange={this.handleSortChange}
+						/>
 					</div>
 				</div>
 				{this.state.searchTags.length > 0 && (

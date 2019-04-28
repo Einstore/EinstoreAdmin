@@ -111,8 +111,9 @@ export class Layout extends React.Component<RouteComponentProps<LayoutProps>, La
 						)}
 					</Button>
 				)
+			default:
+				return null
 		}
-		return null
 	}
 
 	render() {
@@ -129,9 +130,9 @@ export class Layout extends React.Component<RouteComponentProps<LayoutProps>, La
 
 		return (
 			<Dropzone onDrop={this.handleDrop} disableClick>
-				{({ getRootProps, getInputProps, open }: any) => (
-					(this.openDropzone = open),
-					(
+				{({ getRootProps, getInputProps, open }: any) => {
+					this.openDropzone = open
+					return (
 						<div
 							className={cn('layout', this.state.showMenu && 'view-showMenu')}
 							{...getRootProps()}
@@ -177,7 +178,7 @@ export class Layout extends React.Component<RouteComponentProps<LayoutProps>, La
 							</div>
 						</div>
 					)
-				)}
+				}}
 			</Dropzone>
 		)
 	}

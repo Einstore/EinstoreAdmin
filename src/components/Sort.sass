@@ -1,0 +1,27 @@
+.Sort
+	display: inline-flex
+	font-weight: 400
+
+	&-key
+		font-weight: 700
+		margin-left: .5em
+		cursor: pointer
+
+		&.is-active
+			color: #000
+
+	&-direction
+		display: inline-block
+		transition: transform ease-in-out .1s
+		line-height: 1
+		width: 1em
+		height: 1em
+
+		&.view-asc
+			transform: rotate(-90deg)
+
+		&.view-desc
+			transform: rotate(90deg)
+
+	&-key:not(.is-active) &-direction
+		display: none
