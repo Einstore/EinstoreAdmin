@@ -17,8 +17,10 @@ export default class CardTags extends Component {
 	handleSubmit = (e) => {
 		e.preventDefault()
 
-		this.props.onAddTag(this.searchRef.current.value)
-		this.searchRef.current.value = ''
+		if (this.searchRef.current.value) {
+			this.props.onAddTag(this.searchRef.current.value)
+			this.searchRef.current.value = ''
+		}
 	}
 
 	componentDidMount() {
@@ -44,7 +46,12 @@ export default class CardTags extends Component {
 						</form>
 						<div className="card-filtering-list">
 							{this.props.tags.map((tag) => (
-								<div key={tag.id} className={`card-filtering-item ${tag.identifier === this.props.lastAddedTag ? 'is-latest' : ''}`}>
+								<div
+									key={tag.id}
+									className={`card-filtering-item ${
+										tag.identifier === this.props.lastAddedTag ? 'is-latest' : ''
+									}`}
+								>
 									{tag.identifier}{' '}
 									<span role="button" onClick={() => this.props.onDeleteTag(tag)}>
 										<IconTimes />
