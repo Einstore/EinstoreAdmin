@@ -49,7 +49,7 @@ export default class WithCallbacks extends React.Component<Props, State> {
 
 	loadOptions = (inputValue: any) => {
 		this.lastInput = inputValue
-		if (!inputValue || inputValue.length < 3) {
+		if (!inputValue || inputValue.length < 2) {
 			return Promise.resolve([])
 		}
 		return window.Einstore.getSuggestions(inputValue, this.props.teamId).then((suggestions) => {
