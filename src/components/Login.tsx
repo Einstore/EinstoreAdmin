@@ -25,7 +25,7 @@ interface LoginState {
 }
 
 const prefilled =
-	window.PREFILLED_CREDENTIALS && window.PREFILLED_CREDENTIALS.indexOf(':')
+	window.PREFILLED_CREDENTIALS && (window.PREFILLED_CREDENTIALS.indexOf(':') > -1)
 		? window.PREFILLED_CREDENTIALS.split(':')
 		: ['', '']
 
@@ -126,7 +126,11 @@ export default class Login extends React.Component<LoginProps, LoginState> {
 
 										<div className="login-links-right">
 											{!!(server && server.config.github_enabled) && (
-												<Button tyúe="button" onClick={this.handleGithubLogin} className="view-github">
+												<Button
+													tyúe="button"
+													onClick={this.handleGithubLogin}
+													className="view-github"
+												>
 													<IconEnter /> GitHub
 												</Button>
 											)}
