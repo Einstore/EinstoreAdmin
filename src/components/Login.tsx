@@ -127,7 +127,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
 										<div className="login-links-right">
 											{!!(server && server.config.github_enabled) && (
 												<Button
-													tyúe="button"
+													type="button"
 													onClick={this.handleGithubLogin}
 													className="view-github"
 												>
