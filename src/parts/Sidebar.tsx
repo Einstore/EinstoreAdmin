@@ -5,6 +5,7 @@ import TeamSelect from '../components/TeamSelect'
 import UserMedailon from '../components/UserMedailon'
 import './sidebar.sass'
 import { LayoutChildProps } from './Layout'
+import { MeContext } from 'App'
 
 interface SidebarProps extends LayoutChildProps {
 	activeTeam?: string
@@ -96,6 +97,15 @@ export class Sidebar extends React.Component<SidebarProps> {
 								<Link onClick={this.props.onChoice} to="/me">
 									My profile
 								</Link>
+								<MeContext.Consumer>
+									{(me) =>
+										me.isAdmin ? (
+											<Link onClick={this.props.onChoice} to="/system">
+												System settings
+											</Link>
+										) : null
+									}
+								</MeContext.Consumer>
 								<Link to="/" onClick={window.logout}>
 									Logout
 								</Link>

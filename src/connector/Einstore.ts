@@ -459,7 +459,9 @@ export class Einstore {
 	public me = async (): Promise<Response> => {
 		const promise = this.networking.get(`/users/me`)
 		const res = await promise
-		return res.json()
+		return res.json().then((me) => {
+			return this.amISuperAdmin().then((isAdmin) => ({ ...me, isAdmin }))
+		})
 	}
 
 	public amISuperAdmin = async (): Promise<boolean> => {
