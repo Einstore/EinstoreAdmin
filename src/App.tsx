@@ -265,7 +265,6 @@ body {
 								path="app/:appId"
 								body={AppRoute}
 								header={Header}
-								headerButtonView={HeaderButtonView.ADD_NEW_BUILD}
 							/>
 						)}
 						{auth && (
@@ -273,7 +272,6 @@ body {
 								path="build/:buildId"
 								body={BuildRoute}
 								header={Header}
-								headerButtonView={HeaderButtonView.ADD_NEW_BUILD}
 							/>
 						)}
 						{auth && (
