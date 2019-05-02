@@ -13,6 +13,7 @@ import bytes from 'pretty-bytes'
 import prettyDate from '../utils/prettyDate'
 import PlatformSwitch, { PlatformSwitchValue } from './PlatformSwitch'
 import InstallButton, { InstallButtonView } from './InstallButton'
+import detectOS, { OSName } from '../utils/detectOS'
 
 export interface OverviewProps {
 	teamId?: string
@@ -115,6 +116,18 @@ class SearchResults extends Component<{ tags: string[] }, { apps: any[] }> {
 	}
 }
 
+let initialPlatform = PlatformSwitchValue.ALL
+const os = detectOS()
+switch (os) {
+	case OSName.ANDROID:
+		initialPlatform = PlatformSwitchValue.ANDROID
+		break
+	case OSName.IOS:
+		initialPlatform = PlatformSwitchValue.IOS
+		break
+	default:
+}
+
 export default class Overview extends Component<OverviewProps> {
 	state = {
 		loaded: false,
@@ -126,7 +139,7 @@ export default class Overview extends Component<OverviewProps> {
 		isFetchingAdditionalApps: false,
 		noApps: false,
 		searchTags: [],
-		platform: PlatformSwitchValue.ALL,
+		platform: initialPlatform,
 		sort: {
 			value: SortValue.DATE,
 			direction: SortDirection.DESC,
