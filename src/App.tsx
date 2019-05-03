@@ -14,7 +14,7 @@ import AppDetail from './parts/appDetail'
 import { AuthRoute, AuthView } from './parts/Auth'
 import { HeaderButtonView, Layout, LayoutChildProps } from './parts/Layout'
 import Team from './parts/team'
-import { ServerIcon } from './ServerIcon'
+import { ServerIcon } from './components/ServerIcon'
 import AddTeam from './parts/AddTeam'
 import SystemSettings from './parts/SystemSettings'
 import TeamName from './components/TeamName';
