@@ -23,9 +23,11 @@ class SystemImageForm extends React.Component<
 
 		if (this.fileInputRef.current && this.fileInputRef.current.files) {
 			for (let i = 0; i < this.fileInputRef.current.files.length; i++) {
-				window.Einstore.uploadServerImage(this.fileInputRef.current.files[i]).then(() =>
-					window.location.reload()
-				)
+				window.Einstore.uploadServerImage(this.fileInputRef.current.files[i])
+					.then(() => window.location.reload())
+					.catch((err) => {
+						alert(err.ref.description)
+					})
 			}
 		}
 	}
@@ -52,7 +54,9 @@ class SystemImageForm extends React.Component<
 			>
 				<label htmlFor="server-icon">
 					<div className="systemSettingsForm-current">
-						{this.state.oldValue && !this.state.previewValue && <img src={this.state.oldValue} alt="" />}
+						{this.state.oldValue && !this.state.previewValue && (
+							<img src={this.state.oldValue} alt="" />
+						)}
 						{this.state.previewValue && <img src={this.state.previewValue} alt="" />}
 					</div>
 					<div className="systemSettingsForm-control">

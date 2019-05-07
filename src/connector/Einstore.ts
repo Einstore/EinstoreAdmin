@@ -288,7 +288,15 @@ export class Einstore {
 	}
 
 	public uploadServerImage = async (file: File): Promise<Response> => {
-		return this.networking.postData(`/server/image`, file)
+		return this.networking.postData(`/server/image`, file).then((res: any) => {
+			if (res.status > 299) {
+				return res.json().then((data: any) => {
+					const err = new Error('Image upload failed.') as any
+					err.ref = data
+					throw err
+				})
+			}
+		})
 	}
 
 	public uploadTeamIcon = async (teamId: string, file: File): Promise<Response> => {
