@@ -1,6 +1,6 @@
 import React from 'react'
-import { ServerContext } from './App'
-import Icon from './components/Icon'
+import { ServerContext } from '../App'
+import Icon from './Icon'
 
 export function ServerIcon() {
 	return (
