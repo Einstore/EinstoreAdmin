@@ -174,8 +174,8 @@ export class Einstore {
 		}
 		const promise = this.networking.get(
 			teamId === 'all' || teamId.length === 0
-				? `/apps/overview?${qs.stringify(query)}`
-				: `/teams/${teamId}/apps/overview?${qs.stringify(query)}`
+				? `/apps?${qs.stringify(query)}`
+				: `/teams/${teamId}/apps?${qs.stringify(query)}`
 		)
 		const res = await promise
 		const json = await res.json()
@@ -192,11 +192,10 @@ export class Einstore {
 			const { identifiers, regularTags } = splitToIdentifiersAndRegularTags(
 				typeof filter.tags === 'string' ? [filter.tags] : filter.tags
 			)
-			console.log({ identifiers, regularTags })
-			filter.tags = regularTags.length ? JSON.stringify(regularTags) : undefined
+			filter.tags = regularTags.length ? regularTags.join('|') : undefined
 			filter.identifier = identifiers[0] || undefined
 		}
-		const promise = this.networking.get(`/apps?${qs.stringify(filter)}`)
+		const promise = this.networking.get(`/builds?${qs.stringify(filter)}`)
 		const res = await promise
 		const json = await res.json()
 		return json
@@ -222,7 +221,7 @@ export class Einstore {
 		limit: number = 20
 	): Promise<Response> => {
 		const promise = this.networking.get(
-			`/apps?platform=${encodeURIComponent(platform)}&identifier=${encodeURIComponent(
+			`/builds?platform=${encodeURIComponent(platform)}&identifier=${encodeURIComponent(
 				identifier
 			)}&limit=${limit}`
 		)
@@ -231,24 +230,16 @@ export class Einstore {
 		return json
 	}
 
-	public clusterApps = async (id: string, limit: number = 10): Promise<Response> => {
-		return this.networking.get(`/clusters/${id}/apps?limit=${limit}`).then((res) => res.json())
-	}
-
-	// TODO: should be cluster
-	public deleteApps = async (id: string): Promise<Response> => {
-		const promise = this.networking.delete('/apps/' + id)
-		const res = await promise
-		const json = await res.json()
-		return json
-	}
-
-	public deleteCluster = async (id: string): Promise<Response> => {
-		return this.networking.delete('/clusters/' + id)
+	public appBuilds = async (id: string, limit: number = 10): Promise<Response> => {
+		return this.networking.get(`/apps/${id}/builds?limit=${limit}`).then((res) => res.json())
 	}
 
 	public deleteApp = async (id: string): Promise<Response> => {
 		return this.networking.delete('/apps/' + id)
+	}
+
+	public deleteBuild = async (id: string): Promise<Response> => {
+		return this.networking.delete('/builds/' + id)
 	}
 
 	public addTeam = async (name: string, identifier: string): Promise<Response> => {
@@ -273,7 +264,7 @@ export class Einstore {
 	}
 
 	public build = async (id: string): Promise<Response> => {
-		const promise = this.networking.get(`/apps/${encodeURIComponent(id)}`)
+		const promise = this.networking.get(`/builds/${id}`)
 		const res = await promise
 		const json = await res.json()
 		return json
@@ -338,7 +329,7 @@ export class Einstore {
 	}
 
 	public download = async (id: string): Promise<Response> => {
-		const promise = this.networking.get('/apps/' + id + '/auth')
+		const promise = this.networking.get('/builds/' + id + '/auth')
 		const res = await promise
 		const json = await res.json()
 		return json
@@ -390,7 +381,7 @@ export class Einstore {
 	}
 
 	public getAppTags = async (appId: string): Promise<[AppTag]> => {
-		const promise = this.networking.get(`/apps/${appId}/tags`)
+		const promise = this.networking.get(`/builds/${appId}/tags`)
 		const res = await promise
 		const json = await res.json()
 		return json.map((x: JSON) => Object.assign(new AppTag(), x))
@@ -407,7 +398,7 @@ export class Einstore {
 
 	public getAppsSuggestions = async (str: string, teamId?: string): Promise<Overview[]> => {
 		const promise = this.networking.get(
-			`${teamId ? '/teams/' + teamId : ''}/apps/overview?search=${encodeURIComponent(str)}`
+			`${teamId ? '/teams/' + teamId : ''}/apps?search=${encodeURIComponent(str)}`
 		)
 		const res = await promise
 		const json = await res.json()
@@ -427,11 +418,11 @@ export class Einstore {
 				type: SearchSuggestionType.APP,
 				current: App.create({
 					team_id: app.team_id,
-					id: app.latest_app_id,
+					id: app.latest_build_id,
 					identifier: app.identifier,
-					icon: app.latest_app_icon,
-					name: app.latest_app_name,
-					version: app.latest_app_version,
+					icon: app.latest_build_icon,
+					name: app.latest_build_name,
+					version: app.latest_build_version,
 					platform: app.platform,
 				}),
 			})
@@ -448,14 +439,14 @@ export class Einstore {
 	}
 
 	public addAppTag = async (appId: string, tag: string): Promise<Response> => {
-		const promise = this.networking.postJson(`/apps/${appId}/tags`, [tag])
+		const promise = this.networking.postJson(`/builds/${appId}/tags`, [tag])
 		const res = await promise
 		const json = await res.json()
 		return json.map((x: JSON) => Object.assign(new AppTag(), x))
 	}
 
-	public deleteAppTag = (appId: string, tagId: string): Promise<Response> => {
-		const promise = this.networking.delete(`/apps/${appId}/tags/${tagId}`)
+	public deleteBuildTag = (appId: string, tagId: string): Promise<Response> => {
+		const promise = this.networking.delete(`/builds/${appId}/tags/${tagId}`)
 		promise.then(console.log)
 		promise.catch(console.warn)
 		return new Promise((resolve) => {
