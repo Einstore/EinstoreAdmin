@@ -257,9 +257,9 @@ export default class Overview extends Component<OverviewProps> {
 							<div className="page-cards-list-item" key={key}>
 								<CardList
 									index={key}
-									name={item.latest_app_name}
+									name={item.latest_build_name}
 									id={item.identifier}
-									versionCode={item.latest_app_build}
+									versionCode={item.latest_build_build}
 									platform={item.platform}
 									buildCount={item.build_count}
 									cluster_id={item.id}

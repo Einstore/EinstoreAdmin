@@ -69,7 +69,7 @@ export default class AppDetail extends Component {
 				},
 			}
 		})
-		window.Einstore.deleteAppTag(this.state.id, tag.id)
+		window.Einstore.deleteBuildTag(this.state.id, tag.id)
 	}
 
 	lastAddedTag = null
@@ -91,7 +91,7 @@ export default class AppDetail extends Component {
 
 	handleDelete = () => {
 		usure().then(() => {
-			window.Einstore.deleteApp(this.state.id).then(() => navigate('/apps'))
+			window.Einstore.deleteBuild(this.state.id).then(() => navigate('/apps'))
 		})
 	}
 
