@@ -20,7 +20,7 @@ interface State {
 
 export default class AppIcon extends Component<Props, State> {
 	public static defaultProps = {
-		context: 'apps',
+		context: 'builds',
 	}
 
 	public context: any
