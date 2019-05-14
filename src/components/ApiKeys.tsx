@@ -16,6 +16,7 @@ interface RowProps {
 	team?: string
 	created?: string
 	token?: string
+	type?: number
 	onDeleteKey: (id: string) => void
 	onChange?: (data: { name: string | null; id: string }) => void
 }
@@ -71,6 +72,11 @@ export class Row extends React.Component<RowProps> {
 							{this.props.name}
 						</span>
 					)}
+				</td>
+				<td className="apiKey-type" title={this.props.type == 0 ? "Upload" : "SDK"}>
+					<span className={this.props.type == 0 ? "apiKey-type-round-label-upload" : "apiKey-type-round-label-sdk"}>
+						{this.props.type == 0 ? "Upload" : "SDK"}
+					</span>
 				</td>
 				<td className="apiKey-date" title={this.props.created}>
 					{this.props.created && prettyDate(this.props.created)}
@@ -140,6 +146,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 								<tr>
 									<td>Team</td>
 									<td>Name/note</td>
+									<td>Type</td>
 									<td>Created</td>
 									<td>Actions</td>
 								</tr>
@@ -152,6 +159,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 											onChange={this.handleChangeKey}
 											key={item.id}
 											name={item.name}
+											type={item.type}
 											created={item.created}
 											id={item.id}
 											team={item.team_id}

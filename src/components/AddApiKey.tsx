@@ -15,10 +15,11 @@ interface AddApiKeysState {
 	teams: any
 	activeTeam?: string
 	name: string
+	type: number
 	recentlyAddedApiKeys: any[]
 }
 
-function RecentlyAddedApiKey({ id, name, team_id, token }: any) {
+function RecentlyAddedApiKey({ id, name, type, team_id, token }: any) {
 	return (
 		<div className="card">
 			<div className="card-content">
@@ -28,7 +29,19 @@ function RecentlyAddedApiKey({ id, name, team_id, token }: any) {
 							<tr>
 								<th>Name / note:</th>
 								<td>
-									<TeamName teamId={team_id} /> / <code>{name}</code>
+									<TeamName teamId={team_id} /> / <strong>{name}</strong>
+								</td>
+							</tr>
+							<tr>
+								<th>Type:</th>
+								<td>
+									<span
+										className={
+											type == 0 ? 'apiKey-type-round-label-upload' : 'apiKey-type-round-label-sdk'
+										}
+									>
+										{type == 0 ? 'Upload' : 'SDK'}
+									</span>
 								</td>
 							</tr>
 							<tr>
@@ -51,6 +64,7 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 		teams: [],
 		activeTeam: this.props.teamId,
 		name: '',
+		type: 0,
 		recentlyAddedApiKeys: [],
 	}
 
@@ -66,19 +80,27 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 		this.setState({ name: e.target.value })
 	}
 
+	handleChangeType = (event: React.FormEvent<HTMLSelectElement>) => {
+		const element = event.target as HTMLSelectElement
+		this.setState({ type: parseInt(element.value) })
+	}
+
 	handleSubmit = (e: FormEvent) => {
 		e.preventDefault()
 
 		if (this.state.activeTeam && this.state.name) {
 			this.setState({ working: true })
-			window.Einstore.createApiKey(this.state.activeTeam, this.state.name).then((newKey: any) => {
-				this.setState((state) => ({
-					...state,
-					name: '',
-					working: false,
-					recentlyAddedApiKeys: [...state.recentlyAddedApiKeys, newKey],
-				}))
-			})
+			window.Einstore.createApiKey(this.state.activeTeam, this.state.name, this.state.type).then(
+				(newKey: any) => {
+					this.setState((state) => ({
+						...state,
+						name: '',
+						type: 0,
+						working: false,
+						recentlyAddedApiKeys: [...state.recentlyAddedApiKeys, newKey],
+					}))
+				}
+			)
 		}
 	}
 
@@ -104,6 +126,10 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 									value={this.state.name}
 									placeholder={'Name / note'}
 								/>
+								<select name="type" onChange={this.handleChangeType}>
+									<option value="0">Upload</option>
+									<option value="1">SDK</option>
+								</select>
 								<div>
 									<Button>{this.state.working ? 'Creating...' : 'Create API key'}</Button>
 								</div>
