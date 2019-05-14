@@ -13,6 +13,25 @@ function NewLines({ children }) {
 	return children.split('\n').map((str, i) => <div key={i}>{str}</div>)
 }
 
+function BuildMessage({ label, id, url, message, versionNumber }) {
+	return (
+		<div className="card-column-commit">
+			<div className="card-column-commit-header">
+				<div className="card-column-commit-header-info">
+					{label}:{' '}
+					<span className="card-column-commit-header-info-msg">
+						<a href={url}>{id || url}</a>
+					</span>
+				</div>
+				{versionNumber && <div className="card-column-commit-header-version">{versionNumber}</div>}
+			</div>
+			<p className="card-column-commit-content">
+				<NewLines>{message}</NewLines>
+			</p>
+		</div>
+	)
+}
+
 function BuildMessages({ messages, versionNumber }) {
 	if (!messages) {
 		return null
@@ -23,58 +42,31 @@ function BuildMessages({ messages, versionNumber }) {
 	return (
 		<div className="cardInfo-messages">
 			{pm && pm.ticket && (
-				<div className="card-column-commit">
-					<div className="card-column-commit-header">
-						<div className="card-column-commit-header-info">
-							PM:{' '}
-							<span className="card-column-commit-header-info-msg">
-								<a href={pm.ticket.url}>{pm.ticket.id || pm.ticket.url}</a>
-							</span>
-						</div>
-						{versionNumber && (
-							<div className="card-column-commit-header-version">{versionNumber}</div>
-						)}
-					</div>
-					<p className="card-column-commit-content">
-						<NewLines>{pm.ticket.message}</NewLines>
-					</p>
-				</div>
+				<BuildMessage
+					label="PM"
+					id={pm.ticket.id}
+					url={pm.ticket.url}
+					message={pm.ticket.message}
+					versionNumber={versionNumber}
+				/>
 			)}
 			{sc && sc.pr && (
-				<div className="card-column-commit">
-					<div className="card-column-commit-header">
-						<div className="card-column-commit-header-info">
-							PR:{' '}
-							<span className="card-column-commit-header-info-msg">
-								<a href={sc.pr.url}>{sc.pr.id || sc.pr.url}</a>
-							</span>
-						</div>
-						{versionNumber && (
-							<div className="card-column-commit-header-version">{versionNumber}</div>
-						)}
-					</div>
-					<p className="card-column-commit-content">
-						<NewLines>{sc.pr.message}</NewLines>
-					</p>
-				</div>
+				<BuildMessage
+					label="PR"
+					id={sc.pr.id}
+					url={sc.pr.url}
+					message={sc.pr.message}
+					versionNumber={versionNumber}
+				/>
 			)}
 			{sc && sc.commit && (
-				<div className="card-column-commit">
-					<div className="card-column-commit-header">
-						<div className="card-column-commit-header-info">
-							Commit info:{' '}
-							<span className="card-column-commit-header-info-msg">
-								<a href={sc.commit.url}>{sc.commit.id}</a>
-							</span>
-						</div>
-						{versionNumber && (
-							<div className="card-column-commit-header-version">{versionNumber}</div>
-						)}
-					</div>
-					<p className="card-column-commit-content">
-						<NewLines>{sc.commit.message}</NewLines>
-					</p>
-				</div>
+				<BuildMessage
+					label="Commit info"
+					id={sc.commit.id}
+					url={sc.commit.url}
+					message={sc.commit.message}
+					versionNumber={versionNumber}
+				/>
 			)}
 		</div>
 	)
