@@ -126,7 +126,11 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 									value={this.state.name}
 									placeholder={'Name / note'}
 								/>
-								<select name="type" onChange={this.handleChangeType}>
+								<select
+									name="type"
+									value={this.state.type.toString()}
+									onChange={this.handleChangeType}
+								>
 									<option value="0">Upload</option>
 									<option value="1">SDK</option>
 								</select>
