@@ -18,7 +18,7 @@ interface RowProps {
 	token?: string
 	type?: number
 	onDeleteKey: (id: string) => void
-	onChange?: (data: { name: string | null; id: string }) => void
+	onChange?: (data: { name: string | null; id: string, type?: number }) => void
 }
 
 export class Row extends React.Component<RowProps> {
@@ -47,6 +47,7 @@ export class Row extends React.Component<RowProps> {
 			this.props.onChange({
 				id: this.props.id,
 				name: this.state.name,
+				type: this.props.type,
 			})
 		}
 	}
@@ -119,7 +120,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 	}
 
 	handleChangeKey = (data: any) => {
-		window.Einstore.editApiKey(data.id, { name: data.name }).then(() => {
+		window.Einstore.editApiKey(data.id, { name: data.name, type: data.type }).then(() => {
 			this.refresh()
 		})
 	}

@@ -376,7 +376,7 @@ export class Einstore {
 	public createApiKey = async (team: string, name: string, type: number): Promise<Response> => {
 		const promise = this.networking.postJson(`/teams/${team}/keys`, {
 			name: name,
-			type: type.toString,
+			type: type,
 		})
 		const res = await promise
 		const json = await res.json()
