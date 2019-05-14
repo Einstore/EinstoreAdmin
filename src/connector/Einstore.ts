@@ -272,7 +272,7 @@ export class Einstore {
 
 	public upload = async (data: any, team: string): Promise<Response> => {
 		console.log('uploading', { data, team })
-		const promise = this.networking.postData(`/teams/${team}/apps`, data)
+		const promise = this.networking.postData(`/teams/${team}/builds`, data)
 		const res = await promise
 		const json = await res.json()
 		return json
