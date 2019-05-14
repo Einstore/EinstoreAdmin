@@ -5,6 +5,8 @@ import './basicForm.sass'
 import './recentlyAddedApiKey.sass'
 import Button from './button'
 import TeamName from './TeamName'
+import { ApiKeyType, apiKeyTypePairs } from '../api/types/ApiKeyType'
+import map from 'lodash-es/map'
 
 interface AddApiKeysProps {
 	teamId?: string
@@ -17,6 +19,11 @@ interface AddApiKeysState {
 	name: string
 	type: number
 	recentlyAddedApiKeys: any[]
+}
+
+const apiKeyTypeClassnames = {
+	[ApiKeyType.UPLOAD]: 'apiKey-type-round-label-upload',
+	[ApiKeyType.SDK]: 'apiKey-type-round-label-sdk',
 }
 
 function RecentlyAddedApiKey({ id, name, type, team_id, token }: any) {
@@ -35,13 +42,7 @@ function RecentlyAddedApiKey({ id, name, type, team_id, token }: any) {
 							<tr>
 								<th>Type:</th>
 								<td>
-									<span
-										className={
-											type == 0 ? 'apiKey-type-round-label-upload' : 'apiKey-type-round-label-sdk'
-										}
-									>
-										{type == 0 ? 'Upload' : 'SDK'}
-									</span>
+									<span className={apiKeyTypeClassnames[type]}>{apiKeyTypePairs[type]}</span>
 								</td>
 							</tr>
 							<tr>
@@ -131,8 +132,9 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 									value={this.state.type.toString()}
 									onChange={this.handleChangeType}
 								>
-									<option value="0">Upload</option>
-									<option value="1">SDK</option>
+									{map(apiKeyTypePairs, (label, value) => (
+										<option value={value}>{label}</option>
+									))}
 								</select>
 								<div>
 									<Button>{this.state.working ? 'Creating...' : 'Create API key'}</Button>
