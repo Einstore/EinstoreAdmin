@@ -7,6 +7,9 @@ yarn-install: package-lock.json package.json ## Runs yarn install in docker
 up: docker-compose.yaml docker-compose.override.yaml ## Does docker-compose up, automaticly create docker-compose.override.yaml
 	docker-compose up -d --remove-orphans
 
+update: ## Update to the latest docker images
+	docker-compose pull
+
 clean: ## Deletes all containers and volumes. WILL DROP ALL DB DATA
 	docker-compose down --volumes --remove-orphans
 
