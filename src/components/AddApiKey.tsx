@@ -81,9 +81,8 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 		this.setState({ name: e.target.value })
 	}
 
-	handleChangeType = (event: React.FormEvent<HTMLSelectElement>) => {
-		const element = event.target as HTMLSelectElement
-		this.setState({ type: parseInt(element.value) })
+	handleChangeType = (e: React.FormEvent<HTMLSelectElement>) => {
+		this.setState({ type: Number(e.currentTarget.value) })
 	}
 
 	handleSubmit = (e: FormEvent) => {
