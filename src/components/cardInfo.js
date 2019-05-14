@@ -10,7 +10,7 @@ import bytes from 'pretty-bytes'
 import InstallButton from './InstallButton'
 
 function NewLines({ children }) {
-	return children.split("\n").map((str, i) => <div key={i}>{str}</div>)
+	return children.split('\n').map((str, i) => <div key={i}>{str}</div>)
 }
 
 function BuildMessages({ messages, versionNumber }) {
@@ -21,11 +21,24 @@ function BuildMessages({ messages, versionNumber }) {
 	const { pm, sc } = messages
 
 	return (
-		<>
+		<div className="cardInfo-messages">
 			{pm && pm.ticket && (
-				<p className="card-column-description">
-					{pm.ticket.message} {pm.ticket.url && <a href={pm.ticket.url}>more…</a>}
-				</p>
+				<div className="card-column-commit">
+					<div className="card-column-commit-header">
+						<div className="card-column-commit-header-info">
+							PM:{' '}
+							<span className="card-column-commit-header-info-msg">
+								<a href={pm.ticket.url}>{pm.ticket.id || pm.ticket.url}</a>
+							</span>
+						</div>
+						{versionNumber && (
+							<div className="card-column-commit-header-version">{versionNumber}</div>
+						)}
+					</div>
+					<p className="card-column-commit-content">
+						<NewLines>{pm.ticket.message}</NewLines>
+					</p>
+				</div>
 			)}
 			{sc && sc.pr && (
 				<div className="card-column-commit">
@@ -40,7 +53,9 @@ function BuildMessages({ messages, versionNumber }) {
 							<div className="card-column-commit-header-version">{versionNumber}</div>
 						)}
 					</div>
-					<p className="card-column-commit-content"><NewLines>{sc.pr.message}</NewLines></p>
+					<p className="card-column-commit-content">
+						<NewLines>{sc.pr.message}</NewLines>
+					</p>
 				</div>
 			)}
 			{sc && sc.commit && (
@@ -56,10 +71,12 @@ function BuildMessages({ messages, versionNumber }) {
 							<div className="card-column-commit-header-version">{versionNumber}</div>
 						)}
 					</div>
-					<p className="card-column-commit-content"><NewLines>{sc.commit.message}</NewLines></p>
+					<p className="card-column-commit-content">
+						<NewLines>{sc.commit.message}</NewLines>
+					</p>
 				</div>
 			)}
-		</>
+		</div>
 	)
 }
 
