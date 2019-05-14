@@ -9,6 +9,12 @@ import usure from '../utils/usure'
 import TextInput from './textInput'
 import Button from './button'
 import prettyDate from '../utils/prettyDate'
+import { ApiKeyType, apiKeyTypePairs } from '../api/types/ApiKeyType'
+
+const apiKeyTypeClassnames = {
+	[ApiKeyType.UPLOAD]: 'apiKey-type-round-label-upload',
+	[ApiKeyType.SDK]: 'apiKey-type-round-label-sdk',
+}
 
 interface RowProps {
 	name?: string
@@ -16,8 +22,9 @@ interface RowProps {
 	team?: string
 	created?: string
 	token?: string
+	type?: ApiKeyType
 	onDeleteKey: (id: string) => void
-	onChange?: (data: { name: string | null; id: string }) => void
+	onChange?: (data: { name: string | null; id: string; type?: number }) => void
 }
 
 export class Row extends React.Component<RowProps> {
@@ -46,6 +53,7 @@ export class Row extends React.Component<RowProps> {
 			this.props.onChange({
 				id: this.props.id,
 				name: this.state.name,
+				type: this.props.type,
 			})
 		}
 	}
@@ -53,6 +61,13 @@ export class Row extends React.Component<RowProps> {
 	inputRef = (ref?: HTMLInputElement) => ref && ref.select()
 
 	render() {
+		const typeName =
+			typeof this.props.type !== 'undefined' ? apiKeyTypePairs[this.props.type] : 'none'
+		const typeClassname =
+			typeof this.props.type !== 'undefined'
+				? apiKeyTypeClassnames[this.props.type]
+				: 'apiKey-type-round-label-none'
+
 		return (
 			<tr>
 				<td>{this.props.team && <TeamName teamId={this.props.team} iconSize={32} />}</td>
@@ -71,6 +86,9 @@ export class Row extends React.Component<RowProps> {
 							{this.props.name}
 						</span>
 					)}
+				</td>
+				<td className="apiKey-type" title={typeName}>
+					<span className={typeClassname}>{typeName}</span>
 				</td>
 				<td className="apiKey-date" title={this.props.created}>
 					{this.props.created && prettyDate(this.props.created)}
@@ -113,7 +131,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 	}
 
 	handleChangeKey = (data: any) => {
-		window.Einstore.editApiKey(data.id, { name: data.name }).then(() => {
+		window.Einstore.editApiKey(data.id, { name: data.name, type: data.type }).then(() => {
 			this.refresh()
 		})
 	}
@@ -140,6 +158,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 								<tr>
 									<td>Team</td>
 									<td>Name/note</td>
+									<td>Type</td>
 									<td>Created</td>
 									<td>Actions</td>
 								</tr>
@@ -152,6 +171,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 											onChange={this.handleChangeKey}
 											key={item.id}
 											name={item.name}
+											type={item.type}
 											created={item.created}
 											id={item.id}
 											team={item.team_id}
