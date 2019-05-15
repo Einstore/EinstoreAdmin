@@ -524,26 +524,56 @@ export class Einstore {
 		window.location.href = `${a.button}?link=${encodeURIComponent(link)}`
 	}
 
-	public registerTemplate = (name: string, source: 'html' | 'plain', link: string) => {
+	public postTemplate = (name: string, source: string, link: string) => {
 		return this.networking.postJson(`/templates`, {
 			name,
 			source,
 			link,
+			deletable: false,
 		})
 	}
 
-	public registerAllAvailableTemplates = () => {
+	public putTemplate = (id: string, name: string, source: string, link: string) => {
+		return this.networking.putJson(`/templates/${id}`, {
+			name,
+			source,
+			link,
+			deletable: false,
+		})
+	}
+
+	public templates = async (): Promise<
+		[{ name: string; id: string; deletable: boolean; source?: string; link?: string }]
+	> => {
+		return this.networking.get('/templates').then((res) => res.json())
+	}
+
+	public registerAllAvailableTemplates = async () => {
 		const urlParts = window.location.href.split('/')
 		const urlRoot = `${urlParts[0]}//${urlParts[2]}`
 
+		const existingTemplates = await this.templates()
+
+		const existingPairs = {}
+
+		for (let template of existingTemplates) {
+			existingPairs[template.name] = template.id
+		}
+
 		return Promise.all(
 			availableTemplates.map((templateName) => {
-				const source = /\.html$/.test(templateName) ? 'html' : 'plain'
-				return this.registerTemplate(
-					templateName,
-					source,
-					`${urlRoot}/templates/${templateName}.leaf`
-				)
+				const id = existingPairs[templateName]
+				const url = `${urlRoot}/templates/${templateName}.leaf`
+
+				return fetch(url)
+					.then((res) => res.text())
+					.then((source) => {
+						if (id) {
+							return this.putTemplate(id, templateName, source, url)
+						} else {
+							return this.postTemplate(templateName, source, url)
+						}
+					})
 			})
 		)
 	}
