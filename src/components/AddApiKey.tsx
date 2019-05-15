@@ -9,6 +9,7 @@ import { ApiKeyType, apiKeyTypePairs } from '../api/types/ApiKeyType'
 import map from 'lodash-es/map'
 import find from 'lodash-es/find'
 import Select from 'react-select'
+import IconBack from 'shapes/back'
 
 interface AddApiKeysProps {
 	teamId?: string
@@ -113,6 +114,11 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 
 		return (
 			<div className="page">
+				<div className="page-controls">
+					<div className="page-control is-active" onClick={() => window.history.back()}>
+						<IconBack /> Back
+					</div>
+				</div>
 				<div className="recentlyAddedApiKeys">
 					{this.state.recentlyAddedApiKeys.map((key: any) => (
 						<RecentlyAddedApiKey key={key.id} {...key} />
