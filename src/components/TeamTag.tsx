@@ -1,21 +1,14 @@
-import bestContrast from 'get-best-contrast-color'
 import React from 'react'
 import allTeamsIcon from '../shapes/all-teams.png'
 import AppIcon from './AppIcon'
 import './teamIcon.sass'
-
-const colors = ['#000', '#FFF']
-
-const getContrastColor = (original: string) => bestContrast(`#${original}`, colors)
+import getContrastColor from '../utils/getContrastColor'
 
 export const TeamIcon = ({ team, iconSize }: { team: any; iconSize?: number }) => {
 	if (team.id === 'new') {
 		return (
 			<span className="teamTag-img" style={{ fontSize: iconSize }}>
-
-				<div
-					className="teamIcon view-add"
-				>
+				<div className="teamIcon view-add">
 					<div className="teamIcon-initials">+</div>
 				</div>
 			</span>
@@ -54,7 +47,15 @@ export const TeamIcon = ({ team, iconSize }: { team: any; iconSize?: number }) =
 	)
 }
 
-export const TeamTag = ({ team, iconSize, withoutName }: { team: any; iconSize?: number, withoutName?: boolean }) => {
+export const TeamTag = ({
+	team,
+	iconSize,
+	withoutName,
+}: {
+	team: any
+	iconSize?: number
+	withoutName?: boolean
+}) => {
 	return (
 		<div className="teamTag">
 			<TeamIcon team={team} iconSize={iconSize} />
