@@ -3,6 +3,7 @@
 	"version": "1.0.0",
 	"private": true,
 	"dependencies": {
+		"@fortawesome/fontawesome-free": "^5.8.2",
 		"@reach/router": "^1.2.1",
 		"@types/classnames": "^2.2.7",
 		"@types/crypto-js": "^3.1.43",

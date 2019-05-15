@@ -18,11 +18,18 @@ export class Networking implements Networkable {
 		}
 	}
 
+	public normalizeUrl = (path: string) => {
+		if (path.substr(0, 4) !== 'http') {
+			path = this.config.url + path
+		}
+		return path
+	}
+
 	// Requests
 
 	public get = (path: string, headers: Headers = new Headers()): Promise<Response> => {
 		console.log('GET', path)
-		path = this.config.url + path
+		path = this.normalizeUrl(path)
 		const promise = window
 			.fetch(path, {
 				headers: this.headers(headers),
@@ -48,8 +55,7 @@ export class Networking implements Networkable {
 		json: object,
 		headers: Headers = new Headers()
 	): Promise<Response> => {
-		console.log(path)
-		path = this.config.url + path
+		path = this.normalizeUrl(path)
 		const promise = window.fetch(path, {
 			body: JSON.stringify(json),
 			headers: this.headers(headers),
@@ -69,7 +75,7 @@ export class Networking implements Networkable {
 		headers: Headers = new Headers()
 	): Promise<Response> => {
 		console.log(path)
-		path = this.config.url + path
+		path = this.normalizeUrl(path)
 		const promise = window.fetch(path, {
 			body: data,
 			headers: this.headers(headers),
@@ -85,7 +91,7 @@ export class Networking implements Networkable {
 
 	public put = (path: string, json: JSON, headers: Headers = new Headers()): Promise<Response> => {
 		console.log(path)
-		path = this.config.url + path
+		path = this.normalizeUrl(path)
 		const promise = window.fetch(path, {
 			body: JSON.stringify(json),
 			headers: this.headers(headers),
@@ -105,7 +111,7 @@ export class Networking implements Networkable {
 		headers: Headers = new Headers()
 	): Promise<Response> => {
 		console.log(path)
-		path = this.config.url + path
+		path = this.normalizeUrl(path)
 		const promise = window.fetch(path, {
 			body: JSON.stringify(json),
 			headers: this.headers(headers),
@@ -120,7 +126,7 @@ export class Networking implements Networkable {
 		headers: Headers = new Headers()
 	): Promise<Response> => {
 		console.log(path)
-		path = this.config.url + path
+		path = this.normalizeUrl(path)
 		const promise = window.fetch(path, {
 			body: JSON.stringify(json),
 			headers: this.headers(headers),
@@ -135,7 +141,7 @@ export class Networking implements Networkable {
 	}
 
 	public delete = (path: string, headers: Headers = new Headers()): Promise<Response> => {
-		path = this.config.url + path
+		path = this.normalizeUrl(path)
 		const promise = window.fetch(path, {
 			headers: this.headers(headers),
 			method: 'DELETE',

@@ -16,6 +16,20 @@ import { splitToIdentifiersAndRegularTags } from '../utils/splitToIdentifiersAnd
 
 import uniqBy from 'lodash-es/uniqBy'
 
+export enum AuthenticatorType {
+	BASIC = 'BASIC',
+	OAUTH = 'OAUTH',
+}
+
+export interface Authenticator {
+	name: string
+	icon: string
+	button: string
+	identifier: string
+	type: AuthenticatorType
+	color?: string
+}
+
 export class Einstore {
 	public networking: Networking
 
@@ -34,11 +48,15 @@ export class Einstore {
 	// Requests
 
 	public auth = (email: string, password: string): Promise<Auth> => {
+		return this.basicAuth('/auth', email, password)
+	}
+
+	public basicAuth = (url: string, email: string, password: string) => {
 		const object = {
 			email,
 			password,
 		}
-		const promise = this.networking.postJson('/auth', object)
+		const promise = this.networking.postJson(url, object)
 		return promise.then((res) => {
 			const jwt = res.headers.get('authorization')
 			if (jwt) {
@@ -129,6 +147,10 @@ export class Einstore {
 
 	public removeUserFromTeam = (teamId: string, userId: string): Promise<any> => {
 		return this.networking.postJson(`/teams/${teamId}/unlink`, { id: userId })
+	}
+
+	public authenticators = async (): Promise<[Authenticator]> => {
+		return this.networking.get('/authenticators').then((res) => res.json())
 	}
 
 	public teams = async (): Promise<[Team]> => {
@@ -483,10 +505,10 @@ export class Einstore {
 		return res.json()
 	}
 
-	public authViaGithub = () => {
-		const link = `${window.location.origin}/github-auth-result`
-		window.location.href = `${
-			this.networking.config.url
-		}/auth/github/login?link=${encodeURIComponent(link)}`
+	public startOauth = (a: Authenticator) => {
+		const link = `${window.location.origin}/oauth-result?identifier=${encodeURIComponent(
+			a.identifier
+		)}`
+		window.location.href = `${a.button}?link=${encodeURIComponent(link)}`
 	}
 }
