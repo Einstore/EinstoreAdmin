@@ -25,11 +25,11 @@ export enum AlertView {
 interface State {}
 
 interface Props {
-	view: AlertView
-	text: string
-	html: string
-	onDismiss: () => void
-	onClick: () => void
+	view?: AlertView
+	text?: string
+	html?: string
+	onDismiss?: () => void
+	onClick?: () => void
 }
 
 export default class Alert extends React.Component<Props, State> {
@@ -40,11 +40,13 @@ export default class Alert extends React.Component<Props, State> {
 					{this.props.text && <p>{this.props.text}</p>}
 					{this.props.html && <div dangerouslySetInnerHTML={{ __html: this.props.html }} />}
 				</div>
-				<div className="alert-actions">
-					<button role="button" className="alert-close-button" onClick={this.props.onDismiss}>
-						&times;
-					</button>
-				</div>
+				{this.props.onDismiss && (
+					<div className="alert-actions">
+						<button className="alert-close-button" onClick={this.props.onDismiss}>
+							&times;
+						</button>
+					</div>
+				)}
 			</div>
 		)
 	}
