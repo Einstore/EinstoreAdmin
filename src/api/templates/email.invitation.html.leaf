@@ -1,3 +1,4 @@
+<!-- email.invitation.html.leaf -->
 <h1>Hi #(user.firstname) #(user.lastname)</h1>
 <p>&nbsp;</p>
 <p>
