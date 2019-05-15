@@ -10,6 +10,8 @@ import TextInput from './textInput'
 import Button from './button'
 import prettyDate from '../utils/prettyDate'
 import { ApiKeyType, apiKeyTypePairs } from '../api/types/ApiKeyType'
+import { Link } from '@reach/router'
+import IconPlus from 'shapes/plus'
 
 const apiKeyTypeClassnames = {
 	[ApiKeyType.UPLOAD]: 'apiKey-type-round-label-upload',
@@ -109,7 +111,9 @@ export class Row extends React.Component<RowProps> {
 	}
 }
 
-interface ApiKeysProps {}
+interface ApiKeysProps {
+	teamId?: string
+}
 
 interface ApiKeysState {
 	keys: ApiKey[]
@@ -151,37 +155,55 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 	render() {
 		return (
 			<div className="page">
-				<div className="card">
-					<div className="card-content">
-						<table className="api">
-							<thead>
-								<tr>
-									<td>Team</td>
-									<td>Name/note</td>
-									<td>Type</td>
-									<td>Created</td>
-									<td>Actions</td>
-								</tr>
-							</thead>
-							<tbody>
-								{this.state.keys.map((item: ApiKey) => {
-									return (
-										<Row
-											onDeleteKey={this.handleDeleteKey}
-											onChange={this.handleChangeKey}
-											key={item.id}
-											name={item.name}
-											type={item.type}
-											created={item.created}
-											id={item.id}
-											team={item.team_id}
-										/>
-									)
-								})}
-							</tbody>
-						</table>
+				{this.state.keys.length > 0 ? (
+					<div className="card">
+						<div className="card-content">
+							<table className="api">
+								<thead>
+									<tr>
+										<td>Team</td>
+										<td>Name/note</td>
+										<td>Type</td>
+										<td>Created</td>
+										<td>Actions</td>
+									</tr>
+								</thead>
+								<tbody>
+									{this.state.keys.map((item: ApiKey) => {
+										return (
+											<Row
+												onDeleteKey={this.handleDeleteKey}
+												onChange={this.handleChangeKey}
+												key={item.id}
+												name={item.name}
+												type={item.type}
+												created={item.created}
+												id={item.id}
+												team={item.team_id}
+											/>
+										)
+									})}
+								</tbody>
+							</table>
+						</div>
 					</div>
-				</div>
+				) : (
+					<div className="page-upload">
+						<p className="page-upload-text">No API keys here yet.</p>
+						{this.props.teamId && (
+							<div>
+								<Link
+									to={this.props.teamId ? `/add-api-key/${this.props.teamId}` : `/add-api-key`}
+									className="button"
+								>
+									<span>
+										<IconPlus /> Add new API key
+									</span>
+								</Link>
+							</div>
+						)}
+					</div>
+				)}
 			</div>
 		)
 	}

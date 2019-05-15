@@ -7,6 +7,8 @@ import Button from './button'
 import TeamName from './TeamName'
 import { ApiKeyType, apiKeyTypePairs } from '../api/types/ApiKeyType'
 import map from 'lodash-es/map'
+import find from 'lodash-es/find'
+import Select from 'react-select'
 
 interface AddApiKeysProps {
 	teamId?: string
@@ -81,8 +83,8 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 		this.setState({ name: e.target.value })
 	}
 
-	handleChangeType = (e: React.FormEvent<HTMLSelectElement>) => {
-		this.setState({ type: Number(e.currentTarget.value) })
+	handleChangeType = (value: any) => {
+		this.setState({ type: Number(value.value) })
 	}
 
 	handleSubmit = (e: FormEvent) => {
@@ -105,6 +107,10 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 	}
 
 	render() {
+		const typeOptions: { label: string; value: number }[] = []
+
+		map(apiKeyTypePairs, (label, value) => typeOptions.push({ label, value: Number(value) }))
+
 		return (
 			<div className="page">
 				<div className="recentlyAddedApiKeys">
@@ -126,16 +132,14 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 									value={this.state.name}
 									placeholder={'Name / note'}
 								/>
-								<select
-									name="type"
-									value={this.state.type.toString()}
+								<Select
+									placeholder="Select type"
+									isSearchable={false}
 									onChange={this.handleChangeType}
-								>
-									{map(apiKeyTypePairs, (label, value) => (
-										<option value={value}>{label}</option>
-									))}
-								</select>
-								<div>
+									value={find(typeOptions, (opt: any) => opt.value === this.state.type)}
+									options={typeOptions}
+								/>
+								<div className="card-actions">
 									<Button>{this.state.working ? 'Creating...' : 'Create API key'}</Button>
 								</div>
 							</fieldset>
