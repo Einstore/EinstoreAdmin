@@ -88,19 +88,11 @@ export default class Team extends Component {
 		}
 	}
 
-	handleActiveTeamDelete = (e) => {
-		e.preventDefault()
-		const teamId = this.state.activeTeam
-		usure('Are you really sure you want to delete team ' + teamId).then(() => {
-			window.Einstore.deleteTeam(teamId).then(() => (window.location.href = '/'))
-		})
-	}
-
 	render() {
 		const { activeTeam, teams } = this.state
 		return (
 			<div className="page">
-				<EditTeam teamId={this.state.activeTeam} key={this.state.activeTeam} />
+				<EditTeam teamId={this.state.activeTeam} key={'editbox'+this.state.activeTeam} />
 
 				<div className="card">
 					<div className="card-footer">
@@ -172,20 +164,7 @@ export default class Team extends Component {
 					</div>
 				</div>
 
-				<div className="notice">
-					<h2 className="notice-title">
-						<IconInfo /> Want to delete team?
-					</h2>
-					<p className="notice-content">
-						By deleting this team you will remove all files associated with the team. All users
-						assigned to this team will lose access too.
-					</p>
-					<div>
-						<Button danger onClick={this.handleActiveTeamDelete}>
-							Delete team {this.state.activeTeam}
-						</Button>
-					</div>
-				</div>
+				<DeleteTeamBox key={'deletebox'+this.state.activeTeam} teamId={this.state.activeTeam} />
 			</div>
 		)
 	}
@@ -194,4 +173,50 @@ export default class Team extends Component {
 Team.contextTypes = {
 	connector: PropTypes.object,
 	team: PropTypes.string,
+}
+
+class DeleteTeamBox extends React.PureComponent {
+	state = {
+		team: null,
+	}
+
+	componentDidMount() {
+		window.Einstore.team(this.props.teamId).then((data) => this.setState({ team: data }))
+	}
+
+	handleDeleteTeam = (e) => {
+		e.preventDefault()
+		const teamId = this.props.teamId
+		usure(`Are you really sure you want to delete ${this.state.team.name}?`).then(() => {
+			window.Einstore.deleteTeam(teamId).then(() => (window.location.href = '/'))
+		})
+	}
+
+	render() {
+		return (
+			this.state.team && (
+				<div className="notice">
+					<h2 className="notice-title">
+						<IconInfo /> Want to delete team '{this.state.team.name}'?
+					</h2>
+					{this.state.team.admin ? (
+							<p className="notice-content">
+								This team cannot be deleted, because it is <strong>admin</strong> team.
+							</p>) : (
+						<>
+						<p className="notice-content">
+							By deleting this team you will remove all files associated with the team. All users
+							assigned to this team will lose access too.
+						</p>
+							<div>
+								<Button danger onClick={this.handleDeleteTeam}>
+									Delete team '{this.state.team.name}'
+								</Button>
+							</div>
+						</>
+					)}
+				</div>
+			)
+		)
+	}
 }
