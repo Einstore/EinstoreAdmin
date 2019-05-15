@@ -160,6 +160,7 @@ export default class Team extends Component {
 								<TeamMember
 									key={item.id}
 									id={item.id}
+									su={item.su}
 									firstname={item.firstname}
 									lastname={item.lastname}
 									username={item.username}

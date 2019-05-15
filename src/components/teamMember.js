@@ -29,9 +29,9 @@ export default class TeamMember extends Component {
 						</div>
 					</div>
 				</div>
-				<div className="card-content-member-action" onClick={this.removeFromTeam}>
+				{this.props.su ? <div className="card-content-member-isSU">this user is superadmin</div> : <div className="card-content-member-action" onClick={this.removeFromTeam}>
 					<IconTrash /> Remove from team
-				</div>
+				</div>}
 			</div>
 		)
 	}
