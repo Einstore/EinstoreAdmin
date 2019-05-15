@@ -17,7 +17,7 @@ export enum AuthView {
 	RESET_PASSWORD = 'reset-password',
 	REGISTRATION = 'register',
 	LOGIN = 'login',
-	GITHUB_AUTH_RESULT = 'github-auth-result',
+	OAUTH_RESULT = 'outh-result',
 }
 
 export interface AuthRouteProps {
@@ -253,7 +253,7 @@ export class AuthRoute extends React.Component<RouteComponentProps<AuthRouteProp
 						<ResetPassword onSuccess={this.props.onResetPassword} />
 					</div>
 				)
-			case AuthView.GITHUB_AUTH_RESULT:
+			case AuthView.OAUTH_RESULT:
 				const info = parse(window.location.search).info as string
 				if (this.lastInfo !== info) {
 					this.lastInfo = info

@@ -249,7 +249,7 @@ body {
 						/>
 
 						{this.state.server && this.state.server.config.github_enabled && (
-							<AuthRoute path="github-auth-result" view={AuthView.GITHUB_AUTH_RESULT} />
+							<AuthRoute path="oauth-result" view={AuthView.OAUTH_RESULT} />
 						)}
 
 						{this.state.server && this.state.server.config.allow_registrations && (
