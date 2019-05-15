@@ -16,6 +16,7 @@ import { splitToIdentifiersAndRegularTags } from '../utils/splitToIdentifiersAnd
 
 import uniqBy from 'lodash-es/uniqBy'
 import { AlertView } from 'components/Alert'
+import availableTemplates from '../api/availableTemplates'
 
 export enum AuthenticatorType {
 	BASIC = 'BASIC',
@@ -521,5 +522,29 @@ export class Einstore {
 			a.identifier
 		)}`
 		window.location.href = `${a.button}?link=${encodeURIComponent(link)}`
+	}
+
+	public registerTemplate = (name: string, source: 'html' | 'plain', link: string) => {
+		return this.networking.postJson(`/templates`, {
+			name,
+			source,
+			link,
+		})
+	}
+
+	public registerAllAvailableTemplates = () => {
+		const urlParts = window.location.href.split('/')
+		const urlRoot = `${urlParts[0]}//${urlParts[2]}`
+
+		return Promise.all(
+			availableTemplates.map((templateName) => {
+				const source = /\.html$/.test(templateName) ? 'html' : 'plain'
+				return this.registerTemplate(
+					templateName,
+					source,
+					`${urlRoot}/templates/${templateName}.leaf`
+				)
+			})
+		)
 	}
 }
