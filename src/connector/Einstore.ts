@@ -524,19 +524,19 @@ export class Einstore {
 		window.location.href = `${a.button}?link=${encodeURIComponent(link)}`
 	}
 
-	public postTemplate = (name: string, link: string) => {
+	public postTemplate = (name: string, source: string, link: string) => {
 		return this.networking.postJson(`/templates`, {
 			name,
-			source: '',
+			source,
 			link,
 			deletable: false,
 		})
 	}
 
-	public putTemplate = (id: string, name: string, link: string) => {
+	public putTemplate = (id: string, name: string, source: string, link: string) => {
 		return this.networking.putJson(`/templates/${id}`, {
 			name,
-			source: '',
+			source,
 			link,
 			deletable: false,
 		})
@@ -565,11 +565,15 @@ export class Einstore {
 				const id = existingPairs[templateName]
 				const url = `${urlRoot}/templates/${templateName}.leaf`
 
-				if (id) {
-					return this.putTemplate(id, templateName, url)
-				} else {
-					return this.postTemplate(templateName, url)
-				}
+				return fetch(url)
+					.then((res) => res.text())
+					.then((source) => {
+						if (id) {
+							return this.putTemplate(id, templateName, source, url)
+						} else {
+							return this.postTemplate(templateName, source, url)
+						}
+					})
 			})
 		)
 	}
