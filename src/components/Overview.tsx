@@ -14,6 +14,7 @@ import prettyDate from '../utils/prettyDate'
 import PlatformSwitch, { PlatformSwitchValue } from './PlatformSwitch'
 import InstallButton, { InstallButtonView } from './InstallButton'
 import detectOS, { OSName } from '../utils/detectOS'
+import SecurityOverview from './SecurityOverview';
 
 export interface OverviewProps {
 	teamId?: string
@@ -251,6 +252,7 @@ export default class Overview extends Component<OverviewProps> {
 				{this.state.searchTags.length > 0 && (
 					<SearchResults key={JSON.stringify(this.state.searchTags)} tags={this.state.searchTags} />
 				)}
+				{!this.props.teamId && <SecurityOverview />}
 				<div className="page-cards-list">
 					{this.state.data.map((item: any, key) => {
 						return (

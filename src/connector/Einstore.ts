@@ -15,6 +15,7 @@ import { App } from './Model/App'
 import { splitToIdentifiersAndRegularTags } from '../utils/splitToIdentifiersAndRegularTags'
 
 import uniqBy from 'lodash-es/uniqBy'
+import { AlertView } from 'components/Alert'
 
 export enum AuthenticatorType {
 	BASIC = 'BASIC',
@@ -28,6 +29,12 @@ export interface Authenticator {
 	identifier: string
 	type: AuthenticatorType
 	color?: string
+}
+
+export interface SecurityMessage {
+	issue: string
+	code: string
+	category: AlertView
 }
 
 export class Einstore {
@@ -158,6 +165,10 @@ export class Einstore {
 		const res = await promise
 		const json = await res.json()
 		return json.map((x: JSON) => Object.assign(new Team(), x))
+	}
+
+	public security = async (): Promise<{ issues: [SecurityMessage] }> => {
+		return this.networking.get('/server/security').then((res) => res.json())
 	}
 
 	public createTeam = async (data: object): Promise<Response> => {
