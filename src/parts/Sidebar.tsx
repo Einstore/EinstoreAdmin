@@ -71,8 +71,8 @@ export class Sidebar extends React.Component<SidebarProps> {
 						</Link>
 						<Link
 							onClick={this.props.onChoice}
-							to={activeTeam ? `/api-keys/${activeTeam}` : '/'}
-							className={cn('sidebar-menu-item', !activeTeam && 'is-inactive')}
+							to={activeTeam ? `/api-keys/${activeTeam}` : '/api-keys'}
+							className={cn('sidebar-menu-item')}
 						>
 							API keys
 						</Link>

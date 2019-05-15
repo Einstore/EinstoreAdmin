@@ -17,7 +17,7 @@ import Team from './parts/team'
 import { ServerIcon } from './components/ServerIcon'
 import AddTeam from './parts/AddTeam'
 import SystemSettings from './parts/SystemSettings'
-import TeamName from './components/TeamName';
+import TeamName from './components/TeamName'
 
 const FadeInOut = posed.div({
 	enter: { opacity: 1 },
@@ -31,7 +31,11 @@ function Header({ params }: { params: any }) {
 	console.log({ Header: params })
 	return (
 		<Link to={`/apps${params.teamId ? `/${params.teamId}` : ''}`}>
-			{params.teamId ? <TeamName key={params.teamId} teamId={params.teamId} iconSize={48} withoutName /> : <ServerIcon />}
+			{params.teamId ? (
+				<TeamName key={params.teamId} teamId={params.teamId} iconSize={48} withoutName />
+			) : (
+				<ServerIcon />
+			)}
 		</Link>
 	)
 }
@@ -74,8 +78,8 @@ function SystemRoute() {
 	return <SystemSettings />
 }
 
-function ApiKeysRoute() {
-	return <ApiKeys />
+function ApiKeysRoute(props: LayoutChildProps) {
+	return <ApiKeys teamId={props.params.teamId} />
 }
 
 function AddApiKeyRoute({ params }: LayoutChildProps) {
@@ -260,20 +264,8 @@ body {
 
 						{auth && <Redirect from="/" to="apps" />}
 						{auth && <Layout path="apps" body={OverviewRoute} header={Header} />}
-						{auth && (
-							<Layout
-								path="app/:appId"
-								body={AppRoute}
-								header={Header}
-							/>
-						)}
-						{auth && (
-							<Layout
-								path="build/:buildId"
-								body={BuildRoute}
-								header={Header}
-							/>
-						)}
+						{auth && <Layout path="app/:appId" body={AppRoute} header={Header} />}
+						{auth && <Layout path="build/:buildId" body={BuildRoute} header={Header} />}
 						{auth && (
 							<Layout
 								path="apps/:teamId"
@@ -283,6 +275,14 @@ body {
 							/>
 						)}
 						{auth && <Layout path="me" body={MeRoute} header={Header} />}
+						{auth && (
+							<Layout
+								path="api-keys"
+								body={ApiKeysRoute}
+								header={Header}
+								headerButtonView={HeaderButtonView.ADD_API_KEY}
+							/>
+						)}
 						{auth && (
 							<Layout
 								path="api-keys/:teamId"
