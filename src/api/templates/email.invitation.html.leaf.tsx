@@ -3,7 +3,7 @@ import htmlEmailButton from './parts/htmlEmailButton'
 
 export default function emailInvitationHtmlLeaf(params: any) {
 	const content = /*html*/ `
-<p>Hi #(user.firstname) #(user.lastname)</p>
+<p style="font-size:1.25em;font-weight:bold">Hi #(user.firstname) #(user.lastname)</p>
 <p>
 	You have been invited to one of our teams by #(sender.firstname) #(sender.lastname) (#(sender.email)).<br />
 	You can confirm your registration now by clicking on this button.
