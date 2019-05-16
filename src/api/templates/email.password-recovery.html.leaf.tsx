@@ -1,17 +1,19 @@
+import htmlEmailLayout from './parts/htmlEmailLayout'
+import htmlEmailButton from './parts/htmlEmailButton'
+
 export default function emailInvitationHtmlLeaf(params: any) {
-	return /*html*/ `
-<!-- email.password-recovery.html.leaf -->
-<style>
-	* {
-		font-family: sans-serif;
-	}
-</style>
-<h1>Hi #(user.firstname) #(user.lastname)</h1>
-<p>&nbsp;</p>
-<p>Please confirm your email #(user.email) by clicking on this <a href="#(link)">link</a></p>
-<p>&nbsp;</p>
-<p>Recovery code is: <strong>#(verification)</strong></p>
-<p>&nbsp;</p>
-<p>#(system.info.name)</p>
+	const content = /*html*/ `
+<p>Hi #(user.firstname) #(user.lastname)</p>
+<p>Please confirm your email #(user.email) by clicking on this button./p>
+${htmlEmailButton({ label: 'Confirm your email', href: '#(link)', center: true }, params)}
 `
+
+	return htmlEmailLayout(
+		{
+			content,
+			footer: '#(system.info.name)',
+			center: true,
+		},
+		params
+	)
 }
