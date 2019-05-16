@@ -24,5 +24,10 @@ docker-compose.override.yaml:
 
 direnv: .envrc ## Create .envrc for bin-docker
 
+local: ## Start against local development API server
+	REACT_APP_API_URL=http://localhost:8080 BOOSTCORE_DEMO=true yarn start
+
 .envrc:
 	cp .envrc.dist .envrc
+
+
