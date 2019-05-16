@@ -16,7 +16,7 @@ import { splitToIdentifiersAndRegularTags } from '../utils/splitToIdentifiersAnd
 
 import uniqBy from 'lodash-es/uniqBy'
 import { AlertView } from 'components/Alert'
-import availableTemplates from '../api/availableTemplates'
+import availableTemplates from '../api/templates/availableTemplates'
 
 export enum AuthenticatorType {
 	BASIC = 'BASIC',
@@ -524,7 +524,7 @@ export class Einstore {
 		window.location.href = `${a.button}?link=${encodeURIComponent(link)}`
 	}
 
-	public postTemplate = (name: string, source: string, link: string) => {
+	public postTemplate = (name: string, source: string, link?: string) => {
 		return this.networking.postJson(`/templates`, {
 			name,
 			source,
@@ -533,7 +533,7 @@ export class Einstore {
 		})
 	}
 
-	public putTemplate = (id: string, name: string, source: string, link: string) => {
+	public putTemplate = (id: string, name: string, source: string, link?: string) => {
 		return this.networking.putJson(`/templates/${id}`, {
 			name,
 			source,
@@ -550,7 +550,16 @@ export class Einstore {
 
 	public registerAllAvailableTemplates = async () => {
 		const urlParts = window.location.href.split('/')
-		const urlRoot = `${urlParts[0]}//${urlParts[2]}`
+		const baseUrl = `${urlParts[0]}//${urlParts[2]}`
+
+		const settings = await window.Einstore.serverSettingsPlain()
+
+		const templateParams = {
+			baseUrl,
+			settings,
+		}
+
+		console.log(templateParams)
 
 		const existingTemplates = await this.templates()
 
@@ -561,19 +570,14 @@ export class Einstore {
 		}
 
 		return Promise.all(
-			availableTemplates.map((templateName) => {
-				const id = existingPairs[templateName]
-				const url = `${urlRoot}/templates/${templateName}.leaf`
-
-				return fetch(url)
-					.then((res) => res.text())
-					.then((source) => {
-						if (id) {
-							return this.putTemplate(id, templateName, source, url)
-						} else {
-							return this.postTemplate(templateName, source, url)
-						}
-					})
+			availableTemplates.map(async (template) => {
+				const id = existingPairs[template.name]
+				const source = await template.render(templateParams).trim()
+				if (id) {
+					return this.putTemplate(id, template.name, source)
+				} else {
+					return this.postTemplate(template.name, source)
+				}
 			})
 		)
 	}
