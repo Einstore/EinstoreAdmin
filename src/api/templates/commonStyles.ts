@@ -67,7 +67,7 @@ export default function commonStyles(params?: any) {
 		border: 1px solid #b3b3b3;
 		border-radius: 4px;
 		padding: 10px;
-		margin: 16px 0;
+		margin: .25em 0 1em;
 		color: #364041;
 	}
 	input[disabled] {
