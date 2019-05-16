@@ -1,8 +1,26 @@
-import React, { FormEvent, ChangeEvent } from 'react'
+import React, { FormEvent, ChangeEvent, useState, useCallback } from 'react'
 
 import './systemSettings.sass'
 import Button from '../components/button'
 import previewFileImage from '../utils/previewFileImage'
+
+function TemplatorUpdate() {
+	const [isWorking, setIsWorking] = useState(false)
+	const onClick = useCallback((e: MouseEvent) => {
+		e.preventDefault()
+		setIsWorking(true)
+		window.Einstore.registerAllAvailableTemplates().then(() => {
+			setIsWorking(false)
+		})
+	}, [])
+	return (
+		<div className="TemplatorUpdate">
+			<Button onClick={isWorking ? undefined : onClick}>
+				{isWorking ? 'Updating...' : 'Trigger update of email and API forms templates.'}
+			</Button>
+		</div>
+	)
+}
 
 class SystemImageForm extends React.Component<
 	{},
@@ -149,6 +167,7 @@ export default class AddTeam extends React.Component {
 					<h2 className="sheet-title">System settings</h2>
 					<SystemImageForm />
 					<SystemConfigsForm />
+					<TemplatorUpdate />
 				</div>
 			</div>
 		)
