@@ -1,8 +1,8 @@
 import cn from 'classnames'
 import React from 'react'
 import './teamName.sass'
-import { TeamTag } from './TeamTag';
-import { Team } from '../connector/Model/Team';
+import { TeamTag } from './TeamTag'
+import { Team } from '../connector/Model/Team'
 
 interface TeamNameProps {
 	teamId: string
@@ -17,21 +17,27 @@ interface TeamNameState {
 
 export default class TeamName extends React.PureComponent<TeamNameProps, TeamNameState> {
 	static defaultProps = {
-		withoutName: false
+		withoutName: false,
 	}
 
 	state = {
-		team: undefined
+		team: undefined,
 	}
 
 	componentDidMount() {
-		window.Einstore.team(this.props.teamId).then((data: any) => this.setState({ team: data }))
+		if (this.props.teamId) {
+			window.Einstore.team(this.props.teamId).then((data: any) => this.setState({ team: data }))
+		}
 	}
 
 	render() {
 		return (
 			<div className={cn('teamName', this.props.className)}>
-				{this.state.team && <TeamTag team={this.state.team} withoutName={this.props.withoutName} iconSize={this.props.iconSize} />}
+				<TeamTag
+					team={this.state.team}
+					withoutName={this.props.withoutName}
+					iconSize={this.props.iconSize}
+				/>
 			</div>
 		)
 	}

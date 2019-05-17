@@ -32,6 +32,12 @@ export default class CardList extends Component {
 		window.Einstore.appBuilds(this.props.cluster_id, 3).then((builds) => this.setState({ builds }))
 	}
 
+	getBuilds() {
+		return (
+			this.state.builds || [{ placeholder: true }, { placeholder: true }, { placeholder: true }]
+		)
+	}
+
 	render() {
 		return (
 			<div className="card">
@@ -45,11 +51,9 @@ export default class CardList extends Component {
 										<span className="card-header-part-name-icon">{this.getPlatformIcon()}</span>
 									</div>
 								</div>
-								{this.props.teamId && (
-									<div className="card-header-part-teamName">
-										<TeamName teamId={this.props.teamId} />
-									</div>
-								)}
+								{!this.props.hideTeam && <div className="card-header-part-teamName">
+									<TeamName key={this.props.teamId} teamId={this.props.teamId} />
+								</div>}
 							</div>
 						</div>
 						<div className="card-header-part card-header-part-build">
@@ -70,12 +74,12 @@ export default class CardList extends Component {
 				)}
 				<div className="card-content">
 					<div className="card-content-list">
-						{!this.state.builds && (
-							<div style={{ textAlign: 'center', padding: 10, opacity: 0.5 }}>loading...</div>
-						)}
-						{this.state.builds &&
-							this.state.builds.slice(0, 3).map((item, key) => {
-								return (
+						{this.getBuilds()
+							.slice(0, 3)
+							.map((item, key) => {
+								return item.placeholder ? (
+									<CardItem isAll={false} isLast={key === 0} key={key} placeholder />
+								) : (
 									<CardItem
 										isAll={false}
 										isLast={key === 0}

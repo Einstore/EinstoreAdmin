@@ -14,12 +14,8 @@ import prettyDate from '../utils/prettyDate'
 import PlatformSwitch, { PlatformSwitchValue } from './PlatformSwitch'
 import InstallButton, { InstallButtonView } from './InstallButton'
 import detectOS, { OSName } from '../utils/detectOS'
-import SecurityOverview from './SecurityOverview';
-
-export interface OverviewProps {
-	teamId?: string
-	layout: Layout
-}
+import SecurityOverview from './SecurityOverview'
+import LoadMore from '../ui/LoadMore'
 
 export enum SortDirection {
 	ASC = 'asc',
@@ -129,86 +125,34 @@ switch (os) {
 	default:
 }
 
-export default class Overview extends Component<OverviewProps> {
-	state = {
-		loaded: false,
-		loadingStatus: 'start',
-		data: [],
-		loadingTotal: 1,
-		loadingCurrent: 0,
-		appsOffset: 0,
-		isFetchingAdditionalApps: false,
-		noApps: false,
+export interface OverviewProps {
+	teamId?: string
+	layout: Layout
+}
+
+export interface OverviewState {
+	searchTags: string[]
+	platform: PlatformSwitchValue
+	sort: {
+		value: SortValue
+		direction: SortDirection
+	}
+	refreshKey: any
+}
+
+export default class Overview extends Component<OverviewProps, OverviewState> {
+	state: OverviewState = {
 		searchTags: [],
 		platform: initialPlatform,
 		sort: {
 			value: SortValue.DATE,
 			direction: SortDirection.DESC,
 		},
-	}
-
-	componentDidMount() {
-		this.fetchApps()
-		window.addEventListener('scroll', this.handleScroll, { capture: true, passive: true })
-	}
-
-	componentWillUnmount() {
-		window.removeEventListener('scroll', this.handleScroll)
-	}
-
-	fetchApps = () => {
-		this.setState({
-			isFetchingAdditionalApps: true,
-		})
-		const shouldHandleScroll = this.state.appsOffset === 0
-		window.Einstore.overview(
-			this.props.teamId,
-			9,
-			this.state.appsOffset,
-			undefined,
-			this.state.platform,
-			this.state.sort.value + ':' + this.state.sort.direction
-		)
-			.then((result: any) => {
-				if (typeof result.error !== 'undefined') {
-					throw new Error()
-				}
-				this.setState({
-					loaded: true,
-					data: this.state.data.concat(result),
-					loadingStatus: 'ajax',
-					loadingCurrent: 1,
-					appsOffset: this.state.appsOffset + 10,
-					isFetchingAdditionalApps: false,
-					noApps: this.state.data.concat(result).length === 0,
-				})
-			})
-			.catch((error: any) => {
-				console.error(error)
-				this.setState({
-					isFetchingAdditionalApps: false,
-				})
-			})
-			.then(() => {
-				if (shouldHandleScroll) {
-					setTimeout(() => {
-						this.handleScroll({ target: document.querySelector('.layout-fg-body') })
-					})
-				}
-			})
-	}
-
-	handleScroll = (e: any) => {
-		const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight
-		if (bottom) {
-			if (this.state.isFetchingAdditionalApps === false) {
-				this.fetchApps()
-			}
-		}
+		refreshKey: 1,
 	}
 
 	refresh = () => {
-		this.setState({ appsOffset: 0, data: [], appData: {} }, () => this.fetchApps())
+		this.setState((state) => ({ ...state, refreshKey: state.refreshKey + 1 }))
 	}
 
 	handleTagSearchChange = (tags: string[]) => {
@@ -223,12 +167,83 @@ export default class Overview extends Component<OverviewProps> {
 		this.setState({ sort: { value, direction } }, this.refresh)
 	}
 
-	render() {
-		return this.state.loaded === false ? (
-			<div id="loading">
-				<div className="loading-line" />
+	loadPage = (page: number) => {
+		const perPage = 9
+		const offset = perPage * (page - 1)
+
+		return window.Einstore.overview(
+			this.props.teamId,
+			perPage,
+			offset,
+			undefined,
+			this.state.platform,
+			this.state.sort.value + ':' + this.state.sort.direction
+		)
+	}
+
+	getListKey = () => {
+		return [
+			this.state.refreshKey,
+			this.props.teamId,
+			this.state.platform,
+			this.state.sort.value + ':' + this.state.sort.direction,
+		].join('_')
+	}
+
+	renderNoApps() {
+		return (
+			<div className="page">
+				{this.props.teamId ? (
+					<div className="page-upload">
+						<p className="page-upload-text">No apps here yet.</p>
+						<Button onClick={this.props.layout.openDropzone}>Upload app</Button>
+					</div>
+				) : (
+					<div className="page-upload">
+						<p className="page-upload-text">No apps here yet. Select team to add new build.</p>
+					</div>
+				)}
 			</div>
-		) : this.state.noApps === false ? (
+		)
+	}
+
+	renderItem = (item: any) => {
+		return (
+			<div className="page-cards-list-item">
+				<CardList
+					index={item.id}
+					name={item.latest_build_name}
+					id={item.identifier}
+					versionCode={item.latest_build_build}
+					platform={item.platform}
+					buildCount={item.build_count}
+					cluster_id={item.id}
+					teamId={item.team_id !== this.props.teamId ? item.team_id : null}
+					hideTeam={!!this.props.teamId}
+				/>
+			</div>
+		)
+	}
+
+	renderEmptyState = () => {
+		return (
+			<>
+				{this.props.teamId ? (
+					<div className="page-upload">
+						<p className="page-upload-text">No apps here yet.</p>
+						<Button onClick={this.props.layout.openDropzone}>Upload app</Button>
+					</div>
+				) : (
+					<div className="page-upload">
+						<p className="page-upload-text">No apps here yet. Select team to add new build.</p>
+					</div>
+				)}
+			</>
+		)
+	}
+
+	render() {
+		return (
 			<div className="page">
 				<div className="page-controls">
 					<div className="page-control view-primary">
@@ -253,37 +268,13 @@ export default class Overview extends Component<OverviewProps> {
 					<SearchResults key={JSON.stringify(this.state.searchTags)} tags={this.state.searchTags} />
 				)}
 				{!this.props.teamId && <SecurityOverview />}
-				<div className="page-cards-list">
-					{this.state.data.map((item: any, key) => {
-						return (
-							<div className="page-cards-list-item" key={key}>
-								<CardList
-									index={key}
-									name={item.latest_build_name}
-									id={item.identifier}
-									versionCode={item.latest_build_build}
-									platform={item.platform}
-									buildCount={item.build_count}
-									cluster_id={item.id}
-									teamId={item.team_id !== this.props.teamId ? item.team_id : null}
-								/>
-							</div>
-						)
-					})}
-				</div>
-			</div>
-		) : (
-			<div className="page">
-				{this.props.teamId ? (
-					<div className="page-upload">
-						<p className="page-upload-text">No apps here yet.</p>
-						<Button onClick={this.props.layout.openDropzone}>Upload app</Button>
-					</div>
-				) : (
-					<div className="page-upload">
-						<p className="page-upload-text">No apps here yet. Select team to add new build.</p>
-					</div>
-				)}
+				<LoadMore
+					key={this.getListKey()}
+					itemsClassName="page-cards-list"
+					loadPage={this.loadPage}
+					renderItem={this.renderItem}
+					renderEmptyState={this.renderEmptyState}
+				/>
 			</div>
 		)
 	}

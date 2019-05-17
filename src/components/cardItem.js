@@ -4,39 +4,58 @@ import AppIcon from './AppIcon'
 import './cardItem.sass'
 import InstallButton, { InstallButtonView } from './InstallButton'
 
+const placeholderProps = {
+	name: null,
+	icon: false,
+	appId: null,
+	versionCode: null,
+	date: null,
+	buildCount: 'x',
+	link: '/',
+	isLast: false,
+	build: { platform: 'android' },
+}
+
 export default class CardItem extends Component {
-	getBuildCountString() {
-		const count = this.props.buildCount
+	getBuildCountString(count) {
 		return `(${count} ${count === 1 ? 'build' : 'builds'})`
 	}
 
 	render() {
+		const {
+			name,
+			icon,
+			appId,
+			versionCode,
+			versionNumber,
+			date,
+			build,
+			buildCount,
+			link,
+			isLast,
+		} = this.props.placeholder ? placeholderProps : this.props
+
 		if (this.props.isAll === false) {
 			return (
 				<div className="card-content-list-item-wrap">
-					<Link to={this.props.link} className="card-content-list-item">
+					<Link to={link} className="card-content-list-item">
 						<div className="card-content-list-item-image">
-							<AppIcon empty={!this.props.icon} name={this.props.name} id={this.props.appId} />
+							<AppIcon empty={!icon} name={name} id={appId} />
 						</div>
 						<div className="card-content-list-item-text">
 							<div className="card-content-list-item-text-version">
-								{this.props.versionNumber}&nbsp;
-								<span className="card-content-list-item-text-version-build">
-									({this.props.versionCode})
-								</span>
-								{' '}
-								{this.props.isLast === true ? (
+								{versionNumber}&nbsp;
+								{versionCode && (
+									<span className="card-content-list-item-text-version-build">({versionCode})</span>
+								)}{' '}
+								{isLast === true ? (
 									<span className="card-content-list-item-text-last">Latest</span>
 								) : null}
 							</div>
-							<div className="card-content-list-item-text-date">{this.props.date}</div>
+							<div className="card-content-list-item-text-date">{date}</div>
 						</div>
 						<div className="card-content-list-item-download">
-							<InstallButton
-								build={this.props.build}
-								view={InstallButtonView.MINI}
-								faded={this.props.isLast !== true}
-							/>
+							<InstallButton build={build} view={InstallButtonView.MINI} faded={isLast !== true} />
 						</div>
 					</Link>
 				</div>
@@ -44,10 +63,12 @@ export default class CardItem extends Component {
 		} else {
 			return (
 				<div className="card-content-list-item-wrap">
-					<Link to={this.props.link} className="card-content-list-item">
+					<Link to={link} className="card-content-list-item">
 						<div className="card-content-list-item-all">
 							<div className="card-content-list-item-all-big">Show all</div>
-							<div className="card-content-list-item-all-small">{this.getBuildCountString()}</div>
+							<div className="card-content-list-item-all-small">
+								{this.getBuildCountString(buildCount)}
+							</div>
 						</div>
 					</Link>
 				</div>
