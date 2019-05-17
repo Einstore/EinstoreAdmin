@@ -264,8 +264,14 @@ export class Einstore {
 		return json
 	}
 
-	public appBuilds = async (id: string, limit: number = 10): Promise<Response> => {
-		return this.networking.get(`/apps/${id}/builds?limit=${limit}`).then((res) => res.json())
+	public appBuilds = async (
+		id: string,
+		limit: number = 10,
+		offset: number = 0
+	): Promise<Response> => {
+		return this.networking
+			.get(`/apps/${id}/builds?limit=${limit}&from=${offset}`)
+			.then((res) => res.json())
 	}
 
 	public deleteApp = async (id: string): Promise<Response> => {
