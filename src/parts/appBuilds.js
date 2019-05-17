@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import AppIcon from '../components/AppIcon'
-import CardListBuilds from '../components/cardListBuilds'
+import LoadMore from '../ui/LoadMore'
 import IconBack from '../shapes/back'
 import './apiBuilds.sass'
 import './page.sass'
@@ -10,35 +10,26 @@ import IconIos from '../shapes/ios'
 import IconTrash from '../shapes/trash'
 import usure from '../utils/usure'
 import { navigate } from '@reach/router'
+import CardItem from '../components/cardItem'
 
 export default class AppBuilds extends Component {
 	state = {
-		loaded: false,
-		name: '',
-		icon: '',
-		build: 0,
-		version: '',
-		builds: [],
+		build: null,
 	}
 
 	componentDidMount() {
-		window.Einstore.appBuilds(this.props.appId)
-			.then((result) => {
-				console.log(result)
-				this.setState({
-					loaded: true,
-					name: result[0].name,
-					icon: result[0].icon,
-					id: result[0].id,
-					version: result[0].version,
-					build: result[0].build,
-					platform: result[0].platform,
-					builds: result,
-				})
+		window.Einstore.appBuilds(this.props.appId).then((result) => {
+			this.setState({
+				build: result[0],
 			})
-			.catch((err) => {
-				console.error(err)
-			})
+		})
+	}
+
+	loadPage = (page) => {
+		const perPage = 10
+		const offset = perPage * (page - 1)
+
+		return window.Einstore.appBuilds(this.props.appId, perPage, offset)
 	}
 
 	getPlatformIcon() {
@@ -56,6 +47,26 @@ export default class AppBuilds extends Component {
 		usure().then(() => {
 			window.Einstore.deleteApp(this.props.appId).then(() => navigate('/apps'))
 		})
+	}
+
+	getBuildDate(dateTime) {
+		let date = new Date(dateTime)
+		return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear()
+	}
+
+	renderBuild = (item) => {
+		return (
+			<CardItem
+				isAll={false}
+				link={'/build/' + item.id}
+				icon={item.icon}
+				versionNumber={item.version}
+				versionCode={item.build}
+				appId={item.id}
+				date={this.getBuildDate(item.created)}
+				build={item}
+			/>
+		)
 	}
 
 	render() {
@@ -79,7 +90,11 @@ export default class AppBuilds extends Component {
 						</div>
 					</div>
 					<div className="card-content">
-						<CardListBuilds showAll={true} builds={this.state.builds} />
+						<LoadMore
+							itemsClassName="card-content-list"
+							loadPage={this.loadPage}
+							renderItem={this.renderBuild}
+						/>
 					</div>
 				</div>
 				<div
