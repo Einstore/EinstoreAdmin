@@ -5,6 +5,19 @@ import './teamIcon.sass'
 import getContrastColor from '../utils/getContrastColor'
 
 export const TeamIcon = ({ team, iconSize }: { team: any; iconSize?: number }) => {
+	if (!team) {
+		return (
+			<span className="teamTag-img" style={{ fontSize: iconSize }}>
+				<div
+					className="teamIcon"
+					style={{ backgroundColor: `#eee`, color: `${getContrastColor('eee')}` }}
+				>
+					<div className="teamIcon-initials"></div>
+				</div>
+			</span>
+		)
+	}
+
 	if (team.id === 'new') {
 		return (
 			<span className="teamTag-img" style={{ fontSize: iconSize }}>
@@ -59,7 +72,7 @@ export const TeamTag = ({
 	return (
 		<div className="teamTag">
 			<TeamIcon team={team} iconSize={iconSize} />
-			{!withoutName && <span className="teamTag-label">{team.name}</span>}
+			{!withoutName && <span className="teamTag-label">{team && team.name}</span>}
 		</div>
 	)
 }
