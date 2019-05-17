@@ -51,9 +51,9 @@ export default class CardList extends Component {
 										<span className="card-header-part-name-icon">{this.getPlatformIcon()}</span>
 									</div>
 								</div>
-								<div className="card-header-part-teamName">
+								{!this.props.hideTeam && <div className="card-header-part-teamName">
 									<TeamName key={this.props.teamId} teamId={this.props.teamId} />
-								</div>
+								</div>}
 							</div>
 						</div>
 						<div className="card-header-part card-header-part-build">
