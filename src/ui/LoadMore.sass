@@ -1,0 +1,19 @@
+@keyframes LoadMore-loadingAnimation
+	0%
+		opacity: .4
+	50%
+		opacity: .5
+	100%
+		opacity: .4
+
+.LoadMore
+	&-loadingIndicator,
+	&-endIndicator,
+	&-emptyResultNote
+		padding: 1em
+		text-align: center
+		opacity: .5
+		font-style: italic
+
+	&-loadingIndicator
+		animation: LoadMore-loadingAnimation infinite .15s
