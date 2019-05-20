@@ -6,14 +6,19 @@ import UserMedailon from '../components/UserMedailon'
 import './sidebar.sass'
 import { LayoutChildProps } from './Layout'
 import { MeContext } from 'App'
+import { Team } from 'connector/Model/Team'
 
 interface SidebarProps extends LayoutChildProps {
 	activeTeam?: string
 	onChoice?: () => void
 }
 
-export class Sidebar extends React.Component<SidebarProps> {
-	state = {
+interface SidebarState {
+	teams: null | Team[]
+}
+
+export class Sidebar extends React.Component<SidebarProps, SidebarState> {
+	state: SidebarState = {
 		teams: null,
 	}
 
