@@ -78,7 +78,7 @@ export default class AppIcon extends Component<Props, State> {
 					this.state.url ? 'view-loaded' : 'view-loading',
 					this.props.className
 				)}
-				style={{fontSize: this.props.iconSize }}
+				style={{ fontSize: this.props.iconSize }}
 			>
 				<span className="AppIcon-img">{this.state.url && <img src={this.state.url} alt="" />}</span>
 			</div>

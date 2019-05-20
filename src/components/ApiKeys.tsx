@@ -189,7 +189,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 					</div>
 				) : (
 					<div className="page-upload">
-						<p className="page-upload-text">No API keys here yet.</p>
+						<p className="page-upload-text">Create your first API key here.</p>
 						{this.props.teamId && (
 							<div>
 								<Link
@@ -197,7 +197,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 									className="button"
 								>
 									<span>
-										<IconPlus /> Add new API key
+										<IconPlus /> Add
 									</span>
 								</Link>
 							</div>
