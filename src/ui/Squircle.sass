@@ -1,0 +1,45 @@
+.Squircle
+	position: relative
+	display: inline-flex
+	border-radius: 0
+	width: 100%
+	max-width: 512px
+	overflow: hidden
+	align-self: center
+	justify-self: center
+
+	&::before
+		display: block
+		content: ''
+		width: 100%
+		padding-top: 100%
+
+	&-in,
+	&-image,
+	&-border
+		position: absolute
+		width: 100%
+		height: 100%
+		top: 0
+		left: 0
+		right: 0
+		bottom: 0
+		pointer-events: none
+
+	&-in,
+	&-image
+		overflow: hidden
+		display: flex
+		align-items: center
+		justify-content: center
+
+	&-image
+		background: #fff
+		mask-image: url(./Squircle-assets/Squircle-mask.svg)
+		mask-size: cover
+
+	& img
+		display: block
+		margin: 0
+		width: 100%
+		height: 100%
