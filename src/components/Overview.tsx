@@ -16,6 +16,7 @@ import InstallButton, { InstallButtonView } from './InstallButton'
 import detectOS, { OSName } from '../utils/detectOS'
 import SecurityOverview from './SecurityOverview'
 import LoadMore from '../ui/LoadMore'
+import IconPlus from 'shapes/plus'
 
 export enum SortDirection {
 	ASC = 'asc',
@@ -190,23 +191,6 @@ export default class Overview extends Component<OverviewProps, OverviewState> {
 		].join('_')
 	}
 
-	renderNoApps() {
-		return (
-			<div className="page">
-				{this.props.teamId ? (
-					<div className="page-upload">
-						<p className="page-upload-text">No apps here yet.</p>
-						<Button onClick={this.props.layout.openDropzone}>Upload app</Button>
-					</div>
-				) : (
-					<div className="page-upload">
-						<p className="page-upload-text">No apps here yet. Select team to add new build.</p>
-					</div>
-				)}
-			</div>
-		)
-	}
-
 	renderItem = (item: any) => {
 		return (
 			<div className="page-cards-list-item">
@@ -230,12 +214,16 @@ export default class Overview extends Component<OverviewProps, OverviewState> {
 			<>
 				{this.props.teamId ? (
 					<div className="page-upload">
-						<p className="page-upload-text">No apps here yet.</p>
-						<Button onClick={this.props.layout.openDropzone}>Upload app</Button>
+						<p className="page-upload-text">Upload your first app here.</p>
+						<Button onClick={this.props.layout.openDropzone}>
+							<span>
+								<IconPlus /> Upload
+							</span>
+						</Button>
 					</div>
 				) : (
 					<div className="page-upload">
-						<p className="page-upload-text">No apps here yet. Select team to add new build.</p>
+						<p className="page-upload-text">No apps here yet. Select team to upload a build.</p>
 					</div>
 				)}
 			</>
