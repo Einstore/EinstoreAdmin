@@ -14,7 +14,7 @@ import CardItem from '../components/cardItem'
 
 export default class AppBuilds extends Component {
 	state = {
-		build: null,
+		build: {},
 	}
 
 	componentDidMount() {
@@ -33,7 +33,7 @@ export default class AppBuilds extends Component {
 	}
 
 	getPlatformIcon() {
-		switch (this.state.platform) {
+		switch (this.state.build.platform) {
 			case 'ios':
 				return <IconIos />
 			case 'android':
@@ -80,13 +80,13 @@ export default class AppBuilds extends Component {
 				<div className="card">
 					<div className="card-header builds">
 						<div className="builds-icon">
-							<AppIcon empty={!this.state.icon} id={this.state.id} name={this.state.name} />
+							<AppIcon empty={!this.state.build.icon} id={this.state.build.id} name={this.state.build.name} />
 						</div>
 						<div className="builds-name">
-							{this.state.name} {this.getPlatformIcon()}
+							{this.state.build.name} {this.getPlatformIcon()}
 						</div>
 						<div className="builds-id" style={{ fontFamily: 'Monaco, monospace' }}>
-							{this.state.identifier}
+							{this.state.build.identifier}
 						</div>
 					</div>
 					<div className="card-content">
