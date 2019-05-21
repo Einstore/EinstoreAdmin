@@ -35,18 +35,12 @@ export default class AppIcon extends Component<Props, State> {
 			if (!empty && id) {
 				const url = `/${context}/${id}/icon`
 				window.Einstore.networking
-					.memoizedGet(url)
-					.then((res: Response) => {
+					.memoizedGet(url, undefined, false)
+					.then((res: any) => {
 						if (res.status === 500) {
 							throw new Error(`500 error in image loading ${url}`)
 						}
-						return res
-					})
-					.then((res: Response) => res.blob())
-					.then((blob: Blob) => {
-						const urlCreator = window.URL
-						const url = urlCreator.createObjectURL(blob)
-						this.setState({ url, empty: false })
+						this.setState({ url: res.url, empty: false })
 					})
 					.catch(() => {
 						this.setState({ url: undefined, empty: true })
@@ -78,7 +72,9 @@ export default class AppIcon extends Component<Props, State> {
 				)}
 				style={{ fontSize: this.props.iconSize }}
 			>
-				<span className="AppIcon-img"><Squircle src={this.state.url} /></span>
+				<span className="AppIcon-img">
+					<Squircle src={this.state.url} />
+				</span>
 			</div>
 		)
 	}

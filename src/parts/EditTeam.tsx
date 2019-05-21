@@ -71,13 +71,7 @@ export default class EditTeam extends React.Component<EditTeamProps, EditTeamSta
 					if (res.status === 500) {
 						throw new Error(`500 error in image loading ${url}`)
 					}
-					return res
-				})
-				.then((res: Response) => res.blob())
-				.then((blob: Blob) => {
-					const urlCreator = window.URL
-					const url = urlCreator.createObjectURL(blob)
-					this.setState({ oldIconPreview: url })
+					this.setState({ oldIconPreview: res.url })
 				})
 		},
 		(id) => id
