@@ -1,3 +1,5 @@
+@import 'vars.sass'
+
 .Squircle
 	position: relative
 	display: inline-flex
@@ -7,6 +9,8 @@
 	overflow: hidden
 	align-self: center
 	justify-self: center
+	font-weight: 700
+	line-height: 1
 
 	&::before
 		display: block
@@ -16,7 +20,8 @@
 
 	&-in,
 	&-image,
-	&-border
+	&-border,
+	&-placeholder
 		position: absolute
 		width: 100%
 		height: 100%
@@ -35,8 +40,17 @@
 
 	&-image
 		background: #fff
-		mask-image: url(./Squircle-assets/Squircle-mask.svg)
 		mask-size: cover
+		mask-image: url(./Squircle-assets/Squircle-M-mask.svg)
+
+	&.view-radiusS &-image
+		mask-image: url(./Squircle-assets/Squircle-S-mask.svg)
+
+	&.view-radiusM &-image
+		mask-image: url(./Squircle-assets/Squircle-M-mask.svg)
+
+	&.view-radiusL &-image
+		mask-image: url(./Squircle-assets/Squircle-L-mask.svg)
 
 	& img
 		display: block

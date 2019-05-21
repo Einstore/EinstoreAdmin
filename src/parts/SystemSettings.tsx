@@ -1,8 +1,8 @@
 import React, { FormEvent, ChangeEvent, useState, useCallback } from 'react'
-
 import './systemSettings.sass'
 import Button from '../components/button'
 import previewFileImage from '../utils/previewFileImage'
+import IconField from 'ui/IconField'
 
 function TemplatorUpdate() {
 	const [isWorking, setIsWorking] = useState(false)
@@ -47,6 +47,8 @@ class SystemImageForm extends React.Component<
 						alert(err.ref.description)
 					})
 			}
+
+			this.fileInputRef.current.value = ''
 		}
 	}
 
@@ -62,6 +64,11 @@ class SystemImageForm extends React.Component<
 		}
 	}
 
+	handleDiscardNewImage = (e: MouseEvent) => {
+		e.preventDefault()
+		this.setState({ previewValue: undefined })
+	}
+
 	render() {
 		return (
 			<form
@@ -72,10 +79,11 @@ class SystemImageForm extends React.Component<
 			>
 				<label htmlFor="server-icon">
 					<div className="systemSettingsForm-current">
-						{this.state.oldValue && !this.state.previewValue && (
-							<img src={this.state.oldValue} alt="" />
-						)}
-						{this.state.previewValue && <img src={this.state.previewValue} alt="" />}
+						<IconField
+							oldValue={this.state.oldValue}
+							newValue={this.state.previewValue}
+							onClickOld={this.state.previewValue && this.handleDiscardNewImage}
+						/>
 					</div>
 					<div className="systemSettingsForm-control">
 						<input

@@ -3,39 +3,3 @@
 	flex-grow: 0
 	width: 1em
 	height: 1em
-	border-radius: 23%
-	overflow: hidden
-	display: inline-flex
-	vertical-align: center
-	justify-content: center
-	align-items: center
-	background: url(../shapes/empty.png) no-repeat center center
-	background-size: 100%
-	box-shadow: inset 0 0 1px rgba(#000, .1)
-	position: relative
-
-	img
-		position: absolute
-		top: 0
-		left: 0
-		right: 0
-		bottom: 0
-		width: 100%
-		display: block
-		margin: 0
-
-	&-img
-		transition: all cubic-bezier(0.215, 0.61, 0.355, 1) .3s
-		display: block
-		width: 100%
-		border-radius: 23%
-		overflow: hidden
-
-	&.view-loading &-img
-		opacity: 0
-
-	&-emptyNote
-		font-size: .15em
-		text-transform: uppercase
-		font-weight: bold
-		opacity: .1

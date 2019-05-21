@@ -55,13 +55,6 @@
 		label
 			cursor: pointer
 
-			img
-				max-width: 100%
-				width: 256px
-				display: block
-				line-height: 1
-				margin: 0
-
 			input[type="file"]
 				display: none
 
@@ -71,8 +64,15 @@
 		.systemSettingsForm-current
 			max-width: 256px
 			margin: 0 auto
-			overflow: hidden
-			border-radius: 18%
+			position: relative
+
+			&-old
+				position: absolute
+				top: 0
+				left: 0
+				width: 100%
+				transform: translateX(-50%) scale(.8)
+				opacity: .5
 
 .TemplatorUpdate
 	margin-top: 2em

@@ -1,7 +1,6 @@
-import CryptoJS from 'crypto-js'
 import React from 'react'
-
 import { MeContext } from '../App'
+import Gravatar from './Gravatar'
 
 interface UserMedailonProps {}
 
@@ -18,7 +17,7 @@ export default class UserMedailon extends React.PureComponent<
 					me && (
 						<div>
 							<div className="menu-user-icon">
-								<img alt="" src={`https://www.gravatar.com/avatar/${CryptoJS.MD5(me.email)}.jpg`} />
+								<Gravatar email={me.email} />
 							</div>
 							<div className="menu-user-name">{me.firstname + ' ' + me.lastname}</div>
 						</div>
