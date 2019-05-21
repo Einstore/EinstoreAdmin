@@ -27,14 +27,18 @@ export class Networking implements Networkable {
 
 	// Requests
 
-	public get = (path: string, headers: Headers = new Headers()): Promise<Response> => {
+	public get = (
+		path: string,
+		headers: Headers = new Headers(),
+		followRedirect: boolean = true
+	): Promise<Response> => {
 		console.log('GET', path)
 		path = this.normalizeUrl(path)
 		const promise = window
 			.fetch(path, {
 				headers: this.headers(headers),
 				method: 'GET',
-				redirect: 'follow',
+				redirect: followRedirect ? 'follow' : undefined,
 			})
 			.then((response) => {
 				if (response.status === 401) {
