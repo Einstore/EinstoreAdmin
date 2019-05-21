@@ -6,6 +6,8 @@ import TeamName from '../components/TeamName'
 import TextInput from '../components/textInput'
 import pick from 'lodash-es/pick'
 import previewFileImage from '../utils/previewFileImage'
+import IconField from 'ui/IconField'
+import memoize from 'lodash-es/memoize'
 
 interface EditTeamProps {
 	teamId: string
@@ -16,6 +18,7 @@ interface EditTeamState {
 	changed: any
 	newIcon?: File
 	newIconPreview?: string
+	oldIconPreview?: string
 }
 
 export default class EditTeam extends React.Component<EditTeamProps, EditTeamState> {
@@ -50,17 +53,44 @@ export default class EditTeam extends React.Component<EditTeamProps, EditTeamSta
 	}
 
 	componentDidMount() {
-		window.Einstore.team(this.props.teamId).then((team) =>
-			this.setState({ current: team, changed: pick(team, this.editable) })
+		window.Einstore.team(this.props.teamId).then((team: any) =>
+			this.setState({ current: team, changed: pick(team, this.editable) }, () => {
+				if (team.icon) {
+					this.loadOldIconPreview(team.id)
+				}
+			})
 		)
 	}
+
+	loadOldIconPreview = memoize(
+		(id: string) => {
+			const url = `/teams/${id}/icon`
+			return window.Einstore.networking
+				.memoizedGet(url)
+				.then((res: Response) => {
+					if (res.status === 500) {
+						throw new Error(`500 error in image loading ${url}`)
+					}
+					return res
+				})
+				.then((res: Response) => res.blob())
+				.then((blob: Blob) => {
+					const urlCreator = window.URL
+					const url = urlCreator.createObjectURL(blob)
+					this.setState({ oldIconPreview: url })
+				})
+		},
+		(id) => id
+	)
 
 	handleSubmit = (e: FormEvent) => {
 		e.preventDefault()
 
 		const promises = []
 
-		promises.push(window.Einstore.editTeam(this.props.teamId, pick(this.state.changed, this.editable)))
+		promises.push(
+			window.Einstore.editTeam(this.props.teamId, pick(this.state.changed, this.editable))
+		)
 
 		if (this.state.newIcon) {
 			promises.push(window.Einstore.uploadTeamIcon(this.props.teamId, this.state.newIcon))
@@ -78,11 +108,16 @@ export default class EditTeam extends React.Component<EditTeamProps, EditTeamSta
 
 	handleIconChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const files = e.currentTarget.files
-
 		if (files && files.length) {
 			this.setState({ newIcon: files[0] })
 			this.loadNewIconPreview(files[0])
+			e.currentTarget.value = ''
 		}
+	}
+
+	handleIconDiscard = (e: MouseEvent) => {
+		e.preventDefault()
+		this.setState({ newIcon: undefined, newIconPreview: undefined })
 	}
 
 	loadNewIconPreview = (file: File) => {
@@ -110,6 +145,7 @@ export default class EditTeam extends React.Component<EditTeamProps, EditTeamSta
 	render() {
 		const { current } = this.state
 		const iconUrl = this.state.newIconPreview
+		const oldIconUrl = this.state.oldIconPreview
 		return (
 			<div className="sheet">
 				{current && (
@@ -118,21 +154,21 @@ export default class EditTeam extends React.Component<EditTeamProps, EditTeamSta
 							Edit team <TeamName teamId={this.props.teamId} />
 						</div>
 						<form action="" onSubmit={this.handleSubmit}>
-							<div
-								className="systemSettingsForm-control view-configControl"
-								onSubmit={this.handleSubmit}
-							>
-								<label className="systemSettingsForm-control-label" htmlFor="team-icon">
-									Change team icon
+							<div className="systemSettingsForm view-image">
+								<label htmlFor="server-icon">
+									<div className="systemSettingsForm-current">
+										<IconField
+											color={current.color}
+											placeholder={current.initials}
+											oldValue={oldIconUrl}
+											newValue={iconUrl}
+											onClickOld={this.handleIconDiscard}
+										/>
+									</div>
+									<div className="systemSettingsForm-control">
+										<input type="file" id="server-icon" onChange={this.handleIconChange} />
+									</div>
 								</label>
-								<span className="systemSettingsForm-control-input view-iconInput">
-									<input type="file" id="team-icon" onChange={this.handleIconChange} />
-									{iconUrl && (
-										<label htmlFor="team-icon">
-											<img src={iconUrl} alt="" width="48" />
-										</label>
-									)}
-								</span>
 							</div>
 							{this.editable.map((key) => (
 								<div

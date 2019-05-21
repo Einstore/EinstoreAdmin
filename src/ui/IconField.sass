@@ -1,0 +1,34 @@
+@import 'vars.sass'
+
+.IconField
+	position: relative
+
+	&:after
+		display: block
+		content: ''
+		padding-top: 100%
+
+	&-in
+		position: absolute
+		top: 0
+		left: 0
+		right: 0
+		bottom: 0
+
+	&-image
+		position: absolute
+		top: 0
+		left: 0
+		width: 100%
+		transition: all $ease-in-out-cubic .6s
+
+		&.view-new
+			transition: all $ease-in-cubic .4s
+			opacity: 0
+
+	&.view-hasNewValue &-image.view-old
+			transform: translateX(-40%) scale(.7)
+			opacity: .8
+
+	&.view-hasNewValue &-image.view-new
+			opacity: 1
