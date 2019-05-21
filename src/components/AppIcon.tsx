@@ -1,8 +1,8 @@
 import cn from 'classnames'
 import memoize from 'lodash-es/memoize'
 import React, { Component } from 'react'
-import IconEmpty from '../shapes/empty.png'
 import './AppIcon.sass'
+import Squircle from 'ui/Squircle'
 
 interface Props {
 	id: string
@@ -49,12 +49,10 @@ export default class AppIcon extends Component<Props, State> {
 						this.setState({ url, empty: false })
 					})
 					.catch(() => {
-						const url = IconEmpty
-						this.setState({ url, empty: true })
+						this.setState({ url: undefined, empty: true })
 					})
 			} else {
-				const url = IconEmpty
-				this.setState({ url, empty: true })
+				this.setState({ url: undefined, empty: true })
 			}
 		},
 		(...params) => {
@@ -80,7 +78,7 @@ export default class AppIcon extends Component<Props, State> {
 				)}
 				style={{ fontSize: this.props.iconSize }}
 			>
-				<span className="AppIcon-img">{this.state.url && <img src={this.state.url} alt="" />}</span>
+				<span className="AppIcon-img"><Squircle src={this.state.url} /></span>
 			</div>
 		)
 	}
