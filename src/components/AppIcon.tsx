@@ -2,7 +2,7 @@ import cn from 'classnames'
 import memoize from 'lodash-es/memoize'
 import React, { Component } from 'react'
 import './AppIcon.sass'
-import Squircle from 'ui/Squircle'
+import Squircle, { SquircleRadius } from 'ui/Squircle'
 
 interface Props {
 	id: string
@@ -11,6 +11,7 @@ interface Props {
 	context: string
 	className?: string
 	iconSize?: number
+	platform?: string
 }
 
 interface State {
@@ -73,7 +74,10 @@ export default class AppIcon extends Component<Props, State> {
 				style={{ fontSize: this.props.iconSize }}
 			>
 				<span className="AppIcon-img">
-					<Squircle src={this.state.url} />
+					<Squircle
+						src={this.state.url}
+						radius={this.props.platform === 'android' ? SquircleRadius.S : SquircleRadius.M}
+					/>
 				</span>
 			</div>
 		)

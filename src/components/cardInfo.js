@@ -89,7 +89,12 @@ export default class CardInfo extends Component {
 			<div className="card card-columns">
 				<div className="card-column">
 					<div className="card-column-icon">
-						<AppIcon empty={!this.props.icon} name={this.props.name} id={this.props.uuid} />
+						<AppIcon
+							empty={!this.props.icon}
+							name={this.props.name}
+							id={this.props.uuid}
+							platform={this.props.platform}
+						/>
 					</div>
 					<InstallButton build={{ id: this.props.uuid, platform: this.props.platform }} />
 				</div>

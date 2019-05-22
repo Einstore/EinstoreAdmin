@@ -85,7 +85,12 @@ class SearchResults extends Component<{ tags: string[] }, { apps: any[] }> {
 									<div className="card-content-list-item-wrap">
 										<Link to={'/build/' + app.id} className="card-content-list-item">
 											<div className="card-content-list-item-image">
-												<AppIcon empty={!app.icon} name={app.name} id={app.id} />
+												<AppIcon
+													empty={!app.icon}
+													name={app.name}
+													id={app.id}
+													platform={app.platform}
+												/>
 											</div>
 											<div className="card-content-list-item-text">
 												<div>

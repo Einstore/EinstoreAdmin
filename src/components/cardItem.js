@@ -14,6 +14,7 @@ const placeholderProps = {
 	link: '/',
 	isLast: false,
 	build: { platform: 'android' },
+	platform: 'android',
 }
 
 export default class CardItem extends Component {
@@ -35,12 +36,14 @@ export default class CardItem extends Component {
 			isLast,
 		} = this.props.placeholder ? placeholderProps : this.props
 
+		const platform = this.props.platform
+
 		if (this.props.isAll === false) {
 			return (
 				<div className="card-content-list-item-wrap">
 					<Link to={link} className="card-content-list-item">
 						<div className="card-content-list-item-image">
-							<AppIcon empty={!icon} name={name} id={appId} />
+							<AppIcon empty={!icon} name={name} id={appId} platform={platform} />
 						</div>
 						<div className="card-content-list-item-text">
 							<div className="card-content-list-item-text-version">
