@@ -1,7 +1,11 @@
 import { Config } from '../Config'
+import { captureException } from 'utils/logging'
+
 export interface Networkable {}
 
 export class NotAuthorizedError extends Error {}
+
+export class ServerError extends Error {}
 
 export class Networking implements Networkable {
 	public config: Config
@@ -13,7 +17,7 @@ export class Networking implements Networkable {
 	public constructor(public conf: Config) {
 		this.config = conf
 
-		if (this.config.url === '%REACT_APP_API_URL%') {
+		if (this.config.url.substr(0, 4) !== 'http') {
 			throw new Error('Please set `REACT_APP_API_URL` env variable.')
 		}
 	}
@@ -23,6 +27,32 @@ export class Networking implements Networkable {
 			path = this.config.url + path
 		}
 		return path
+	}
+
+	public processResponse = (response: Response): Response | Promise<Response> => {
+		if (response.status === 401) {
+			this.config.onLoggedOut(401)
+			throw new NotAuthorizedError(`401: Req ${response.url}`)
+		} else if (response.status >= 500) {
+			return response.json().then((err) => {
+				let exception
+
+				if (err.error === 'server_err') {
+					exception = new ServerError(`Req ${response.url}: ${response.status} ${err.description}`)
+				} else if (err.error) {
+					exception = new Error(`Req ${response.url}: ${response.status} ${JSON.stringify(err)}`)
+				}
+
+				if (exception) {
+					console.trace(exception)
+					captureException(exception)
+					throw exception
+				}
+
+				return err
+			})
+		}
+		return response
 	}
 
 	// Requests
@@ -40,14 +70,7 @@ export class Networking implements Networkable {
 				method: 'GET',
 				redirect: followRedirect ? 'follow' : undefined,
 			})
-			.then((response) => {
-				if (response.status === 401) {
-					this.config.onLoggedOut(401)
-					console.trace(response)
-					throw new NotAuthorizedError(`401: GET ${path}`)
-				}
-				return response
-			})
+			.then(this.processResponse)
 
 		return promise
 	}
@@ -85,11 +108,7 @@ export class Networking implements Networkable {
 			headers: this.headers(headers),
 			method: 'POST',
 		})
-		promise.then((response) => {
-			if (response.status === 401) {
-				this.config.onLoggedOut(401)
-			}
-		})
+		promise.then(this.processResponse)
 		return promise
 	}
 
@@ -101,11 +120,7 @@ export class Networking implements Networkable {
 			headers: this.headers(headers),
 			method: 'PUT',
 		})
-		promise.then((response) => {
-			if (response.status === 401) {
-				this.config.onLoggedOut(401)
-			}
-		})
+		promise.then(this.processResponse)
 		return promise
 	}
 
@@ -136,11 +151,7 @@ export class Networking implements Networkable {
 			headers: this.headers(headers),
 			method: 'PATCH',
 		})
-		promise.then((response) => {
-			if (response.status === 401) {
-				this.config.onLoggedOut(401)
-			}
-		})
+		promise.then(this.processResponse)
 		return promise
 	}
 
@@ -150,11 +161,7 @@ export class Networking implements Networkable {
 			headers: this.headers(headers),
 			method: 'DELETE',
 		})
-		promise.then((response) => {
-			if (response.status === 401) {
-				this.config.onLoggedOut(401)
-			}
-		})
+		promise.then(this.processResponse)
 		return promise
 	}
 
