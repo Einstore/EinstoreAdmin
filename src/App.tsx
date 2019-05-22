@@ -18,6 +18,7 @@ import { ServerIcon } from './components/ServerIcon'
 import AddTeam from './parts/AddTeam'
 import SystemSettings from './parts/SystemSettings'
 import TeamName from './components/TeamName'
+import { ErrorBoundary } from 'utils/logging'
 
 const FadeInOut = posed.div({
 	enter: { opacity: 1 },
@@ -233,72 +234,74 @@ export class EinstoreApp extends React.Component<{}, AppState> {
 		}
 		const auth = !!this.state.me
 		return (
-			<MeContext.Provider value={this.state.me}>
-				<ServerContext.Provider value={this.state.server}>
-					<style
-						id="config-vars"
-						dangerouslySetInnerHTML={{
-							__html: `
+			<ErrorBoundary>
+				<MeContext.Provider value={this.state.me}>
+					<ServerContext.Provider value={this.state.server}>
+						<style
+							id="config-vars"
+							dangerouslySetInnerHTML={{
+								__html: `
 body {
 	${this.getStyleVars()}
 }
 				`,
-						}}
-					/>
-					<Router>
-						<AuthRoute
-							path="reset-password"
-							view={AuthView.RESET_PASSWORD}
-							onResetPassword={console.log}
+							}}
 						/>
-
-						{this.state.server && this.state.server.config.github_enabled && (
-							<AuthRoute path="oauth-result" view={AuthView.OAUTH_RESULT} />
-						)}
-
-						{this.state.server && this.state.server.config.allow_registrations && (
-							<AuthRoute path="register" view={AuthView.REGISTRATION} onRegister={console.log} />
-						)}
-
-						{!auth && <AuthRoute default view={AuthView.LOGIN} onLogin={this.handleLogin} />}
-
-						{auth && <Redirect from="/" to="apps" />}
-						{auth && <Layout path="apps" body={OverviewRoute} header={Header} />}
-						{auth && <Layout path="app/:appId" body={AppRoute} header={Header} />}
-						{auth && <Layout path="build/:buildId" body={BuildRoute} header={Header} />}
-						{auth && (
-							<Layout
-								path="apps/:teamId"
-								body={OverviewRoute}
-								header={Header}
-								headerButtonView={HeaderButtonView.ADD_NEW_BUILD}
+						<Router>
+							<AuthRoute
+								path="reset-password"
+								view={AuthView.RESET_PASSWORD}
+								onResetPassword={console.log}
 							/>
-						)}
-						{auth && <Layout path="me" body={MeRoute} header={Header} />}
-						{auth && (
-							<Layout
-								path="api-keys"
-								body={ApiKeysRoute}
-								header={Header}
-								headerButtonView={HeaderButtonView.ADD_API_KEY}
-							/>
-						)}
-						{auth && (
-							<Layout
-								path="api-keys/:teamId"
-								body={ApiKeysRoute}
-								header={Header}
-								headerButtonView={HeaderButtonView.ADD_API_KEY}
-							/>
-						)}
-						{auth && <Layout path="add-api-key" body={AddApiKeyRoute} header={Header} />}
-						{auth && <Layout path="add-api-key/:teamId" body={AddApiKeyRoute} header={Header} />}
-						{auth && <Layout path="team/new" body={AddTeamRoute} header={Header} />}
-						{auth && <Layout path="team/:teamId" body={TeamRoute} header={Header} />}
-						{auth && <Layout path="system" body={SystemRoute} header={Header} />}
-					</Router>
-				</ServerContext.Provider>
-			</MeContext.Provider>
+
+							{this.state.server && this.state.server.config.github_enabled && (
+								<AuthRoute path="oauth-result" view={AuthView.OAUTH_RESULT} />
+							)}
+
+							{this.state.server && this.state.server.config.allow_registrations && (
+								<AuthRoute path="register" view={AuthView.REGISTRATION} onRegister={console.log} />
+							)}
+
+							{!auth && <AuthRoute default view={AuthView.LOGIN} onLogin={this.handleLogin} />}
+
+							{auth && <Redirect from="/" to="apps" />}
+							{auth && <Layout path="apps" body={OverviewRoute} header={Header} />}
+							{auth && <Layout path="app/:appId" body={AppRoute} header={Header} />}
+							{auth && <Layout path="build/:buildId" body={BuildRoute} header={Header} />}
+							{auth && (
+								<Layout
+									path="apps/:teamId"
+									body={OverviewRoute}
+									header={Header}
+									headerButtonView={HeaderButtonView.ADD_NEW_BUILD}
+								/>
+							)}
+							{auth && <Layout path="me" body={MeRoute} header={Header} />}
+							{auth && (
+								<Layout
+									path="api-keys"
+									body={ApiKeysRoute}
+									header={Header}
+									headerButtonView={HeaderButtonView.ADD_API_KEY}
+								/>
+							)}
+							{auth && (
+								<Layout
+									path="api-keys/:teamId"
+									body={ApiKeysRoute}
+									header={Header}
+									headerButtonView={HeaderButtonView.ADD_API_KEY}
+								/>
+							)}
+							{auth && <Layout path="add-api-key" body={AddApiKeyRoute} header={Header} />}
+							{auth && <Layout path="add-api-key/:teamId" body={AddApiKeyRoute} header={Header} />}
+							{auth && <Layout path="team/new" body={AddTeamRoute} header={Header} />}
+							{auth && <Layout path="team/:teamId" body={TeamRoute} header={Header} />}
+							{auth && <Layout path="system" body={SystemRoute} header={Header} />}
+						</Router>
+					</ServerContext.Provider>
+				</MeContext.Provider>
+			</ErrorBoundary>
 		)
 	}
 }
