@@ -18,7 +18,15 @@ Ports are exposed using `docker-compose.override.yaml`
 
 For initial login in basic data is email `core@liveui.io`, default password: `sup3rS3cr3t`
 
-## Makefile
+## Install
+
+- `yarn install` Install all dependencies
+
+## Usage
+
+In the project directory, you can run:
+
+#### Make helper scripts
 
 ```
 Usage:
@@ -36,13 +44,8 @@ Targets:
   local          Start against local development API server
 ```
 
-## Dev Scripts
-
-In the project directory, you can run:
-
 #### `yarn start`
 
-- Dont forget to install dependencies with `yarn install`.
 - You need to provide URL to Einstore API with env variable:
 
 ```sh
@@ -56,10 +59,10 @@ make local
 REACT_APP_API_URL=https://demo.einstore.io/api yarn start
 ```
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Runs the app in development mode.<br>
+Open [http://localhost:3000](http://localhost:3000) to view in the browser.
 
-The page will reload if you make edits.<br>
+The page will reload, should you make edits, on file save.<br>
 You will also see any lint errors in the console.
 
 ##### Test run, connected to our demo API
@@ -87,7 +90,5 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.<br>
 Your app is ready to be deployed!
 
-### Careful
-
-By default `yarn build` expects you to manually replace `%REACT_APP_API_URL%` inside `public/index.html` with URL to EinstoreCore API. Or you can provide it with env variable in build command.
+> **Warning!** By default `yarn build` expects you to manually replace `%REACT_APP_API_URL%` inside `public/index.html` with URL to EinstoreCore API. Or you can provide it with env variable in build command.
 
