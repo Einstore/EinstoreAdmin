@@ -26,7 +26,7 @@ For initial login in basic data is email `core@liveui.io`, default password: `su
 
 In the project directory, you can run:
 
-#### Make helper scripts
+### Make helper scripts
 
 ```
 Usage:
@@ -43,6 +43,8 @@ Targets:
   direnv         Create .envrc for bin-docker
   local          Start against local development API server
 ```
+
+### YARN
 
 #### `yarn start`
 
