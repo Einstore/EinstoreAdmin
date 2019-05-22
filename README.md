@@ -18,21 +18,42 @@ Ports are exposed using `docker-compose.override.yaml`
 
 For initial login in basic data is email `core@liveui.io`, default password: `sup3rS3cr3t`
 
+## Makefile
+
+```
+Usage:
+  make <target>
+
+Targets:
+  help           Display this help
+  yarn-install   Runs yarn install in docker
+  up             Does docker-compose up, automaticly create docker-compose.override.yaml
+  update         Update to the latest docker images
+  clean          Deletes all containers and volumes. WILL DROP ALL DB DATA
+  install-db     Install basic data
+  install-demo   Install demo data
+  direnv         Create .envrc for bin-docker
+  local          Start against local development API server
+```
+
 ## Dev Scripts
 
 In the project directory, you can run:
 
-### `yarn start`
+#### `yarn start`
 
 - Dont forget to install dependencies with `yarn install`.
 - You need to provide URL to Einstore API with env variable:
 
 ```sh
 # Your local API
-REACT_APP_API_URL=http://localhost:8080 yarn
+REACT_APP_API_URL=http://localhost:8080 yarn start
+
+# or just the following using our Makefile
+make local
 
 # Try our running demo
-REACT_APP_API_URL=https://demo.einstore.io/api yarn
+REACT_APP_API_URL=https://demo.einstore.io/api yarn start
 ```
 
 Runs the app in the development mode.<br>
@@ -41,12 +62,12 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
 
-### `yarn test`
+#### `yarn test`
 
 Launches the test runner in the interactive watch mode.<br>
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
+#### `yarn build`
 
 Builds the app for production to the `build` folder.<br>
 It correctly bundles React in production mode and optimizes the build for the best performance.
