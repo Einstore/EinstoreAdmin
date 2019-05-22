@@ -51,7 +51,7 @@
 	},
 	"scripts": {
 		"prod": "npm run build && npm run serve",
-		"start": "react-scripts start",
+		"start": "cross-env BROWSER=none react-scripts start",
 		"start-demo": "cross-env REACT_APP_API_URL=https://demo.einstore.io/api npm run start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
