@@ -62,6 +62,18 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
 
+##### Test run, connected to our demo API
+
+<pre>
+<b>REACT_APP_API_URL=https://demo.einstore.io/api</b> yarn start
+</pre>
+
+##### Run with SENTRY_DSN
+
+<pre>
+REACT_APP_API_URL=https://demo.einstore.io/api <b>REACT_APP_SENTRY_DSN=https://secret@sentry.mangoweb.org/your-project</b> yarn start
+</pre>
+
 #### `yarn test`
 
 Launches the test runner in the interactive watch mode.<br>
@@ -79,14 +91,3 @@ Your app is ready to be deployed!
 
 By default `yarn build` expects you to manually replace `%REACT_APP_API_URL%` inside `public/index.html` with URL to EinstoreCore API. Or you can provide it with env variable in build command.
 
-### Example of build with connection to demo API
-
-<pre>
-<b>REACT_APP_API_URL=https://demo.einstore.io/api</b> yarn start
-</pre>
-
-### You can also provide SENTRY_DSN
-
-<pre>
-REACT_APP_API_URL=https://demo.einstore.io/api <b>REACT_APP_SENTRY_DSN=https://secret@sentry.mangoweb.org/your-project</b> yarn start
-</pre>
