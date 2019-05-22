@@ -8,7 +8,7 @@ COPY package.json  /src/package.json
 COPY tsconfig.json /src/tsconfig.json
 COPY yarn.lock     /src/yarn.lock
 
-ENV REACT_APP_API_URL 'REACT_APP_API_URL'
+ENV REACT_APP_API_URL '%REACT_APP_API_URL%'
 
 RUN yarn install && \
 	yarn build
