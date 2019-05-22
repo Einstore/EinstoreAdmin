@@ -104,7 +104,7 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 				})
 				.catch((err) => {
 					this.setState({ working: false })
-					alert('API key couldnt be generated.\n\n' + err.message)
+					alert('API key can not be generated.\n\n' + err.message)
 				})
 		}
 	}
