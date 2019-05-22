@@ -92,8 +92,8 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 
 		if (this.state.activeTeam && this.state.name) {
 			this.setState({ working: true })
-			window.Einstore.createApiKey(this.state.activeTeam, this.state.name, this.state.type).then(
-				(newKey: any) => {
+			window.Einstore.createApiKey(this.state.activeTeam, this.state.name, this.state.type)
+				.then((newKey: any) => {
 					this.setState((state) => ({
 						...state,
 						name: '',
@@ -101,8 +101,11 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 						working: false,
 						recentlyAddedApiKeys: [...state.recentlyAddedApiKeys, newKey],
 					}))
-				}
-			)
+				})
+				.catch((err) => {
+					this.setState({ working: false })
+					alert('API key couldnt be generated.\n\n' + err.message)
+				})
 		}
 	}
 
