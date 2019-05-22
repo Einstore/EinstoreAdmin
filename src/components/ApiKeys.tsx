@@ -73,9 +73,7 @@ export class Row extends React.Component<RowProps> {
 
 		return (
 			<tr>
-				{this.props.globalTeamId ? (
-					''
-				) : (
+				{!this.props.globalTeamId && (
 					<td>{this.props.team && <TeamName teamId={this.props.team} iconSize={32} />}</td>
 				)}
 				<td>
@@ -166,7 +164,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 							<table className="api">
 								<thead>
 									<tr>
-										{this.props.teamId ? '' : <td>Team</td>}
+										{!this.props.teamId && <td>Team</td>}
 										<td>Name/note</td>
 										<td>Type</td>
 										<td>Created</td>

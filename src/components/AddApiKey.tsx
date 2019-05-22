@@ -127,9 +127,7 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 					<div className="card-content">
 						<form className="basicForm" onSubmit={this.handleSubmit}>
 							<fieldset disabled={this.state.working}>
-								{this.props.teamId ? (
-									''
-								) : (
+								{!this.props.teamId && (
 									<TeamSelect
 										teams={this.state.teams}
 										activeTeam={this.state.activeTeam}
