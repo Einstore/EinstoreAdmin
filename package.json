@@ -5,6 +5,7 @@
 	"dependencies": {
 		"@fortawesome/fontawesome-free": "^5.8.2",
 		"@reach/router": "^1.2.1",
+		"@sentry/browser": "^5.2.1",
 		"@types/classnames": "^2.2.7",
 		"@types/crypto-js": "^3.1.43",
 		"@types/jest": "^24.0.11",
