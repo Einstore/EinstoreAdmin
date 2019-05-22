@@ -25,6 +25,7 @@ interface RowProps {
 	created?: string
 	token?: string
 	type?: ApiKeyType
+	globalTeamId?: string
 	onDeleteKey: (id: string) => void
 	onChange?: (data: { name: string | null; id: string; type?: number }) => void
 }
@@ -72,7 +73,9 @@ export class Row extends React.Component<RowProps> {
 
 		return (
 			<tr>
-				<td>{this.props.team && <TeamName teamId={this.props.team} iconSize={32} />}</td>
+				{!this.props.globalTeamId && (
+					<td>{this.props.team && <TeamName teamId={this.props.team} iconSize={32} />}</td>
+				)}
 				<td>
 					{this.state.editing ? (
 						<form className="card-editApiNameForm" onSubmit={this.handleEditSubmit}>
@@ -161,7 +164,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 							<table className="api">
 								<thead>
 									<tr>
-										<td>Team</td>
+										{!this.props.teamId && <td>Team</td>}
 										<td>Name/note</td>
 										<td>Type</td>
 										<td>Created</td>
@@ -180,6 +183,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 												created={item.created}
 												id={item.id}
 												team={item.team_id}
+												globalTeamId={this.props.teamId}
 											/>
 										)
 									})}

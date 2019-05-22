@@ -88,12 +88,7 @@ export class Networking implements Networkable {
 			headers: this.headers(headers),
 			method: 'POST',
 		})
-		/*promise.then((response) => {
-			if (response.status === 401) {
-				this.config.onLoggedOut(401)
-			}
-		})*/
-		return promise
+		return promise.then(this.processResponse)
 	}
 
 	public postData = (
@@ -108,8 +103,7 @@ export class Networking implements Networkable {
 			headers: this.headers(headers),
 			method: 'POST',
 		})
-		promise.then(this.processResponse)
-		return promise
+		return promise.then(this.processResponse)
 	}
 
 	public put = (path: string, json: JSON, headers: Headers = new Headers()): Promise<Response> => {
@@ -120,8 +114,7 @@ export class Networking implements Networkable {
 			headers: this.headers(headers),
 			method: 'PUT',
 		})
-		promise.then(this.processResponse)
-		return promise
+		return promise.then(this.processResponse)
 	}
 
 	public putJson = (
@@ -151,8 +144,7 @@ export class Networking implements Networkable {
 			headers: this.headers(headers),
 			method: 'PATCH',
 		})
-		promise.then(this.processResponse)
-		return promise
+		return promise.then(this.processResponse)
 	}
 
 	public delete = (path: string, headers: Headers = new Headers()): Promise<Response> => {
@@ -161,8 +153,7 @@ export class Networking implements Networkable {
 			headers: this.headers(headers),
 			method: 'DELETE',
 		})
-		promise.then(this.processResponse)
-		return promise
+		return promise.then(this.processResponse)
 	}
 
 	// Private interface

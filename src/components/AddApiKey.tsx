@@ -4,7 +4,6 @@ import TextInput from './textInput'
 import './basicForm.sass'
 import './recentlyAddedApiKey.sass'
 import Button from './button'
-import TeamName from './TeamName'
 import { ApiKeyType, apiKeyTypePairs } from '../api/types/ApiKeyType'
 import map from 'lodash-es/map'
 import find from 'lodash-es/find'
@@ -37,9 +36,9 @@ function RecentlyAddedApiKey({ id, name, type, team_id, token }: any) {
 					<table className="recentlyAddedApiKey-values">
 						<tbody>
 							<tr>
-								<th>Name / note:</th>
+								<th>Name:</th>
 								<td>
-									<TeamName teamId={team_id} /> / <strong>{name}</strong>
+									<strong>{name}</strong>
 								</td>
 							</tr>
 							<tr>
@@ -93,8 +92,8 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 
 		if (this.state.activeTeam && this.state.name) {
 			this.setState({ working: true })
-			window.Einstore.createApiKey(this.state.activeTeam, this.state.name, this.state.type).then(
-				(newKey: any) => {
+			window.Einstore.createApiKey(this.state.activeTeam, this.state.name, this.state.type)
+				.then((newKey: any) => {
 					this.setState((state) => ({
 						...state,
 						name: '',
@@ -102,8 +101,11 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 						working: false,
 						recentlyAddedApiKeys: [...state.recentlyAddedApiKeys, newKey],
 					}))
-				}
-			)
+				})
+				.catch((err) => {
+					this.setState({ working: false })
+					alert('API key couldnt be generated.\n\n' + err.message)
+				})
 		}
 	}
 
@@ -128,15 +130,17 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 					<div className="card-content">
 						<form className="basicForm" onSubmit={this.handleSubmit}>
 							<fieldset disabled={this.state.working}>
-								<TeamSelect
-									teams={this.state.teams}
-									activeTeam={this.state.activeTeam}
-									onChangeTeam={this.handleChangeTeam}
-								/>
+								{!this.props.teamId && (
+									<TeamSelect
+										teams={this.state.teams}
+										activeTeam={this.state.activeTeam}
+										onChangeTeam={this.handleChangeTeam}
+									/>
+								)}
 								<TextInput
 									onChange={this.handleChangeName}
 									value={this.state.name}
-									placeholder={'Name / note'}
+									placeholder={'Name'}
 								/>
 								<Select
 									placeholder="Select type"
