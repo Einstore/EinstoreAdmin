@@ -7,6 +7,7 @@ import Squircle, { SquircleRadius } from 'ui/Squircle'
 interface GravatarProps {
 	email?: string
 	className?: string
+	size?: number
 }
 
 export default class Gravatar extends React.PureComponent<GravatarProps> {
@@ -15,12 +16,14 @@ export default class Gravatar extends React.PureComponent<GravatarProps> {
 			return null
 		}
 		const hash = CryptoJS.MD5(this.props.email)
+		const size = this.props.size || 128
 		return (
 			<div className={cn('gravatar', this.props.className)}>
 				<Squircle
 					radius={SquircleRadius.L}
-					src={`https://www.gravatar.com/avatar/${hash}?s=66`}
-					srcSet={`https://www.gravatar.com/avatar/${hash}?s=66, https://www.gravatar.com/avatar/${hash}?s=99 1.5x, https://www.gravatar.com/avatar/${hash}?s=132 2x`}
+					src={`https://www.gravatar.com/avatar/${hash}?s=${size}`}
+					srcSet={`https://www.gravatar.com/avatar/${hash}?s=${size} ${size}w, https://www.gravatar.com/avatar/${hash}?s=${size *
+						2} ${size * 2}w`}
 				/>
 			</div>
 		)

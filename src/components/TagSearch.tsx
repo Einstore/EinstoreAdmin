@@ -22,7 +22,12 @@ function AppLabel({ app }: { app: App }) {
 	return (
 		<span className="tagSearch-appLabel">
 			<span className="tagSearch-appLabel-icon">
-				<AppIcon empty={!app.icon} name={app.name || ''} id={app.id || ''} />
+				<AppIcon
+					empty={!app.icon}
+					name={app.name || ''}
+					id={app.id || ''}
+					platform={app.platform}
+				/>
 			</span>{' '}
 			{app.name}
 		</span>

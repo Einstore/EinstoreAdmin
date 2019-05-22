@@ -60,6 +60,7 @@ export default class AppBuilds extends Component {
 				isAll={false}
 				link={'/build/' + item.id}
 				icon={item.icon}
+				platform={item.platform}
 				versionNumber={item.version}
 				versionCode={item.build}
 				appId={item.id}
@@ -80,7 +81,12 @@ export default class AppBuilds extends Component {
 				<div className="card">
 					<div className="card-header builds">
 						<div className="builds-icon">
-							<AppIcon empty={!this.state.build.icon} id={this.state.build.id} name={this.state.build.name} />
+							<AppIcon
+								empty={!this.state.build.icon}
+								id={this.state.build.id}
+								name={this.state.build.name}
+								platform={this.state.build.platform}
+							/>
 						</div>
 						<div className="builds-name">
 							{this.state.build.name} {this.getPlatformIcon()}

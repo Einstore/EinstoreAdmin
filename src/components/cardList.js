@@ -51,9 +51,11 @@ export default class CardList extends Component {
 										<span className="card-header-part-name-icon">{this.getPlatformIcon()}</span>
 									</div>
 								</div>
-								{!this.props.hideTeam && <div className="card-header-part-teamName">
-									<TeamName key={this.props.teamId} teamId={this.props.teamId} />
-								</div>}
+								{!this.props.hideTeam && (
+									<div className="card-header-part-teamName">
+										<TeamName key={this.props.teamId} teamId={this.props.teamId} />
+									</div>
+								)}
 							</div>
 						</div>
 						<div className="card-header-part card-header-part-build">
@@ -78,7 +80,13 @@ export default class CardList extends Component {
 							.slice(0, 3)
 							.map((item, key) => {
 								return item.placeholder ? (
-									<CardItem isAll={false} isLast={key === 0} key={key} placeholder />
+									<CardItem
+										isAll={false}
+										isLast={key === 0}
+										key={key}
+										placeholder
+										platform={this.props.platform}
+									/>
 								) : (
 									<CardItem
 										isAll={false}
@@ -86,6 +94,7 @@ export default class CardList extends Component {
 										key={key}
 										link={'/build/' + item.id}
 										icon={item.icon}
+										platform={this.props.platform}
 										name={item.name}
 										appId={item.id}
 										versionNumber={item.version}
