@@ -7,7 +7,13 @@ export class NotAuthorizedError extends Error {}
 
 export class ServerError extends Error {}
 
-export class RequestError extends Error {}
+export class RequestError extends Error {
+	code: string
+	constructor(message: string, code: string) {
+		super(message)
+		this.code = code
+	}
+}
 
 export class Networking implements Networkable {
 	public config: Config
@@ -48,7 +54,7 @@ export class Networking implements Networkable {
 				if (exception) {
 					console.trace(exception)
 					captureException(exception)
-					throw new RequestError(err.description)
+					throw new RequestError(err.description, err.error)
 				}
 
 				return err
