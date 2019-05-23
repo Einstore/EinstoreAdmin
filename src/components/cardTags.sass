@@ -27,7 +27,10 @@
 			outline: none
 	&-list
 		display: flex
+		flex-wrap: wrap
+		align-items: flex-start
 	&-item
+		display: inline-flex
 		background-color: #eef1f4
 		border: 1px solid #000000
 		border-radius: 4px
@@ -37,11 +40,10 @@
 		margin-right: .25rem
 		margin-bottom: .25rem
 		@media (min-width: 768px)
-			height: 40px
+			min-height: 40px
 			padding: 0.6875rem 0.75rem
-			margin-left: 1rem
-		&:first-child
-			margin-left: 0
+			margin-right: .5rem
+			margin-bottom: .5rem
 		svg
 			width: 10px
 			height: 10px
