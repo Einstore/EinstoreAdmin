@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FormEvent } from 'react'
 import { navigate } from '@reach/router'
+import slugify from 'slugify'
 
 import './systemSettings.sass'
 import Button from '../components/button'
@@ -10,6 +11,7 @@ export default class AddTeam extends React.Component {
 	state = {
 		name: '',
 		identifier: '',
+		customIdentifier: false,
 	}
 	handleSubmit = (e: FormEvent) => {
 		e.preventDefault()
@@ -19,14 +21,34 @@ export default class AddTeam extends React.Component {
 			return
 		}
 
-		window.Einstore.addTeam(this.state.name, this.state.identifier).then((team: any) => {
-			window.dispatchEvent(new Event('teamsChanged'))
-			navigate(`/apps/${team.id}`)
-		})
+		if (!this.getIdentifier().trim()) {
+			alert('Please fill in a team identifier.')
+			return
+		}
+
+		window.Einstore.addTeam(this.state.name, this.getIdentifier())
+			.then((team: any) => {
+				window.dispatchEvent(new Event('teamsChanged'))
+				navigate(`/apps/${team.id}`)
+			})
+			.catch((err) => {
+				alert(err.message)
+			})
 	}
+
 	handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		this.setState({ [e.currentTarget.name]: e.currentTarget.value })
+		const state: any = { [e.currentTarget.name]: e.currentTarget.value }
+		if (e.currentTarget.name === 'identifier') {
+			state.customIdentifier = true
+		}
+
+		this.setState(state)
 	}
+
+	getIdentifier = () => {
+		return this.state.customIdentifier ? this.state.identifier : slugify(this.state.name)
+	}
+
 	render() {
 		return (
 			<div className="sheet">
@@ -43,7 +65,7 @@ export default class AddTeam extends React.Component {
 						<TextInput
 							type="text"
 							name="identifier"
-							value={this.state.identifier}
+							value={this.getIdentifier()}
 							onChange={this.handleChange}
 							placeholder="Identifier"
 						/>
