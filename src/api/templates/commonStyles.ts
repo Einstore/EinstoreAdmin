@@ -85,6 +85,7 @@ export default function commonStyles(params?: any) {
 		font-size: 13px;
 		background-color: #236aea;
 		background-color: var(--style-primary-action-background-color);
+		border-color: var(--style-primary-action-border-color);
 		color: #fff;
 		color: var(--style-primary-action-color);
 		border: 1px solid #ddddde;

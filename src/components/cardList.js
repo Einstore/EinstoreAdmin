@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import IconAndroid from '../shapes/android'
-import IconIos from '../shapes/ios'
+import PlatformIcon from 'ui/PlatformIcon'
 import './card.sass'
 import CardItem from './cardItem'
 import TeamName from './TeamName'
@@ -15,17 +14,6 @@ export default class CardList extends Component {
 	getBuildDate(dateTime) {
 		let date = new Date(dateTime)
 		return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear()
-	}
-
-	getPlatformIcon() {
-		switch (this.props.platform) {
-			case 'ios':
-				return <IconIos />
-			case 'android':
-				return <IconAndroid />
-			default:
-				return null
-		}
 	}
 
 	componentDidMount() {
@@ -48,7 +36,9 @@ export default class CardList extends Component {
 								<div>
 									<div className="card-header-part-name">
 										{this.props.name}
-										<span className="card-header-part-name-icon">{this.getPlatformIcon()}</span>
+										<span className="card-header-part-name-icon">
+											<PlatformIcon platform={this.props.platform} />
+										</span>
 									</div>
 								</div>
 								{!this.props.hideTeam && (
@@ -67,7 +57,9 @@ export default class CardList extends Component {
 						<div className="card-header-part">
 							<div className="card-header-part-name">
 								{this.props.name}
-								<span className="card-header-part-name-icon">{this.getPlatformIcon()}</span>
+								<span className="card-header-part-name-icon">
+									><PlatformIcon platform={this.props.platform} />
+								</span>
 							</div>
 							<div className="card-header-part-id">({this.props.id})</div>
 						</div>
