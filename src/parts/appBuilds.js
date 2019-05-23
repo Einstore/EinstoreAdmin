@@ -5,8 +5,7 @@ import LoadMore from '../ui/LoadMore'
 import IconBack from '../shapes/back'
 import './apiBuilds.sass'
 import './page.sass'
-import IconAndroid from '../shapes/android'
-import IconIos from '../shapes/ios'
+import PlatformIcon from 'ui/PlatformIcon'
 import IconTrash from '../shapes/trash'
 import usure from '../utils/usure'
 import { navigate } from '@reach/router'
@@ -30,17 +29,6 @@ export default class AppBuilds extends Component {
 		const offset = perPage * (page - 1)
 
 		return window.Einstore.appBuilds(this.props.appId, perPage, offset)
-	}
-
-	getPlatformIcon() {
-		switch (this.state.build.platform) {
-			case 'ios':
-				return <IconIos />
-			case 'android':
-				return <IconAndroid />
-			default:
-				return null
-		}
 	}
 
 	handleDelete = () => {
@@ -89,7 +77,7 @@ export default class AppBuilds extends Component {
 							/>
 						</div>
 						<div className="builds-name">
-							{this.state.build.name} {this.getPlatformIcon()}
+							{this.state.build.name} <PlatformIcon platform={this.state.build.platform} />
 						</div>
 						<div className="builds-id" style={{ fontFamily: 'Monaco, monospace' }}>
 							{this.state.build.identifier}

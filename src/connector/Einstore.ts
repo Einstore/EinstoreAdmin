@@ -220,6 +220,7 @@ export class Einstore {
 		limit?: number
 		tags?: string[] | string
 		identifier?: string
+		platform?: string | void
 	}): Promise<[any]> => {
 		filter = { ...filter }
 		if (filter.tags) {

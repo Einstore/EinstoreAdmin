@@ -1,7 +1,6 @@
 import React, { MouseEvent } from 'react'
 import './platformSwitch.sass'
-import IconAndroid from '../shapes/android'
-import IconIos from '../shapes/ios'
+import PlatformIcon from 'ui/PlatformIcon'
 
 export enum PlatformSwitchValue {
 	IOS = 'ios',
@@ -40,14 +39,14 @@ export default class PlatformSwitch extends React.Component<PlatformSwitchProps>
 					className={this.props.value === PlatformSwitchValue.ANDROID ? 'view-active' : undefined}
 					onClick={this.handleChange}
 				>
-					<IconAndroid />
+					<PlatformIcon platform="android" />
 				</button>
 				<button
 					value={PlatformSwitchValue.IOS}
 					className={this.props.value === PlatformSwitchValue.IOS ? 'view-active' : undefined}
 					onClick={this.handleChange}
 				>
-					<IconIos />
+					<PlatformIcon platform="ios" />
 				</button>
 			</div>
 		)

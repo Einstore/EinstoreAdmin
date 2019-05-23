@@ -17,6 +17,7 @@ import detectOS, { OSName } from '../utils/detectOS'
 import SecurityOverview from './SecurityOverview'
 import LoadMore from '../ui/LoadMore'
 import IconPlus from 'shapes/plus'
+import PlatformIcon from 'ui/PlatformIcon'
 
 export enum SortDirection {
 	ASC = 'asc',
@@ -61,14 +62,28 @@ function Sort({ value, direction, onChange }: SortProps) {
 	)
 }
 
-class SearchResults extends Component<{ tags: string[] }, { apps: any[] }> {
+class SearchResults extends Component<
+	{ tags: string[]; platform: PlatformSwitchValue },
+	{ apps: any[] }
+> {
 	state = {
 		apps: [],
 	}
+
 	componentDidMount() {
-		window.Einstore.filterApps({ limit: 10, tags: this.props.tags }).then((apps) => {
+		window.Einstore.filterApps({
+			limit: 10,
+			tags: this.props.tags,
+			platform: this.getPlatform(),
+		}).then((apps) => {
 			this.setState({ apps })
 		})
+	}
+
+	getPlatform = (): string | void => {
+		if (this.props.platform && this.props.platform !== PlatformSwitchValue.ALL) {
+			return this.props.platform
+		}
 	}
 	render() {
 		return (
@@ -96,7 +111,9 @@ class SearchResults extends Component<{ tags: string[] }, { apps: any[] }> {
 												<div>
 													<TeamName teamId={app.team_id} />
 												</div>
-												<div className="card-content-list-item-text-version">{app.name}</div>
+												<div className="card-content-list-item-text-version">
+													{app.name} <PlatformIcon platform={app.platform} />
+												</div>
 												<div className="card-content-list-item-text-date">
 													{app.identifier} <small>({app.version})</small>
 												</div>
@@ -258,7 +275,11 @@ export default class Overview extends Component<OverviewProps, OverviewState> {
 					</div>
 				</div>
 				{this.state.searchTags.length > 0 && (
-					<SearchResults key={JSON.stringify(this.state.searchTags)} tags={this.state.searchTags} />
+					<SearchResults
+						key={JSON.stringify([this.state.searchTags, this.state.platform])}
+						platform={this.state.platform}
+						tags={this.state.searchTags}
+					/>
 				)}
 				{!this.props.teamId && <SecurityOverview />}
 				<LoadMore
