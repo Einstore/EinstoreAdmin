@@ -14,6 +14,11 @@ export default class AddTeam extends React.Component {
 	handleSubmit = (e: FormEvent) => {
 		e.preventDefault()
 
+		if (!this.state.name.trim()) {
+			alert('Please fill in a team name.')
+			return
+		}
+
 		window.Einstore.addTeam(this.state.name, this.state.identifier).then((team: any) => {
 			window.dispatchEvent(new Event('teamsChanged'))
 			navigate(`/apps/${team.id}`)
