@@ -7,6 +7,8 @@ export class NotAuthorizedError extends Error {}
 
 export class ServerError extends Error {}
 
+export class RequestError extends Error {}
+
 export class Networking implements Networkable {
 	public config: Config
 
@@ -33,7 +35,7 @@ export class Networking implements Networkable {
 		if (response.status === 401) {
 			this.config.onLoggedOut(401)
 			throw new NotAuthorizedError(`401: Req ${response.url}`)
-		} else if (response.status >= 500) {
+		} else if (response.status >= 399) {
 			return response.json().then((err) => {
 				let exception
 
@@ -46,7 +48,7 @@ export class Networking implements Networkable {
 				if (exception) {
 					console.trace(exception)
 					captureException(exception)
-					throw exception
+					throw new RequestError(err.description)
 				}
 
 				return err
