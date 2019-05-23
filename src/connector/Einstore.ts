@@ -283,6 +283,22 @@ export class Einstore {
 		return this.networking.delete('/builds/' + id)
 	}
 
+	public checkTeamIdentifierAvailability = async (identifier: string): Promise<boolean> => {
+		try {
+			const promise = this.networking.postJson('/teams/check', {
+				identifier,
+			})
+			const res = await promise
+			const json = await res.json()
+			return json.code === 'ok'
+		} catch (e) {
+			if (e.code === 'team_error.identifier_already_exists') {
+				return false
+			}
+			throw e
+		}
+	}
+
 	public addTeam = async (name: string, identifier: string): Promise<Response> => {
 		const promise = this.networking.postJson('/teams/', {
 			name,
