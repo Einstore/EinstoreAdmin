@@ -63,7 +63,7 @@ function Sort({ value, direction, onChange }: SortProps) {
 }
 
 class SearchResults extends Component<
-	{ tags: string[]; platform: PlatformSwitchValue },
+	{ tags: string[]; platform: PlatformSwitchValue; omitTeam?: boolean },
 	{ apps: any[] }
 > {
 	state = {
@@ -108,9 +108,11 @@ class SearchResults extends Component<
 												/>
 											</div>
 											<div className="card-content-list-item-text">
-												<div>
-													<TeamName teamId={app.team_id} />
-												</div>
+												{!this.props.omitTeam && (
+													<div>
+														<TeamName teamId={app.team_id} />
+													</div>
+												)}
 												<div className="card-content-list-item-text-version">
 													{app.name} <PlatformIcon platform={app.platform} />
 												</div>
@@ -279,6 +281,7 @@ export default class Overview extends Component<OverviewProps, OverviewState> {
 						key={JSON.stringify([this.state.searchTags, this.state.platform])}
 						platform={this.state.platform}
 						tags={this.state.searchTags}
+						omitTeam={!!this.props.teamId}
 					/>
 				)}
 				{!this.props.teamId && <SecurityOverview />}
