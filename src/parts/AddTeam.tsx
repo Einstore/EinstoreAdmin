@@ -1,11 +1,54 @@
 import React, { ChangeEvent, FormEvent } from 'react'
 import { navigate } from '@reach/router'
 import slugify from 'slugify'
-
 import './systemSettings.sass'
 import Button from '../components/button'
 import TextInput from '../components/textInput'
-//import previewFileImage from '../utils/previewFileImage'
+
+class TeamIdentifierAvailabilityChecker extends React.PureComponent<{ identifier: string }> {
+	mounted = false
+
+	state = {
+		available: null,
+	}
+
+	componentDidMount() {
+		this.mounted = true
+
+		if (this.props.identifier && this.props.identifier.trim()) {
+			window.Einstore.checkTeamIdentifierAvailability(this.props.identifier.trim()).then(
+				(status) => {
+					if (this.mounted) {
+						this.setState({ available: status })
+					}
+				}
+			)
+		}
+	}
+
+	componentWillUnmount() {
+		this.mounted = false
+	}
+
+	render() {
+		if (!this.props.identifier || !this.props.identifier.trim()) {
+			return null
+		}
+		const { available } = this.state
+		if (available === null) {
+			return <div className={`TeamIdentifierAvailabilityChecker`}>checking</div>
+		}
+		return (
+			<div
+				className={`TeamIdentifierAvailabilityChecker view-${
+					available === true ? 'available' : 'unavailable'
+				}`}
+			>
+				{available === true ? 'ok' : 'not available'}
+			</div>
+		)
+	}
+}
 
 export default class AddTeam extends React.Component {
 	state = {
@@ -13,6 +56,7 @@ export default class AddTeam extends React.Component {
 		identifier: '',
 		customIdentifier: false,
 	}
+
 	handleSubmit = (e: FormEvent) => {
 		e.preventDefault()
 
@@ -55,20 +99,30 @@ export default class AddTeam extends React.Component {
 				<div className="sheet-main">
 					<h2 className="sheet-title">Add new team</h2>
 					<form action="" onSubmit={this.handleSubmit}>
-						<TextInput
-							type="text"
-							name="name"
-							value={this.state.name}
-							onChange={this.handleChange}
-							placeholder="Team name"
-						/>
-						<TextInput
-							type="text"
-							name="identifier"
-							value={this.getIdentifier()}
-							onChange={this.handleChange}
-							placeholder="Identifier"
-						/>
+						<div className="sheet-form-control">
+							<TextInput
+								type="text"
+								name="name"
+								value={this.state.name}
+								onChange={this.handleChange}
+								placeholder="Team name"
+							/>
+						</div>
+						<div className="sheet-form-control">
+							<TextInput
+								type="text"
+								name="identifier"
+								value={this.getIdentifier()}
+								onChange={this.handleChange}
+								placeholder="Identifier"
+							/>
+							<div className="sheet-form-control-indicator">
+								<TeamIdentifierAvailabilityChecker
+									key={this.getIdentifier()}
+									identifier={this.getIdentifier()}
+								/>
+							</div>
+						</div>
 						<Button>Add team</Button>
 					</form>
 				</div>
