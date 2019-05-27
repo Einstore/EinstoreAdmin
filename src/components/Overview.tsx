@@ -233,6 +233,43 @@ export default class Overview extends Component<OverviewProps, OverviewState> {
 		)
 	}
 
+	renderHeader = (loadMore: LoadMore) => {
+		return (
+			!loadMore.isEmpty() && (
+				<>
+					<div className="page-controls">
+						<div className="page-control view-primary">
+							<TagSearch
+								key={this.props.teamId || 'all'}
+								teamId={this.props.teamId}
+								onChange={this.handleTagSearchChange}
+							/>
+						</div>
+						<div className="page-control view-platformSwitch">
+							<PlatformSwitch value={this.state.platform} onChange={this.handlePlatformChange} />
+						</div>
+						<div className="page-control hide-s">
+							<Sort
+								value={this.state.sort.value}
+								direction={this.state.sort.direction}
+								onChange={this.handleSortChange}
+							/>
+						</div>
+					</div>
+					{this.state.searchTags.length > 0 && (
+						<SearchResults
+							key={JSON.stringify([this.state.searchTags, this.state.platform])}
+							platform={this.state.platform}
+							tags={this.state.searchTags}
+							omitTeam={!!this.props.teamId}
+						/>
+					)}
+					{!this.props.teamId && <SecurityOverview />}
+				</>
+			)
+		)
+	}
+
 	renderEmptyState = () => {
 		return (
 			<>
@@ -257,38 +294,11 @@ export default class Overview extends Component<OverviewProps, OverviewState> {
 	render() {
 		return (
 			<div className="page">
-				<div className="page-controls">
-					<div className="page-control view-primary">
-						<TagSearch
-							key={this.props.teamId || 'all'}
-							teamId={this.props.teamId}
-							onChange={this.handleTagSearchChange}
-						/>
-					</div>
-					<div className="page-control view-platformSwitch">
-						<PlatformSwitch value={this.state.platform} onChange={this.handlePlatformChange} />
-					</div>
-					<div className="page-control hide-s">
-						<Sort
-							value={this.state.sort.value}
-							direction={this.state.sort.direction}
-							onChange={this.handleSortChange}
-						/>
-					</div>
-				</div>
-				{this.state.searchTags.length > 0 && (
-					<SearchResults
-						key={JSON.stringify([this.state.searchTags, this.state.platform])}
-						platform={this.state.platform}
-						tags={this.state.searchTags}
-						omitTeam={!!this.props.teamId}
-					/>
-				)}
-				{!this.props.teamId && <SecurityOverview />}
 				<LoadMore
 					key={this.getListKey()}
 					itemsClassName="page-cards-list"
 					loadPage={this.loadPage}
+					renderHeader={this.renderHeader}
 					renderItem={this.renderItem}
 					renderEmptyState={this.renderEmptyState}
 				/>
