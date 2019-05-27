@@ -83,8 +83,7 @@ export default class WithCallbacks extends React.Component<Props, State> {
 		})
 	}
 
-	handleInputChange = (newValue: string) => {
-		const inputValue = newValue.replace(/\W/g, '')
+	handleInputChange = (inputValue: string) => {
 		this.setState({ inputValue })
 		return inputValue
 	}
