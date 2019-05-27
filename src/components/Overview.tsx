@@ -114,13 +114,15 @@ class SearchResults extends Component<
 													</div>
 												)}
 												<div className="card-content-list-item-text-version">
-													{app.name} <PlatformIcon platform={app.platform} />
+													{app.name} <small>{app.version}</small>{' '}
+													<PlatformIcon platform={app.platform} />
 												</div>
 												<div className="card-content-list-item-text-date">
-													{app.identifier} <small>({app.version})</small>
+													{app.identifier} <small>({app.build})</small>
 												</div>
 												<div className="card-content-list-item-text-date">
-													{prettyDate(app.created)} <small>({bytes(app.size)})</small>
+													<strong>{prettyDate(app.created)}</strong>{' '}
+													<small>({bytes(app.size)})</small>
 												</div>
 											</div>
 											<div className="card-content-list-item-download">
