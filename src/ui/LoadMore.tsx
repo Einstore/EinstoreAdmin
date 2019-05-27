@@ -8,6 +8,7 @@ export interface LoadMoreProps {
 	renderItem?: (item: LoadMoreItem) => React.ReactNode
 	loadPage?: (page: number) => Promise<null | LoadMoreItem[]>
 	renderEmptyState?: () => React.ReactNode
+	renderHeader?: (self: LoadMore) => React.ReactNode
 	className?: any
 	itemsClassName?: any
 }
@@ -114,9 +115,13 @@ export default class LoadMore extends React.Component<LoadMoreProps, LoadMoreSta
 		return Promise.resolve(null)
 	}
 
+	isEmpty() {
+		return !this.state.items || !this.state.items.length
+	}
+
 	renderEnd() {
 		if (this.state.hasReachedEnd) {
-			if (!this.state.items || !this.state.items.length) {
+			if (this.isEmpty()) {
 				if (this.props.renderEmptyState) {
 					return this.props.renderEmptyState()
 				}
@@ -137,6 +142,7 @@ export default class LoadMore extends React.Component<LoadMoreProps, LoadMoreSta
 					this.state.hasReachedEnd && 'view-hasReachedEnd'
 				)}
 			>
+				{this.props.renderHeader && this.props.renderHeader(this)}
 				<div className={cn('LoadMore-items', this.props.itemsClassName)}>
 					{this.state.items && this.state.items.map(this.renderItem)}
 				</div>
