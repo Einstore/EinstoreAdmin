@@ -422,6 +422,13 @@ export class Einstore {
 		return json.map((x: JSON) => Object.assign(new User(), x))
 	}
 
+	public updateUser = async (id: string, data: any): Promise<Response> => {
+		const promise = this.networking.put(`/users/${id}`, data)
+		const res = await promise
+		const json = await res.json()
+		return json
+	}
+
 	public teamUsers = async (team: string): Promise<Response> => {
 		const promise = this.networking.get(`/teams/${encodeURIComponent(team)}/users`)
 		const res = await promise
@@ -467,16 +474,15 @@ export class Einstore {
 		return this.networking.put(`/keys/${id}`, data)
 	}
 
-	public updateUser = async (id: string, data: any): Promise<Response> => {
-		const promise = this.networking.put(`/users/${id}`, data)
-		const res = await promise
-		const json = await res.json()
-		return json
-	}
-
-	public createApiKey = async (team: string, name: string, type: number): Promise<Response> => {
+	public createApiKey = async (
+		team: string,
+		name: string,
+		tags: String,
+		type: number
+	): Promise<Response> => {
 		const promise = this.networking.postJson(`/teams/${team}/keys`, {
 			name: name,
+			tags: tags,
 			type: type,
 		})
 		const res = await promise
