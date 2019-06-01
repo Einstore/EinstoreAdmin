@@ -20,6 +20,7 @@ import SystemSettings from './parts/SystemSettings'
 import TeamName from './components/TeamName'
 import { ErrorBoundary } from 'utils/logging'
 import Color from 'color'
+import './app.sass'
 
 const FadeInOut = posed.div({
 	enter: { opacity: 1 },
@@ -253,7 +254,6 @@ body {
 							<AuthRoute
 								path="reset-password"
 								view={AuthView.RESET_PASSWORD}
-								onResetPassword={console.log}
 							/>
 
 							{this.state.server && this.state.server.config.github_enabled && (

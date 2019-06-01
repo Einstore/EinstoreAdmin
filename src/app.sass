@@ -17,6 +17,12 @@ body
 html, body, .app
 	background: #efeff3
 
+*, *:after, *:before
+	box-sizing: inherit
+
+html
+	box-sizing: border-box
+
 .app
 	position: absolute
 	top: 0
@@ -68,17 +74,19 @@ html, body, .app
 		box-sizing: border-box
 		padding: 0 10px
 
-			&-name
-				color: #364041
-				color: var(--style-primary-action-background-color)
-				font-size: 12px
-				font-weight: 700
+		&-name
+			color: #364041
+			color: var(--style-primary-action-background-color)
+			font-size: 12px
+			font-weight: 700
+
 		&-links
 			margin: 50px 0 0
 			padding: 0 34px
 			list-style-type: none
 			color: #364041
 			color: var(--style-primary-action-background-color)
+
 		&-link
 			font-size: 26px
 			line-height: 50px
