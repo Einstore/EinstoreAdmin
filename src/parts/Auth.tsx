@@ -180,8 +180,8 @@ class ResetPassword extends React.Component<AuthComponentProps> {
 						alert(res.description)
 						console.error(res)
 					} else {
+						alert('Your password has been reset. Check your email for further instructions.')
 						if (this.props.onSuccess) {
-							alert('Your password has been reset. Check your email for further instructions.')
 							this.props.onSuccess(this.state.email)
 						}
 					}
