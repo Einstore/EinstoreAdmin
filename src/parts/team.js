@@ -9,6 +9,7 @@ import EditTeam from '../parts/EditTeam'
 import '../components/textInput.sass'
 import IconInfo from '../shapes/info'
 import usure from '../utils/usure'
+import getBaseUrl from 'utils/getBaseUrl'
 
 export default class Team extends Component {
 	state = {
@@ -74,10 +75,13 @@ export default class Team extends Component {
 
 		const teamId = this.state.activeTeam
 		if (teamId) {
+			const baseUrl = getBaseUrl()
+
 			const data = {
 				firstname: this.firstNameRef.current.value,
 				lastname: this.lastNameRef.current.value,
 				email: this.emailRef.current.value,
+				link: `${baseUrl}/invitation`,
 			}
 
 			window.Einstore.invite(data)
@@ -92,7 +96,7 @@ export default class Team extends Component {
 		const { activeTeam, teams } = this.state
 		return (
 			<div className="page">
-				<EditTeam teamId={this.state.activeTeam} key={'editbox'+this.state.activeTeam} />
+				<EditTeam teamId={this.state.activeTeam} key={'editbox' + this.state.activeTeam} />
 
 				<div className="card">
 					<div className="card-footer">
@@ -164,7 +168,7 @@ export default class Team extends Component {
 					</div>
 				</div>
 
-				<DeleteTeamBox key={'deletebox'+this.state.activeTeam} teamId={this.state.activeTeam} />
+				<DeleteTeamBox key={'deletebox' + this.state.activeTeam} teamId={this.state.activeTeam} />
 			</div>
 		)
 	}
@@ -200,14 +204,15 @@ class DeleteTeamBox extends React.PureComponent {
 						<IconInfo /> Want to delete team '{this.state.team.name}'?
 					</h2>
 					{this.state.team.admin ? (
-							<p className="notice-content">
-								This team cannot be deleted, because it is <strong>admin</strong> team.
-							</p>) : (
-						<>
 						<p className="notice-content">
-							By deleting this team you will remove all files associated with the team. All users
-							assigned to this team will lose access too.
+							This team cannot be deleted, because it is <strong>admin</strong> team.
 						</p>
+					) : (
+						<>
+							<p className="notice-content">
+								By deleting this team you will remove all files associated with the team. All users
+								assigned to this team will lose access too.
+							</p>
 							<div>
 								<Button danger onClick={this.handleDeleteTeam}>
 									Delete team '{this.state.team.name}'
