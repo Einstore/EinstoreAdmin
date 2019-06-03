@@ -1,10 +1,10 @@
+.auth
+	padding: 1em
+	margin: 0 auto
+	width: 100%
+	max-width: 400px
+
 .login
-	width: 420px
-	max-width: 90%
-	position: absolute
-	top: 50%
-	left: 50%
-	transform: translate(-50%, -50%)
 	fieldset
 		border: 0
 		padding: 0
@@ -13,6 +13,7 @@
 
 		&[disabled]
 			opacity: .5
+
 	&-forgot
 		margin-top: -5px
 		font-size: 11px
@@ -62,3 +63,11 @@
 		display: flex
 		justify-content: space-between
 		align-items: center
+
+#root, #root > [role="group"]
+	display: flex
+	height: 100%
+	width: 100%
+	justify-content: center
+	align-items: center
+	flex-direction: column

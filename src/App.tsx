@@ -256,6 +256,11 @@ body {
 								view={AuthView.RESET_PASSWORD}
 							/>
 
+							<AuthRoute
+								path="set-password"
+								view={AuthView.SET_PASSWORD}
+							/>
+
 							{this.state.server && this.state.server.config.github_enabled && (
 								<AuthRoute path="oauth-result" view={AuthView.OAUTH_RESULT} />
 							)}

@@ -180,10 +180,29 @@ export class Einstore {
 	}
 
 	public resetPassword = async (email: string): Promise<Response> => {
-		const promise = this.networking.postJson('/auth/start-recovery', { email })
+		const promise = this.networking.postJson('/auth/recovery', { email })
 		const res = await promise
 		const json = await res.json()
 		return json
+	}
+
+	public updateResetPassword = async (token: string, password: string): Promise<Response> => {
+		const promise = this.networking.postJson(
+			`/auth/recovery/finish?token=${encodeURIComponent(token)}`,
+			{ password }
+		)
+		const res = await promise
+		const json = await res.json()
+		return json
+	}
+
+	public checkPassword = async (password: string): Promise<boolean> => {
+		try {
+			await this.networking.postJson(`/auth/password-check`, { password })
+			return true
+		} catch (e) {
+			return false
+		}
 	}
 
 	public ping = (): Promise<Response> => {
