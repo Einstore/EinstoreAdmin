@@ -167,7 +167,7 @@ export class Networking implements Networkable {
 	// Private interface
 
 	private headers = (headers: Headers): Headers => {
-		headers = this.appendHeader(headers, 'Content-Type', 'application/json')
+		headers = this.appendHeader(headers, 'Content-Type', 'application/json;charset=utf-8')
 		if (this.jwt) {
 			headers = this.appendHeader(headers, 'Authorization', this.jwt)
 		}
