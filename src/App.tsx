@@ -218,7 +218,12 @@ export class EinstoreApp extends React.Component<{}, AppState> {
 			let rows = [
 				'--style-primary-action-background-color: #236aea;',
 				'--style-primary-action-color: #fff;',
-				`--style-primary-action-border-color: ${Color(this.state.settings['style_primary_action_border_color'] || '#236aea').darken(.25).hsl().toString()};`,
+				`--style-primary-action-border-color: ${Color(
+					this.state.settings['style_primary_action_border_color'] || '#236aea'
+				)
+					.darken(0.25)
+					.hsl()
+					.toString()};`,
 			]
 			const keys = Object.keys(this.state.settings)
 			for (let key of keys) {
@@ -251,15 +256,11 @@ body {
 							}}
 						/>
 						<Router>
-							<AuthRoute
-								path="reset-password"
-								view={AuthView.RESET_PASSWORD}
-							/>
+							<AuthRoute path="reset-password" view={AuthView.RESET_PASSWORD} />
 
-							<AuthRoute
-								path="set-password"
-								view={AuthView.SET_PASSWORD}
-							/>
+							<AuthRoute path="set-password" view={AuthView.SET_PASSWORD} />
+
+							<AuthRoute path="invitation" view={AuthView.INVITE_FINISH} />
 
 							{this.state.server && this.state.server.config.github_enabled && (
 								<AuthRoute path="oauth-result" view={AuthView.OAUTH_RESULT} />
