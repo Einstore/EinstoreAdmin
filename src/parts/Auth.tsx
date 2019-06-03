@@ -1,4 +1,4 @@
-import { Link, RouteComponentProps } from '@reach/router'
+import { Link, RouteComponentProps, navigate } from '@reach/router'
 import cn from 'classnames'
 import React, { ChangeEvent, FormEvent } from 'react'
 import Button from '../components/button'
@@ -12,9 +12,14 @@ import { ServerContext } from '../App'
 import { parse } from 'query-string'
 import jwtDecode from 'jwt-decode'
 import IconNewUser from '../shapes/newUser'
+import Form, { exportValidationSchema, FormControl, ValuesObject } from 'ui/Form'
+import * as Yup from 'yup'
+import getBaseUrl from 'utils/getBaseUrl'
 
 export enum AuthView {
 	RESET_PASSWORD = 'reset-password',
+	SET_PASSWORD = 'set-password',
+	INVITE_FINISH = 'invite-finish',
 	REGISTRATION = 'register',
 	LOGIN = 'login',
 	OAUTH_RESULT = 'outh-result',
@@ -169,17 +174,19 @@ class ResetPassword extends React.Component<AuthComponentProps> {
 	handleSubmit = (e: FormEvent) => {
 		e.preventDefault()
 		if (this.state.email) {
-			window.Einstore.resetPassword(this.state.email).then((res: any) => {
-				if (res && res.error) {
-					alert(res.description)
-					console.error(res)
-				} else {
-					if (this.props.onSuccess) {
-						alert('Your password has been reset. Check your email for further instructions.')
-						this.props.onSuccess(this.state.email)
+			window.Einstore.resetPassword(this.state.email, getBaseUrl() + '/set-password').then(
+				(res: any) => {
+					if (res && res.error) {
+						alert(res.description)
+						console.error(res)
+					} else {
+						if (this.props.onSuccess) {
+							alert('Your password has been reset. Check your email for further instructions.')
+							this.props.onSuccess(this.state.email)
+						}
 					}
 				}
-			})
+			)
 		}
 	}
 
@@ -230,6 +237,123 @@ class ResetPassword extends React.Component<AuthComponentProps> {
 	}
 }
 
+const setPasswordControls: FormControl[] = [
+	{ name: 'new_password', type: 'password', required: true, label: 'New password' },
+	{
+		name: 'new_password_check',
+		label: 'Confirm password',
+		type: 'password',
+		required: true,
+		rules: Yup.string().oneOf([Yup.ref('new_password'), null], 'Passwords must match'),
+	},
+]
+
+const setPasswordValidationSchema = exportValidationSchema(setPasswordControls)
+
+function SetPassword() {
+	const [working, setIsWorking] = React.useState(false)
+
+	const handleSubmit = React.useCallback((values: ValuesObject) => {
+		const token = parse(window.location.search).token as string
+
+		if (!token) {
+			alert('Cannot update password without token.')
+		}
+
+		setIsWorking(true)
+
+		window.Einstore.checkPassword(values.new_password).then((ok) => {
+			if (!ok) {
+				alert('Password is not strong enough. Please choose a better one.')
+				setIsWorking(false)
+				return
+			}
+			window.Einstore.updateResetPassword(token, values.new_password).then((status: any) => {
+				alert('Your password has been changed.')
+				navigate('/')
+				setIsWorking(false)
+			})
+		})
+	}, [])
+
+	return (
+		<div className="login">
+			<Form
+				submitLabel="Update password"
+				isWorking={working}
+				controls={setPasswordControls}
+				validationSchema={setPasswordValidationSchema}
+				onSubmit={handleSubmit}
+			/>
+		</div>
+	)
+}
+
+const inviteFinishControls: FormControl[] = [
+	{
+		name: 'username',
+		type: 'text',
+		required: true,
+		label: 'Username',
+		rules: Yup.string().matches(/^[a-z0-9]+[a-z0-9_-]+[a-z0-9]+$/i, {
+			message: 'Fill in a valid username.',
+		}),
+	},
+	{ name: 'new_password', type: 'password', required: true, label: 'New password' },
+	{
+		name: 'new_password_check',
+		label: 'Confirm password',
+		type: 'password',
+		required: true,
+		rules: Yup.string().oneOf([Yup.ref('new_password'), null], 'Passwords must match'),
+	},
+]
+
+const inviteFinishValidationSchema = exportValidationSchema(inviteFinishControls)
+
+function InviteFinish() {
+	const [working, setIsWorking] = React.useState(false)
+
+	const handleSubmit = React.useCallback((values: ValuesObject) => {
+		const token = parse(window.location.search).token as string
+
+		if (!token) {
+			alert('Cannot finish invite without token.')
+		}
+
+		setIsWorking(true)
+
+		window.Einstore.checkPassword(values.new_password).then((ok) => {
+			if (!ok) {
+				alert('Password is not strong enough. Please choose a better one.')
+				setIsWorking(false)
+				return
+			}
+			window.Einstore.finishInvite(token, {
+				username: values.username,
+				password: values.new_password,
+				link: getBaseUrl() + '/invitation',
+			}).then((status: any) => {
+				alert('You are in.')
+				navigate('/')
+				setIsWorking(false)
+			})
+		})
+	}, [])
+
+	return (
+		<div className="login">
+			<Form
+				submitLabel="Update password"
+				isWorking={working}
+				controls={inviteFinishControls}
+				validationSchema={inviteFinishValidationSchema}
+				onSubmit={handleSubmit}
+			/>
+		</div>
+	)
+}
+
 export class AuthRoute extends React.Component<RouteComponentProps<AuthRouteProps>> {
 	lastInfo: string = ''
 
@@ -251,6 +375,18 @@ export class AuthRoute extends React.Component<RouteComponentProps<AuthRouteProp
 				return (
 					<div className={cn('auth', 'view-' + this.props.view)}>
 						<ResetPassword onSuccess={this.props.onResetPassword} />
+					</div>
+				)
+			case AuthView.SET_PASSWORD:
+				return (
+					<div className={cn('auth', 'view-' + this.props.view)}>
+						<SetPassword />
+					</div>
+				)
+			case AuthView.INVITE_FINISH:
+				return (
+					<div className={cn('auth', 'view-' + this.props.view)}>
+						<InviteFinish />
 					</div>
 				)
 			case AuthView.OAUTH_RESULT:

@@ -17,6 +17,7 @@ import { splitToIdentifiersAndRegularTags } from '../utils/splitToIdentifiersAnd
 import uniqBy from 'lodash-es/uniqBy'
 import { AlertView } from 'components/Alert'
 import availableTemplates from '../api/templates/availableTemplates'
+import getBaseUrl from 'utils/getBaseUrl'
 
 export enum AuthenticatorType {
 	BASIC = 'BASIC',
@@ -133,6 +134,7 @@ export class Einstore {
 		firstname: string
 		lastname: string
 		email: string
+		link: string
 	}): Promise<any> => {
 		const promise = this.networking.postJson('/users/invite', data)
 		return promise.then((res) => res.json())
@@ -179,11 +181,43 @@ export class Einstore {
 		return json
 	}
 
-	public resetPassword = async (email: string): Promise<Response> => {
-		const promise = this.networking.postJson('/auth/start-recovery', { email })
+	public resetPassword = async (email: string, link: string): Promise<Response> => {
+		const promise = this.networking.postJson('/auth/recovery', { email, link })
 		const res = await promise
 		const json = await res.json()
 		return json
+	}
+
+	public updateResetPassword = async (token: string, password: string): Promise<Response> => {
+		const promise = this.networking.postJson(
+			`/auth/recovery/finish?token=${encodeURIComponent(token)}`,
+			{ password }
+		)
+		const res = await promise
+		const json = await res.json()
+		return json
+	}
+
+	public finishInvite = async (
+		token: string,
+		params: { [key: string]: string }
+	): Promise<Response> => {
+		const promise = this.networking.postJson(
+			`/users/invite/finish?token=${encodeURIComponent(token)}`,
+			params
+		)
+		const res = await promise
+		const json = await res.json()
+		return json
+	}
+
+	public checkPassword = async (password: string): Promise<boolean> => {
+		try {
+			await this.networking.postJson(`/auth/password-check`, { password })
+			return true
+		} catch (e) {
+			return false
+		}
 	}
 
 	public ping = (): Promise<Response> => {
@@ -572,8 +606,7 @@ export class Einstore {
 	}
 
 	public registerAllAvailableTemplates = async () => {
-		const urlParts = window.location.href.split('/')
-		const baseUrl = `${urlParts[0]}//${urlParts[2]}`
+		const baseUrl = getBaseUrl()
 
 		const settings = await window.Einstore.serverSettingsPlain()
 

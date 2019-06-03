@@ -1,0 +1,154 @@
+@import "vars.sass"
+
+@keyframes Form-button-fadeInOut
+	0%
+		opacity: 1
+	50%
+		opacity: .6
+	100%
+		opacity: 1
+
+.Form
+	$spacing: 1em
+	$radius: 4px
+	box-sizing: border-box
+	transition: opacity $ease-in-out-cubic 2s
+
+	&.view-isWorking &-container
+		opacity: .5
+
+	&.view-card
+		max-width: 600px
+		margin: $spacing auto
+		background: #fff
+		padding: $spacing
+		box-shadow: $nice-box-shadow
+		border-radius: $radius
+
+	&-fieldset
+		display: block
+		border: none
+		padding: 0
+		margin: 0
+
+	&-actions
+		border-top: solid 1px rgba(#000, .1)
+		margin-top: 1em
+		padding: 1em 0
+		display: flex
+		justify-content: space-between
+		align-items: center
+
+		&-group
+			margin: -0.25 * $spacing
+			> *
+				margin: 0.25 * $spacing
+
+	&-controlGroup
+		margin: -0.5 * $spacing
+
+	&-error,
+	&-errors
+		color: #f00
+
+	&-errors
+		list-style: square
+		margin-left: 0
+		padding-left: 1.3em
+
+	&-error
+		margin: .5em 0
+		font-size: .9em
+
+	&-button
+		font-size: .75em
+		letter-spacing: 0.02em
+		font-family: inherit
+		border: 1px solid #ddddde
+		border-radius: 4px
+		padding: .8em 1.5em
+		line-height: 1
+		cursor: pointer
+		display: inline-flex
+		align-items: center
+		justify-content: center
+		transition: 0.2s background
+		white-space: nowrap
+		text-decoration: none
+
+		background-color: #eee
+		color: #555
+		border-color: rgba(#000, .2)
+
+		&.view-primary
+			background-color: #236aea
+			background-color: var(--style-primary-action-background-color)
+			color: white
+			color: var(--style-primary-action-color)
+			border-color: var(--style-primary-action-border-color)
+
+		&.view-link
+			color: inherit
+			text-decoration: underline
+			border: none
+			background: transparent
+			padding-left: .25em
+			padding-right: .25em
+
+		&.view-danger
+			color: white
+			background-color: #d63031
+			border: 1px solid darken(#d63031, .2)
+			svg
+				fill: darken(#d63031, .2)
+
+		&.view-isWorking
+			animation: Form-button-fadeInOut infinite 1s
+			border-style: dashed
+
+	&-control
+		padding: 0.5 * $spacing
+		display: flex
+		flex-direction: column
+
+		&-label
+			margin: .5em 0
+			font-size: .9em
+			opacity: .5
+
+		&-name
+			margin-right: .5em
+
+		&-tip
+			font-size: .9em
+
+		&-note
+			margin: .5em 0
+			font-size: .9em
+			opacity: .5
+
+			p
+				margin: .5em 0
+
+		&-input
+			&.view-basic
+				display: block
+				padding: .25em .5em
+				font-size: inherit
+				font-family: inherit
+				line-height: 1.4
+				border-radius: $radius
+				border: solid 1px rgba(#000, .5)
+
+			.view-isInvalid &
+				border-color: #f00
+
+
+	&-error + &-control-note
+		margin-top: 0
+
+textarea.Form-control-input
+	width: 100%
+	max-width: 100%
+	min-width: 5em
+	min-height: 4em
