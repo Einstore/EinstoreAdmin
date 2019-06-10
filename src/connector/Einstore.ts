@@ -152,6 +152,15 @@ export class Einstore {
 		return promise.then((res) => res.json())
 	}
 
+	public verifyRegistration = async (token: string): Promise<boolean> => {
+		const headers = new Headers()
+		headers.append('Authorization', `Bearer ${token}`)
+		return this.networking
+			.get(`/users/verify?token=${encodeURIComponent(token)}`, headers)
+			.then((res) => res.json())
+			.then((data) => data && data.verified)
+	}
+
 	public addUserToTeam = (teamId: string, userId: string): Promise<any> => {
 		return this.networking.postJson(`/teams/${teamId}/link`, { id: userId })
 	}

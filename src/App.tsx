@@ -261,6 +261,7 @@ body {
 							<AuthRoute path="set-password" view={AuthView.SET_PASSWORD} />
 
 							<AuthRoute path="invitation" view={AuthView.INVITE_FINISH} />
+							<AuthRoute path="verify" view={AuthView.REGISTRATION_FINISH} />
 
 							{this.state.server && this.state.server.config.github_enabled && (
 								<AuthRoute path="oauth-result" view={AuthView.OAUTH_RESULT} />

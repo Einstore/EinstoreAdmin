@@ -21,6 +21,7 @@ export enum AuthView {
 	SET_PASSWORD = 'set-password',
 	INVITE_FINISH = 'invite-finish',
 	REGISTRATION = 'register',
+	REGISTRATION_FINISH = 'registration-finish',
 	LOGIN = 'login',
 	OAUTH_RESULT = 'outh-result',
 }
@@ -57,7 +58,7 @@ class Registration extends React.Component<AuthComponentProps> {
 				lastname,
 				firstname,
 				password,
-				link: getBaseUrl() + '/',
+				link: getBaseUrl() + '/verify',
 			}).then((res) => {
 				if (res && res.error) {
 					alert(res.description)
@@ -355,6 +356,30 @@ function InviteFinish() {
 	)
 }
 
+function RegistrationFinish() {
+	const [working, setIsWorking] = React.useState(false)
+
+	React.useEffect(() => {
+		const token = parse(window.location.search).token as string
+
+		if (!token) {
+			alert('Cannot finish invite without token.')
+		}
+
+		setIsWorking(true)
+
+		window.Einstore.verifyRegistration(token).then((status) => {
+			if (status) {
+				navigate('/')
+			} else {
+				alert('Cannot verify user')
+			}
+		})
+	}, [])
+
+	return <div className="login">{working ? 'working' : 'waiting'}</div>
+}
+
 export class AuthRoute extends React.Component<RouteComponentProps<AuthRouteProps>> {
 	lastInfo: string = ''
 
@@ -370,6 +395,12 @@ export class AuthRoute extends React.Component<RouteComponentProps<AuthRouteProp
 				return (
 					<div className={cn('auth', 'view-' + this.props.view)}>
 						<Registration onSuccess={this.props.onRegister} />
+					</div>
+				)
+			case AuthView.REGISTRATION_FINISH:
+				return (
+					<div className={cn('auth', 'view-' + this.props.view)}>
+						<RegistrationFinish />
 					</div>
 				)
 			case AuthView.RESET_PASSWORD:

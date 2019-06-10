@@ -38,7 +38,7 @@ export class Networking implements Networkable {
 	}
 
 	public processResponse = (response: Response): Response | Promise<Response> => {
-		if (response.status === 401) {
+		if (response.status === 401 && false) {
 			this.config.onLoggedOut(401)
 			throw new NotAuthorizedError(`401: Req ${response.url}`)
 		} else if (response.status >= 399) {
