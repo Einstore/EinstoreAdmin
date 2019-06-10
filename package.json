@@ -26,6 +26,7 @@
 		"cross-env": "^5.2.0",
 		"crypto-js": "^3.1.9-1",
 		"formik": "^1.5.7",
+		"fstream": ">=1.0.12",
 		"get-best-contrast-color": "^0.2.2",
 		"jwt-decode": "^2.2.0",
 		"lodash-es": "^4.17.11",
@@ -52,8 +53,7 @@
 		"tslint": "^5.16.0",
 		"typescript": "^3.4.5",
 		"whatwg-fetch": "^3.0.0",
-		"yup": "^0.27.0",
-    "fstream": ">=1.0.12"
+		"yup": "^0.27.0"
 	},
 	"scripts": {
 		"prod": "npm run build && npm run serve",
