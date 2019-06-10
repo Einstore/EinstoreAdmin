@@ -8,6 +8,7 @@ import Button from './button'
 import { ApiKeyType, apiKeyTypePairs } from '../api/types/ApiKeyType'
 import map from 'lodash-es/map'
 import find from 'lodash-es/find'
+import filter from 'lodash-es/filter'
 import Select from 'react-select'
 import IconBack from 'shapes/back'
 
@@ -47,7 +48,7 @@ function RecentlyAddedApiKey({ id, name, tags, type, team_id, token }: any) {
 								<tr>
 									<th>Tags:</th>
 									<td>
-										{tags.split(',').map((tag: string) => (
+										{filter(tags.split(',')).map((tag: string) => (
 											<Tag value={tag} />
 										))}
 									</td>

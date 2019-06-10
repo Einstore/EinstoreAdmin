@@ -13,6 +13,7 @@ import prettyDate from '../utils/prettyDate'
 import { ApiKeyType, apiKeyTypePairs } from '../api/types/ApiKeyType'
 import { Link } from '@reach/router'
 import IconPlus from 'shapes/plus'
+import filter from 'lodash-es/filter'
 
 const apiKeyTypeClassnames = {
 	[ApiKeyType.UPLOAD]: 'apiKey-type-round-label-upload',
@@ -100,7 +101,7 @@ export class Row extends React.Component<RowProps> {
 				<td className="apiKey-tags">
 					{this.props.tags && (
 						<span>
-							{this.props.tags.split(',').map((tag: string) => (
+							{filter(this.props.tags.split(',')).map((tag: string) => (
 								<Tag value={tag} />
 							))}
 						</span>

@@ -1,18 +1,15 @@
 import React from 'react'
-import './tag.sass'
+import './Tag.sass'
 
 interface TagProps {
-	value?: string
+	value: string
 	size?: string
 }
 
 export default class Tag extends React.PureComponent<TagProps> {
 	render() {
-		if (!this.props.value) {
-			return null
-		}
 		return (
-			<div className={this.props.size ? 'tag tag-' + this.props.size : 'tag tag-medium'}>
+			<div className={`Tag view-size-${this.props.size || 'medium'}`}>
 				{this.props.value}
 			</div>
 		)
