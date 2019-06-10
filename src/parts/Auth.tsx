@@ -57,6 +57,7 @@ class Registration extends React.Component<AuthComponentProps> {
 				lastname,
 				firstname,
 				password,
+				link: getBaseUrl() + '/',
 			}).then((res) => {
 				if (res && res.error) {
 					alert(res.description)

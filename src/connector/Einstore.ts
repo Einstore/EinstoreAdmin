@@ -146,6 +146,7 @@ export class Einstore {
 		firstname: string
 		lastname: string
 		email: string
+		link: string
 	}): Promise<any> => {
 		const promise = this.networking.postJson('/users', data)
 		return promise.then((res) => res.json())
