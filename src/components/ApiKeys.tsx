@@ -5,6 +5,7 @@ import '../parts/api.sass'
 import IconPen from '../shapes/pen'
 import IconTrash from '../shapes/trash'
 import TeamName from './TeamName'
+import Tag from '../ui/Tag'
 import usure from '../utils/usure'
 import TextInput from './textInput'
 import Button from './button'
@@ -12,6 +13,7 @@ import prettyDate from '../utils/prettyDate'
 import { ApiKeyType, apiKeyTypePairs } from '../api/types/ApiKeyType'
 import { Link } from '@reach/router'
 import IconPlus from 'shapes/plus'
+import filter from 'lodash-es/filter'
 
 const apiKeyTypeClassnames = {
 	[ApiKeyType.UPLOAD]: 'apiKey-type-round-label-upload',
@@ -20,6 +22,7 @@ const apiKeyTypeClassnames = {
 
 interface RowProps {
 	name?: string
+	tags?: string
 	id?: string
 	team?: string
 	created?: string
@@ -95,6 +98,15 @@ export class Row extends React.Component<RowProps> {
 				<td className="apiKey-type" title={typeName}>
 					<span className={typeClassname}>{typeName}</span>
 				</td>
+				<td className="apiKey-tags">
+					{this.props.tags && (
+						<span>
+							{filter(this.props.tags.split(',')).map((tag: string) => (
+								<Tag value={tag} />
+							))}
+						</span>
+					)}
+				</td>
 				<td className="apiKey-date" title={this.props.created}>
 					{this.props.created && prettyDate(this.props.created)}
 				</td>
@@ -138,9 +150,11 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 	}
 
 	handleChangeKey = (data: any) => {
-		window.Einstore.editApiKey(data.id, { name: data.name, type: data.type }).then(() => {
-			this.refresh()
-		})
+		window.Einstore.editApiKey(data.id, { name: data.name, tags: data.tags, type: data.type }).then(
+			() => {
+				this.refresh()
+			}
+		)
 	}
 
 	refresh = () => {
@@ -167,6 +181,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 										{!this.props.teamId && <td>Team</td>}
 										<td>Name/note</td>
 										<td>Type</td>
+										<td>Tags</td>
 										<td>Created</td>
 										<td>Actions</td>
 									</tr>
@@ -179,6 +194,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 												onChange={this.handleChangeKey}
 												key={item.id}
 												name={item.name}
+												tags={item.tags}
 												type={item.type}
 												created={item.created}
 												id={item.id}
