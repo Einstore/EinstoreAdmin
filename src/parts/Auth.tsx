@@ -65,6 +65,7 @@ class Registration extends React.Component<AuthComponentProps> {
 					console.error(res)
 				} else {
 					alert('Your registration went OK. Check your email.')
+					window.location.href = '/'
 				}
 			})
 	}
