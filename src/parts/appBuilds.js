@@ -39,7 +39,7 @@ export default class AppBuilds extends Component {
 
 	getBuildDate(dateTime) {
 		let date = new Date(dateTime)
-		return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear()
+		return date
 	}
 
 	renderBuild = (item) => {

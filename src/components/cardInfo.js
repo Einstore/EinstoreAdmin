@@ -8,6 +8,7 @@ import AppIcon from './AppIcon'
 import bytes from 'pretty-bytes'
 
 import InstallButton from './InstallButton'
+import prettyDate from "../utils/prettyDate";
 
 function NewLines({ children }) {
 	return children.split('\n').map((str, i) => <div key={i}>{str}</div>)
@@ -85,6 +86,13 @@ export default class CardInfo extends Component {
 	}
 
 	render() {
+		const timeBuiltOption = {
+			hour: 'numeric',
+			minute: 'numeric',
+			year: 'numeric',
+			month: 'numeric',
+			day: 'numeric',
+		}
 		return (
 			<div className="card card-columns">
 				<div className="card-column">
@@ -123,6 +131,12 @@ export default class CardInfo extends Component {
 							<div className="card-column-infobox-item-name">Size:</div>
 							<div className="card-column-infobox-item-value">
 								{this.props.size && bytes(this.props.size)}
+							</div>
+						</div>
+						<div className="card-column-infobox-item">
+							<div className="card-column-infobox-item-name">Date:</div>
+							<div className="card-column-infobox-item-value">
+								{prettyDate(this.props.date, timeBuiltOption)}
 							</div>
 						</div>
 					</div>
