@@ -18,6 +18,7 @@ import SecurityOverview from './SecurityOverview'
 import LoadMore from '../ui/LoadMore'
 import IconPlus from 'shapes/plus'
 import PlatformIcon from 'ui/PlatformIcon'
+import * as browserStorage from '../utils/browserStorage'
 
 export enum SortDirection {
 	ASC = 'asc',
@@ -172,8 +173,8 @@ export default class Overview extends Component<OverviewProps, OverviewState> {
 		searchTags: [],
 		platform: initialPlatform,
 		sort: {
-			value: SortValue.DATE,
-			direction: SortDirection.DESC,
+			value: SortValue[browserStorage.get('overview.sort.value', SortValue.DATE).toUpperCase()],
+			direction: SortDirection[browserStorage.get('overview.sort.direction', SortDirection.DESC).toUpperCase()],
 		},
 		refreshKey: 1,
 	}
@@ -191,6 +192,8 @@ export default class Overview extends Component<OverviewProps, OverviewState> {
 	}
 
 	handleSortChange = (value: SortValue, direction: SortDirection) => {
+		browserStorage.set('overview.sort.value', value)
+		browserStorage.set('overview.sort.direction', direction)
 		this.setState({ sort: { value, direction } }, this.refresh)
 	}
 
