@@ -9,6 +9,7 @@ import map from 'lodash-es/map'
 import find from 'lodash-es/find'
 import Select from 'react-select'
 import IconBack from 'shapes/back'
+import showMessage from '../utils/showMessage'
 
 interface AddApiKeysProps {
 	teamId?: string
@@ -104,8 +105,10 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 				})
 				.catch((err) => {
 					this.setState({ working: false })
-					alert('API key can not be generated.\n\n' + err.message)
+					showMessage('API key can not be generated.\n' + err.message)
 				})
+		} else {
+			showMessage('You have to select team and fill API key name.')
 		}
 	}
 

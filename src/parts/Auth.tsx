@@ -15,6 +15,7 @@ import IconNewUser from '../shapes/newUser'
 import Form, { exportValidationSchema, FormControl, ValuesObject } from 'ui/Form'
 import * as Yup from 'yup'
 import getBaseUrl from 'utils/getBaseUrl'
+import showMessage from "../utils/showMessage";
 
 export enum AuthView {
 	RESET_PASSWORD = 'reset-password',
@@ -51,7 +52,7 @@ class Registration extends React.Component<AuthComponentProps> {
 		e.preventDefault()
 
 		const { email, username, lastname, firstname, password } = this.state
-		if (email && username && lastname && firstname && password)
+		if (email && username && lastname && firstname && password) {
 			window.Einstore.register({
 				email,
 				username,
@@ -61,13 +62,18 @@ class Registration extends React.Component<AuthComponentProps> {
 				link: getBaseUrl() + '/verify',
 			}).then((res) => {
 				if (res && res.error) {
-					alert(res.description)
+					showMessage(res.description)
 					console.error(res)
 				} else {
-					alert('Your registration went OK. Check your email.')
+					showMessage('Your registration went OK. Check your email.')
 					window.location.href = '/'
 				}
+			}).catch((e) => {
+				showMessage(e)
 			})
+		} else {
+			showMessage('Fill in all fields.')
+		}
 	}
 
 	handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -180,16 +186,21 @@ class ResetPassword extends React.Component<AuthComponentProps> {
 			window.Einstore.resetPassword(this.state.email, getBaseUrl() + '/set-password').then(
 				(res: any) => {
 					if (res && res.error) {
-						alert(res.description)
+						showMessage(res.description)
 						console.error(res)
 					} else {
-						alert('Your password has been reset. Check your email for further instructions.')
+						showMessage('Your password has been reset. Check your email for further instructions.')
 						if (this.props.onSuccess) {
 							this.props.onSuccess(this.state.email)
 						}
 					}
 				}
-			)
+			).catch((e) => {
+				showMessage(e)
+			})
+		}
+		else {
+			showMessage('You have to enter your e-mail address')
 		}
 	}
 
