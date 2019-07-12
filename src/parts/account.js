@@ -3,6 +3,7 @@ import Button from '../components/button'
 import Gravatar from '../components/Gravatar'
 import './account.sass'
 import './page.sass'
+import showMessage from "../utils/showMessage";
 
 export default class Account extends Component {
 	state = {
@@ -27,7 +28,7 @@ export default class Account extends Component {
 			update.password = this.state.form.password
 
 			if (this.state.form.password !== this.state.form.passwordagain) {
-				alert('Passwords do not match')
+				showMessage('Passwords do not match')
 				return false
 			}
 		}

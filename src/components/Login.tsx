@@ -17,6 +17,7 @@ import getContrastColor from '../utils/getContrastColor'
 import './Login.sass'
 import { ReactComponent as GithubIcon } from '@fortawesome/fontawesome-free/svgs/brands/github.svg'
 import { ReactComponent as GitlabIcon } from '@fortawesome/fontawesome-free/svgs/brands/gitlab.svg'
+import showMessage from "../utils/showMessage";
 
 const oauthIcons = {
 	github: <GithubIcon />,
@@ -74,9 +75,11 @@ export default class Login extends React.Component<LoginProps, LoginState> {
 					this.setState({ working: false })
 				})
 				.catch((e: any) => {
-					alert(e.message)
+					showMessage(e.message)
 					this.setState({ working: false })
 				})
+		} else {
+			showMessage('You have to fill in E-mail and Password.')
 		}
 	}
 
