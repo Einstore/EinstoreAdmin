@@ -18,6 +18,7 @@ export default class AppDetail extends Component {
 		version: '',
 		info: null,
 		platform: '',
+		built: null,
 	}
 
 	componentDidMount() {
@@ -115,6 +116,7 @@ export default class AppDetail extends Component {
 					platform={this.state.platform}
 					uuid={this.state.id}
 					size={this.state.size}
+					date={this.state.built}
 				/>
 				<CardTags tags={tags} lastAddedTag={this.lastAddedTag} onDeleteTag={this.deleteTag} onAddTag={this.addTag} />
 
