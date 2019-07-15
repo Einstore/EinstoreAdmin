@@ -271,6 +271,10 @@ body {
 								<AuthRoute path="register" view={AuthView.REGISTRATION} onRegister={console.log} />
 							)}
 
+							{this.state.server && this.state.server.config.allow_registrations && (
+								<AuthRoute path="register-ok" view={AuthView.REGISTRATION_OK} />
+							)}
+
 							{!auth && <AuthRoute default view={AuthView.LOGIN} onLogin={this.handleLogin} />}
 
 							{auth && <Redirect from="/" to="apps" />}
