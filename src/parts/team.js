@@ -10,6 +10,7 @@ import '../components/textInput.sass'
 import IconInfo from '../shapes/info'
 import usure from '../utils/usure'
 import getBaseUrl from 'utils/getBaseUrl'
+import showMessage from "../utils/showMessage";
 
 export default class Team extends Component {
 	state = {
@@ -88,7 +89,9 @@ export default class Team extends Component {
 				.then((user) => {
 					return window.Einstore.addUserToTeam(teamId, user.id)
 				})
-				.then(() => window.location.reload())
+				.then(() => window.location.reload()).catch((error) => {
+					showMessage(error)
+				})
 		}
 	}
 
