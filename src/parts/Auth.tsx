@@ -22,6 +22,7 @@ export enum AuthView {
 	SET_PASSWORD = 'set-password',
 	INVITE_FINISH = 'invite-finish',
 	REGISTRATION = 'register',
+	REGISTRATION_OK = 'register-ok',
 	REGISTRATION_FINISH = 'registration-finish',
 	LOGIN = 'login',
 	OAUTH_RESULT = 'outh-result',
@@ -91,17 +92,17 @@ class Registration extends React.Component<AuthComponentProps> {
 									<ServerIcon />
 								</div>
 								{server &&
-									server.config.allowed_registration_domains &&
-									!!server.config.allowed_registration_domains.length && (
-										<div className="login-allowedDomains">
-											<h4 className="login-allowedDomains">Allowed email domains:</h4>
-											<ul>
-												{server.config.allowed_registration_domains.map((domain: string) => (
-													<li key={domain}>@{domain}</li>
-												))}
-											</ul>
-										</div>
-									)}
+								server.config.allowed_registration_domains &&
+								!!server.config.allowed_registration_domains.length && (
+									<div className="login-allowedDomains">
+										<h4 className="login-allowedDomains">Allowed email domains:</h4>
+										<ul>
+											{server.config.allowed_registration_domains.map((domain: string) => (
+												<li key={domain}>@{domain}</li>
+											))}
+										</ul>
+									</div>
+								)}
 
 								<div>
 									<TextInput
@@ -169,6 +170,18 @@ class Registration extends React.Component<AuthComponentProps> {
 						</form>
 					)}
 				</ServerContext.Consumer>
+			</div>
+		)
+	}
+}
+
+class RegistrationOk extends React.Component<AuthComponentProps> {
+	render() {
+		return (
+			<div className="text-center">
+				<p>
+					Thank you, please check your inbox now to verify your email address.
+				</p>
 			</div>
 		)
 	}
@@ -382,14 +395,25 @@ function RegistrationFinish() {
 
 		window.Einstore.verifyRegistration(token).then((status) => {
 			if (status) {
-				navigate('/')
+				setIsWorking(false)
 			} else {
 				alert('Cannot verify user')
 			}
 		})
 	}, [])
 
-	return <div className="login">{working ? 'working' : 'waiting'}</div>
+	function handleClick() {
+		window.location.href = '/'
+	}
+
+	if (working) {
+		return <div className="text-center">working</div>
+	} else {
+		return <div className="text-center">
+			<p>Thank you, you are now registered.</p>
+			<button className="button view-center" onClick={handleClick}>Continue</button>
+		</div>
+	}
 }
 
 export class AuthRoute extends React.Component<RouteComponentProps<AuthRouteProps>> {
@@ -407,6 +431,12 @@ export class AuthRoute extends React.Component<RouteComponentProps<AuthRouteProp
 				return (
 					<div className={cn('auth', 'view-' + this.props.view)}>
 						<Registration onSuccess={this.props.onRegister} />
+					</div>
+				)
+			case AuthView.REGISTRATION_OK:
+				return (
+					<div className={cn('auth', 'view-' + this.props.view)}>
+						<RegistrationOk />
 					</div>
 				)
 			case AuthView.REGISTRATION_FINISH:
