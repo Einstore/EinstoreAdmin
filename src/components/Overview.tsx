@@ -19,6 +19,7 @@ import LoadMore from '../ui/LoadMore'
 import IconPlus from 'shapes/plus'
 import PlatformIcon from 'ui/PlatformIcon'
 import * as browserStorage from '../utils/browserStorage'
+import pageTitle from '../utils/pageTitle'
 
 export enum SortDirection {
 	ASC = 'asc',
@@ -177,6 +178,10 @@ export default class Overview extends Component<OverviewProps, OverviewState> {
 			direction: SortDirection[browserStorage.get('overview.sort.direction', SortDirection.DESC).toUpperCase()],
 		},
 		refreshKey: 1,
+	}
+
+	componentDidMount(): void {
+		pageTitle('Dashboard')
 	}
 
 	refresh = () => {

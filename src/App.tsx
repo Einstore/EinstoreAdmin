@@ -142,10 +142,7 @@ export class EinstoreApp extends React.Component<{}, AppState> {
 
 	componentDidMount() {
 		this.mounted = true
-		const name = localStorage.getItem('serverName')
-		if (name) {
-			document.title = name
-		}
+
 		if (window.Einstore) {
 			this.refreshServer()
 			if (this.state.token && this.state.authToken) {
@@ -169,8 +166,6 @@ export class EinstoreApp extends React.Component<{}, AppState> {
 		window.Einstore.server().then((server: any) => {
 			if (this.mounted) {
 				this.setState({ server })
-				document.title = server.name
-				localStorage.setItem('serverName', server.name)
 			}
 		})
 		window.Einstore.serverSettingsPlain().then((settings: any) => {

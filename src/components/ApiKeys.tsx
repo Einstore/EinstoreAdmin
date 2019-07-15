@@ -12,6 +12,7 @@ import prettyDate from '../utils/prettyDate'
 import { ApiKeyType, apiKeyTypePairs } from '../api/types/ApiKeyType'
 import { Link } from '@reach/router'
 import IconPlus from 'shapes/plus'
+import pageTitle from "../utils/pageTitle";
 
 const apiKeyTypeClassnames = {
 	[ApiKeyType.UPLOAD]: 'apiKey-type-round-label-upload',
@@ -129,6 +130,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 
 	componentDidMount() {
 		this.refresh()
+		pageTitle('API keys')
 	}
 
 	handleDeleteKey = (id: string) => {
