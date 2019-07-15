@@ -240,7 +240,7 @@ export default class Overview extends Component<OverviewProps, OverviewState> {
 
 	renderHeader = (loadMore: LoadMore) => {
 		return (
-			!loadMore.isEmpty() && (
+			(!loadMore.isEmpty() || this.state.platform !== 'all') && (
 				<>
 					<div className="page-controls">
 						<div className="page-control view-primary">
