@@ -4,7 +4,7 @@ import TextInput from './textInput'
 import './basicForm.sass'
 import './recentlyAddedApiKey.sass'
 import Button from './button'
-import { ApiKeyType, apiKeyTypePairs } from '../api/types/ApiKeyType'
+import { apiKeyTypePairs } from '../api/types/ApiKeyType'
 import map from 'lodash-es/map'
 import find from 'lodash-es/find'
 import Select from 'react-select'
@@ -22,45 +22,7 @@ interface AddApiKeysState {
 	activeTeam?: string
 	name: string
 	type: number
-	recentlyAddedApiKeys: any[]
-}
-
-const apiKeyTypeClassnames = {
-	[ApiKeyType.UPLOAD]: 'apiKey-type-round-label-upload',
-	[ApiKeyType.SDK]: 'apiKey-type-round-label-sdk',
-}
-
-function RecentlyAddedApiKey({ id, name, type, team_id, token }: any) {
-	return (
-		<div className="card">
-			<div className="card-content">
-				<div className="recentlyAddedApiKey">
-					<table className="recentlyAddedApiKey-values">
-						<tbody>
-							<tr>
-								<th>Name:</th>
-								<td>
-									<strong>{name}</strong>
-								</td>
-							</tr>
-							<tr>
-								<th>Type:</th>
-								<td>
-									<span className={apiKeyTypeClassnames[type]}>{apiKeyTypePairs[type]}</span>
-								</td>
-							</tr>
-							<tr>
-								<th>Token:</th>
-								<td>
-									<code className="important">{token}</code>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	)
+	recentlyAddedApiKeys: {}
 }
 
 export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysState> {
@@ -70,7 +32,7 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 		activeTeam: this.props.teamId,
 		name: '',
 		type: 0,
-		recentlyAddedApiKeys: [],
+		recentlyAddedApiKeys: {},
 	}
 
 	componentDidMount() {
@@ -102,8 +64,10 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 						name: '',
 						type: 0,
 						working: false,
-						recentlyAddedApiKeys: [...state.recentlyAddedApiKeys, newKey],
 					}))
+					window.recentlyAddedApiKeys = {}
+					window.recentlyAddedApiKeys[newKey.id] = newKey.token
+					window.history.back()
 				})
 				.catch((err) => {
 					this.setState({ working: false })
@@ -125,11 +89,6 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 					<div className="page-control is-active" onClick={() => window.history.back()}>
 						<IconBack /> Back
 					</div>
-				</div>
-				<div className="recentlyAddedApiKeys">
-					{this.state.recentlyAddedApiKeys.map((key: any) => (
-						<RecentlyAddedApiKey key={key.id} {...key} />
-					))}
 				</div>
 				<div className="card">
 					<div className="card-content">

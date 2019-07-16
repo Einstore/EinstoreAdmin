@@ -10,5 +10,6 @@ declare global {
 		Einstore: Einstore
 		logout: () => void
 		MSStream?: boolean
+		recentlyAddedApiKeys: {}
 	}
 }

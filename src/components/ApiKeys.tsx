@@ -12,7 +12,12 @@ import prettyDate from '../utils/prettyDate'
 import { ApiKeyType, apiKeyTypePairs } from '../api/types/ApiKeyType'
 import { Link } from '@reach/router'
 import IconPlus from 'shapes/plus'
-import pageTitle from "../utils/pageTitle";
+import pageTitle from '../utils/pageTitle'
+import CopyToClipboard from 'react-copy-to-clipboard'
+
+import { ReactComponent as IconCopy } from '../shapes/copy.svg'
+import { ReactComponent as IconCheck } from '../shapes/check.svg'
+
 
 const apiKeyTypeClassnames = {
 	[ApiKeyType.UPLOAD]: 'apiKey-type-round-label-upload',
@@ -26,6 +31,7 @@ interface RowProps {
 	created?: string
 	token?: string
 	type?: ApiKeyType
+	apiKey?: string
 	globalTeamId?: string
 	onDeleteKey: (id: string) => void
 	onChange?: (data: { name: string | null; id: string; type?: number }) => void
@@ -35,6 +41,7 @@ export class Row extends React.Component<RowProps> {
 	state = {
 		editing: false,
 		name: null,
+		copied: false,
 	}
 
 	handleDelete = () => {
@@ -71,8 +78,13 @@ export class Row extends React.Component<RowProps> {
 			typeof this.props.type !== 'undefined'
 				? apiKeyTypeClassnames[this.props.type]
 				: 'apiKey-type-round-label-none'
+		let apiKey = undefined
+		if (window.recentlyAddedApiKeys && this.props.id){
+			apiKey = window.recentlyAddedApiKeys[this.props.id]
+		}
 
 		return (
+			<>
 			<tr>
 				{!this.props.globalTeamId && (
 					<td>{this.props.team && <TeamName teamId={this.props.team} iconSize={32} />}</td>
@@ -99,7 +111,7 @@ export class Row extends React.Component<RowProps> {
 				<td className="apiKey-date" title={this.props.created}>
 					{this.props.created && prettyDate(this.props.created)}
 				</td>
-				<td>
+				<td className="text-right">
 					<span
 						className="api-action api-action-blue"
 						onClick={() => this.setState({ editing: true, name: this.props.name })}
@@ -111,6 +123,31 @@ export class Row extends React.Component<RowProps> {
 					</span>
 				</td>
 			</tr>
+				{apiKey &&
+				<tr>
+					{!this.props.globalTeamId && (
+						<td></td>
+					)}
+					<td className="recentlyAddedApiKey text-left" colSpan={4}>
+						<div className="recentlyAddedApiKey-important"><pre>{apiKey}</pre></div>
+						<CopyToClipboard text={apiKey} onCopy={() => {this.setState({copied: true})}}>
+							<span className="recentlyAddedApiKey-copy">
+								{this.state.copied &&
+									<>
+										<IconCheck/> Copied
+									</>
+								}
+								{!this.state.copied &&
+									<>
+										<IconCopy/> Copy to clipboard
+									</>
+								}
+							</span>
+						</CopyToClipboard>
+					</td>
+				</tr>
+				}
+				</>
 		)
 	}
 }
@@ -133,6 +170,10 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 		pageTitle('API keys')
 	}
 
+	componentWillUnmount() {
+		window.recentlyAddedApiKeys = []
+	}
+
 	handleDeleteKey = (id: string) => {
 		window.Einstore.deleteApiKey(id).then(() => {
 			this.refresh()
@@ -149,7 +190,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 		window.Einstore.apiKeys()
 			.then((result) => {
 				this.setState({
-					keys: result,
+					keys: result.reverse(),
 				})
 			})
 			.catch((e) => {
@@ -170,7 +211,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 										<td>Name/note</td>
 										<td>Type</td>
 										<td>Created</td>
-										<td>Actions</td>
+										<td className="text-right">Actions</td>
 									</tr>
 								</thead>
 								<tbody>
