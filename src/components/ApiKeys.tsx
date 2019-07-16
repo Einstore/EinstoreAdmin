@@ -171,7 +171,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 	}
 
 	componentWillUnmount() {
-		window.recentlyAddedApiKeys = []
+		window.recentlyAddedApiKeys = {}
 	}
 
 	handleDeleteKey = (id: string) => {
