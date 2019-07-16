@@ -11,6 +11,7 @@ import IconInfo from '../shapes/info'
 import usure from '../utils/usure'
 import getBaseUrl from 'utils/getBaseUrl'
 import showMessage from "../utils/showMessage";
+import pageTitle from "../utils/pageTitle";
 
 export default class Team extends Component {
 	state = {
@@ -35,6 +36,7 @@ export default class Team extends Component {
 	componentDidMount() {
 		window.Einstore.teams().then((teams) => this.setState({ teams }))
 		this.refreshUsers()
+		pageTitle('Team & members')
 	}
 
 	refreshUsers = () => {

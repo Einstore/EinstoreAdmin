@@ -4,6 +4,7 @@ import Gravatar from '../components/Gravatar'
 import './account.sass'
 import './page.sass'
 import showMessage from "../utils/showMessage";
+import pageTitle from "../utils/pageTitle";
 
 export default class Account extends Component {
 	state = {
@@ -16,6 +17,7 @@ export default class Account extends Component {
 		window.Einstore.me().then((me) => {
 			this.setState({ old: me, form: { ...me } })
 		})
+		pageTitle('My profile')
 	}
 
 	getFormValues = () => {

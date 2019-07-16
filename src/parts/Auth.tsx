@@ -16,6 +16,7 @@ import Form, { exportValidationSchema, FormControl, ValuesObject } from 'ui/Form
 import * as Yup from 'yup'
 import getBaseUrl from 'utils/getBaseUrl'
 import showMessage from "../utils/showMessage";
+import pageTitle from "../utils/pageTitle";
 
 export enum AuthView {
 	RESET_PASSWORD = 'reset-password',
@@ -422,42 +423,49 @@ export class AuthRoute extends React.Component<RouteComponentProps<AuthRouteProp
 	render() {
 		switch (this.props.view) {
 			case AuthView.LOGIN:
+				pageTitle('Login')
 				return (
 					<div className={cn('auth', 'view-' + this.props.view)}>
 						<Login onSuccess={this.props.onLogin} />
 					</div>
 				)
 			case AuthView.REGISTRATION:
+				pageTitle('Registration')
 				return (
 					<div className={cn('auth', 'view-' + this.props.view)}>
 						<Registration onSuccess={this.props.onRegister} />
 					</div>
 				)
 			case AuthView.REGISTRATION_OK:
+				pageTitle('Thank you')
 				return (
 					<div className={cn('auth', 'view-' + this.props.view)}>
 						<RegistrationOk />
 					</div>
 				)
 			case AuthView.REGISTRATION_FINISH:
+				pageTitle('Thank you')
 				return (
 					<div className={cn('auth', 'view-' + this.props.view)}>
 						<RegistrationFinish />
 					</div>
 				)
 			case AuthView.RESET_PASSWORD:
+				pageTitle('Password reset')
 				return (
 					<div className={cn('auth', 'view-' + this.props.view)}>
 						<ResetPassword onSuccess={this.props.onResetPassword} />
 					</div>
 				)
 			case AuthView.SET_PASSWORD:
+				pageTitle('Set password')
 				return (
 					<div className={cn('auth', 'view-' + this.props.view)}>
 						<SetPassword />
 					</div>
 				)
 			case AuthView.INVITE_FINISH:
+				pageTitle('Invite')
 				return (
 					<div className={cn('auth', 'view-' + this.props.view)}>
 						<InviteFinish />

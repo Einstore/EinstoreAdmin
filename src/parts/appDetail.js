@@ -7,6 +7,7 @@ import './page.sass'
 import IconTrash from '../shapes/trash'
 import usure from '../utils/usure'
 import { navigate } from '@reach/router'
+import pageTitle from "../utils/pageTitle";
 
 export default class AppDetail extends Component {
 	state = {
@@ -32,6 +33,7 @@ export default class AppDetail extends Component {
 					...result,
 					loaded: true,
 				})
+				pageTitle(this.state.name)
 			})
 			.catch((error) => {
 				console.log(error)

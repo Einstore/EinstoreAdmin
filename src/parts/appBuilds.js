@@ -10,6 +10,7 @@ import IconTrash from '../shapes/trash'
 import usure from '../utils/usure'
 import { navigate } from '@reach/router'
 import CardItem from '../components/cardItem'
+import pageTitle from "../utils/pageTitle";
 
 export default class AppBuilds extends Component {
 	state = {
@@ -21,6 +22,7 @@ export default class AppBuilds extends Component {
 			this.setState({
 				build: result[0],
 			})
+			pageTitle(this.state.build.name)
 		})
 	}
 

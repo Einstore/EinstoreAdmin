@@ -10,6 +10,7 @@ import find from 'lodash-es/find'
 import Select from 'react-select'
 import IconBack from 'shapes/back'
 import showMessage from '../utils/showMessage'
+import pageTitle from "../utils/pageTitle";
 
 interface AddApiKeysProps {
 	teamId?: string
@@ -74,6 +75,7 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 
 	componentDidMount() {
 		window.Einstore.teams().then((teams) => this.setState({ teams }))
+		pageTitle('Add new API key')
 	}
 
 	handleChangeTeam = (value: string) => {

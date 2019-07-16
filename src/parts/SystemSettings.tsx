@@ -3,6 +3,7 @@ import './systemSettings.sass'
 import Button from '../components/button'
 import previewFileImage from '../utils/previewFileImage'
 import IconField from 'ui/IconField'
+import pageTitle from "../utils/pageTitle";
 
 function TemplatorUpdate() {
 	const [isWorking, setIsWorking] = useState(false)
@@ -167,7 +168,11 @@ class SystemConfigsForm extends React.Component {
 	}
 }
 
-export default class AddTeam extends React.Component {
+export default class SystemSettings extends React.Component {
+	componentDidMount(): void {
+		pageTitle('System settings')
+	}
+
 	render() {
 		return (
 			<div className="sheet">
