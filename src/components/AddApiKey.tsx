@@ -14,13 +14,16 @@ import pageTitle from "../utils/pageTitle";
 
 interface AddApiKeysProps {
 	teamId?: string
+	apiKeyId?: string
 }
 
 interface AddApiKeysState {
 	working: boolean
 	teams: any
 	activeTeam?: string
+	editedApiKey?: string
 	name: string
+	tags: string
 	type: number
 	recentlyAddedApiKeys: {}
 }
@@ -30,14 +33,29 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 		working: false,
 		teams: [],
 		activeTeam: this.props.teamId,
+		editingApiKey: this.props.apiKeyId,
 		name: '',
+		tags: '',
 		type: 0,
 		recentlyAddedApiKeys: {},
 	}
 
 	componentDidMount() {
 		window.Einstore.teams().then((teams) => this.setState({ teams }))
-		pageTitle('Add new API key')
+		if(this.state.editingApiKey){
+			window.Einstore.getApiKey(this.state.editingApiKey).then((apiKey) => {
+				console.log('tags', apiKey.tags)
+				this.setState({
+					activeTeam: apiKey.team_id,
+					name: apiKey.name,
+					type: apiKey.type,
+					tags: apiKey.tags ? apiKey.tags : ''
+				})
+			})
+			pageTitle('Edit API key')
+		} else {
+			pageTitle('Add new API key')
+		}
 	}
 
 	handleChangeTeam = (value: string) => {
@@ -52,30 +70,53 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 		this.setState({ type: Number(value.value) })
 	}
 
-	handleSubmit = (e: FormEvent) => {
+	handleSubmitCreate = (e: FormEvent) => {
 		e.preventDefault()
 
 		if (this.state.activeTeam && this.state.name) {
-			this.setState({ working: true })
 			window.Einstore.createApiKey(this.state.activeTeam, this.state.name, this.state.type)
 				.then((newKey: any) => {
-					this.setState((state) => ({
-						...state,
-						name: '',
-						type: 0,
-						working: false,
-					}))
 					window.recentlyAddedApiKeys = {}
 					window.recentlyAddedApiKeys[newKey.id] = newKey.token
 					window.history.back()
 				})
 				.catch((err) => {
-					this.setState({ working: false })
 					showMessage('API key can not be generated.\n' + err.message)
 				})
 		} else {
 			showMessage('You have to select team and fill API key name.')
 		}
+	}
+
+	handleSubmitEdit = (e: FormEvent) => {
+		e.preventDefault()
+
+		if (this.state.activeTeam && this.state.name && this.state.editingApiKey) {
+			let data = {
+				name: this.state.name,
+				tags: 'tag1, tag2'
+			}
+			window.Einstore.editApiKey(this.state.editingApiKey, data)
+				.then(() => {
+					alert('SUCCESS!!!!!!')
+					window.location.href = '/api-keys'
+				})
+				.catch((err) => {
+					showMessage('API key can not be saved.\n' + err.message)
+				})
+		} else {
+			showMessage('You have to select team and fill API key name.')
+		}
+	}
+
+	handleSubmit = (e: FormEvent) => {
+		this.setState({ working: true })
+		if(this.state.editingApiKey){
+			this.handleSubmitEdit(e)
+		} else {
+			this.handleSubmitCreate(e)
+		}
+		this.setState({ working: false })
 	}
 
 	render() {
@@ -114,7 +155,7 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 									options={typeOptions}
 								/>
 								<div className="card-actions">
-									<Button>{this.state.working ? 'Creating...' : 'Create API key'}</Button>
+									<Button>{this.state.working ? 'Working...' : this.state.editingApiKey ? 'Edit API key' : 'Create API key'}</Button>
 								</div>
 							</fieldset>
 						</form>

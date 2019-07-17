@@ -459,6 +459,13 @@ export class Einstore {
 		return json
 	}
 
+	public getApiKey = async (id: string): Promise<ApiKey> => {
+		const promise = this.networking.get(`/keys/${id}`)
+		const res = await promise
+		const json = await res.json()
+		return json
+	}
+
 	public deleteApiKey = (id: string): Promise<Response> => {
 		return this.networking.delete(`/keys/${id}`)
 	}

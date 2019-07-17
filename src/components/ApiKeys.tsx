@@ -1,4 +1,4 @@
-import React, { Component, ChangeEvent, FormEvent } from 'react'
+import React, { Component } from 'react'
 import '../components/card.sass'
 import { ApiKey } from '../connector/Model/ApiKey'
 import '../parts/api.sass'
@@ -6,8 +6,6 @@ import IconPen from '../shapes/pen'
 import IconTrash from '../shapes/trash'
 import TeamName from './TeamName'
 import usure from '../utils/usure'
-import TextInput from './textInput'
-import Button from './button'
 import prettyDate from '../utils/prettyDate'
 import { ApiKeyType, apiKeyTypePairs } from '../api/types/ApiKeyType'
 import { Link } from '@reach/router'
@@ -52,23 +50,6 @@ export class Row extends React.Component<RowProps> {
 		})
 	}
 
-	handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-		this.setState({ name: e.target.value })
-	}
-
-	handleEditSubmit = (e: FormEvent) => {
-		e.preventDefault()
-		this.setState({ editing: false })
-
-		if (this.props.onChange && this.props.id) {
-			this.props.onChange({
-				id: this.props.id,
-				name: this.state.name,
-				type: this.props.type,
-			})
-		}
-	}
-
 	inputRef = (ref?: HTMLInputElement) => ref && ref.select()
 
 	render() {
@@ -90,20 +71,9 @@ export class Row extends React.Component<RowProps> {
 					<td>{this.props.team && <TeamName teamId={this.props.team} iconSize={32} />}</td>
 				)}
 				<td>
-					{this.state.editing ? (
-						<form className="card-editApiNameForm" onSubmit={this.handleEditSubmit}>
-							<TextInput
-								value={this.state.name}
-								onChange={this.handleNameChange}
-								inputRef={this.inputRef}
-							/>
-							<Button>Save</Button>
-						</form>
-					) : (
-						<span onClick={() => this.setState({ editing: true, name: this.props.name })}>
-							{this.props.name}
-						</span>
-					)}
+					<span onClick={() => {window.location.href = 'add-api-key/' + this.props.id}}>
+						{this.props.name}
+					</span>
 				</td>
 				<td className="apiKey-type" title={typeName}>
 					<span className={typeClassname}>{typeName}</span>
@@ -114,7 +84,7 @@ export class Row extends React.Component<RowProps> {
 				<td className="text-right">
 					<span
 						className="api-action api-action-blue"
-						onClick={() => this.setState({ editing: true, name: this.props.name })}
+						onClick={() => {window.location.href = 'edit-api-key/' + this.props.id}}
 					>
 						<IconPen /> Edit
 					</span>
