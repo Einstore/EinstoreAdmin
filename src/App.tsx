@@ -305,6 +305,7 @@ body {
 							{auth && <Layout path="add-api-key/:teamId" body={AddApiKeyRoute} header={Header} />}
 							{auth && <Layout path="team/new" body={AddTeamRoute} header={Header} />}
 							{auth && <Layout path="team/:teamId" body={TeamRoute} header={Header} />}
+							{auth && <Layout path="team" body={TeamRoute} header={Header} />}
 							{auth && <Layout path="system" body={SystemRoute} header={Header} />}
 						</Router>
 					</ServerContext.Provider>

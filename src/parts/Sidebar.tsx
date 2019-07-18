@@ -83,8 +83,8 @@ export class Sidebar extends React.Component<SidebarProps, SidebarState> {
 						</Link>
 						<Link
 							onClick={this.props.onChoice}
-							to={activeTeam ? `/team/${activeTeam}` : '/'}
-							className={cn('sidebar-menu-item', !activeTeam && 'is-inactive')}
+							to={activeTeam ? `/team/${activeTeam}` : '/team'}
+							className={cn('sidebar-menu-item')}
 						>
 							Team & members
 						</Link>
