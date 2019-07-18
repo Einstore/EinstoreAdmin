@@ -11,6 +11,7 @@ import Select from 'react-select'
 import IconBack from 'shapes/back'
 import showMessage from '../utils/showMessage'
 import pageTitle from "../utils/pageTitle";
+import IconTimes from "../shapes/times";
 
 interface AddApiKeysProps {
 	teamId?: string
@@ -23,9 +24,10 @@ interface AddApiKeysState {
 	activeTeam?: string
 	editedApiKey?: string
 	name: string
-	tags: string
+	tags: string[]
 	type: number
 	recentlyAddedApiKeys: {}
+	newTag: string
 }
 
 export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysState> {
@@ -35,21 +37,21 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 		activeTeam: this.props.teamId,
 		editingApiKey: this.props.apiKeyId,
 		name: '',
-		tags: '',
+		tags: [],
 		type: 0,
 		recentlyAddedApiKeys: {},
+		newTag: '',
 	}
 
 	componentDidMount() {
 		window.Einstore.teams().then((teams) => this.setState({ teams }))
 		if(this.state.editingApiKey){
 			window.Einstore.getApiKey(this.state.editingApiKey).then((apiKey) => {
-				console.log('tags', apiKey.tags)
 				this.setState({
 					activeTeam: apiKey.team_id,
 					name: apiKey.name,
 					type: apiKey.type,
-					tags: apiKey.tags ? apiKey.tags : ''
+					tags: apiKey.tags ? 'tag1,tag2,tag3'.split(',') : []
 				})
 			})
 			pageTitle('Edit API key')
@@ -66,6 +68,32 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 		this.setState({ name: e.target.value })
 	}
 
+	handleChangeTagName = (e: ChangeEvent<HTMLInputElement>) => {
+		this.setState({ newTag: e.target.value })
+	}
+
+
+	handleAddTag = (e: ChangeEvent<HTMLInputElement>) => {
+		this.setState(state => {
+			const newTags = state.tags.concat(state.newTag).slice()
+			return {
+				tags: newTags,
+				newTag: ''
+			}
+		})
+	}
+
+	handleRemoveTag = (index: number) => {
+		this.setState(state => {
+			let tags = state.tags
+			tags.splice(index, 1)
+			return {
+				tags: tags,
+				newTag: ''
+			}
+		})
+	}
+
 	handleChangeType = (value: any) => {
 		this.setState({ type: Number(value.value) })
 	}
@@ -74,7 +102,7 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 		e.preventDefault()
 
 		if (this.state.activeTeam && this.state.name) {
-			window.Einstore.createApiKey(this.state.activeTeam, this.state.name, this.state.type)
+			window.Einstore.createApiKey(this.state.activeTeam, this.state.name, this.state.tags.join(','), this.state.type)
 				.then((newKey: any) => {
 					window.recentlyAddedApiKeys = {}
 					window.recentlyAddedApiKeys[newKey.id] = newKey.token
@@ -94,11 +122,11 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 		if (this.state.activeTeam && this.state.name && this.state.editingApiKey) {
 			let data = {
 				name: this.state.name,
-				tags: 'tag1, tag2'
+				tags: this.state.tags.join(',')
 			}
+			console.log('editApiKey', this.state.editingApiKey, data)
 			window.Einstore.editApiKey(this.state.editingApiKey, data)
 				.then(() => {
-					alert('SUCCESS!!!!!!')
 					window.location.href = '/api-keys'
 				})
 				.catch((err) => {
@@ -121,6 +149,7 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 
 	render() {
 		const typeOptions: { label: string; value: number }[] = []
+		const {editingApiKey} = this.state
 
 		map(apiKeyTypePairs, (label, value) => typeOptions.push({ label, value: Number(value) }))
 
@@ -135,7 +164,7 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 					<div className="card-content">
 						<form className="basicForm" onSubmit={this.handleSubmit}>
 							<fieldset disabled={this.state.working}>
-								{!this.props.teamId && (
+								{!this.props.teamId && !editingApiKey && (
 									<TeamSelect
 										teams={this.state.teams}
 										activeTeam={this.state.activeTeam}
@@ -147,6 +176,33 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 									value={this.state.name}
 									placeholder={'Name'}
 								/>
+								<TextInput
+									onChange={this.handleChangeTagName}
+									value={this.state.newTag}
+									placeholder={'Tags'}
+								/>
+								<Button
+									type={'button'}
+									onClick={this.handleAddTag}
+								>Add tag</Button>
+								<div className="card-filtering-list">
+								{this.state.tags.map((tag, index) =>
+									<div
+										key={index}
+										className={`card-filtering-item`}
+									>
+										{tag}{' '}
+										<span role="button" onClick={() => this.handleRemoveTag(index)}>
+										<IconTimes />
+									</span>
+									</div>
+								)}
+								</div>
+
+								<small>
+									* (SDK) Only offer builds marked with above tags / (Upload) Automatically create
+									above tags for uploaded builds
+								</small>
 								<Select
 									placeholder="Select type"
 									isSearchable={false}
@@ -155,7 +211,7 @@ export default class AddApiKeys extends Component<AddApiKeysProps, AddApiKeysSta
 									options={typeOptions}
 								/>
 								<div className="card-actions">
-									<Button>{this.state.working ? 'Working...' : this.state.editingApiKey ? 'Edit API key' : 'Create API key'}</Button>
+									<Button>{this.state.working ? 'Working...' : editingApiKey ? 'Edit API key' : 'Create API key'}</Button>
 								</div>
 							</fieldset>
 						</form>
