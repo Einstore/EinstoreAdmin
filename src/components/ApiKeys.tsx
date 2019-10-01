@@ -160,6 +160,12 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 	render() {
 		return (
 			<div className="page">
+				<div className="notice">
+					<h2 className="notice-title">Api keys</h2>
+					<div className="notice-content">
+						Maecenas finibus magna auctor tortor scelerisque, eget elementum neque egestas. Integer posuere nec metus vitae tincidunt. Curabitur molestie turpis a augue tristique, in tincidunt nisi scelerisque. Vivamus sit amet imperdiet lectus, at tristique sem. Ut vitae magna libero. Vivamus id metus sed erat maximus euismod sit amet non justo
+					</div>
+				</div>
 				{this.state.keys.length > 0 ? (
 					<div className="card">
 						<div className="card-content">

@@ -204,7 +204,7 @@ class DeleteTeamBox extends React.PureComponent {
 	render() {
 		return (
 			this.state.team && (
-				<div className="notice">
+				<div className="notice m-t-4">
 					<h2 className="notice-title">
 						<IconInfo /> Want to delete team '{this.state.team.name}'?
 					</h2>
