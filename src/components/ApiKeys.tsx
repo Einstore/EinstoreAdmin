@@ -10,10 +10,10 @@ import TextInput from './textInput'
 import Button from './button'
 import prettyDate from '../utils/prettyDate'
 import { ApiKeyType, apiKeyTypePairs } from '../api/types/ApiKeyType'
-import { Link } from '@reach/router'
 import IconPlus from 'shapes/plus'
 import pageTitle from '../utils/pageTitle'
 import CopyToClipboard from 'react-copy-to-clipboard'
+import Jumbotron from "./Jumbotron";
 
 import { ReactComponent as IconCopy } from '../shapes/copy.svg'
 import { ReactComponent as IconCheck } from '../shapes/check.svg'
@@ -235,21 +235,17 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 						</div>
 					</div>
 				) : (
-					<div className="page-upload">
-						<p className="page-upload-text">Create your first API key here.</p>
-						{this.props.teamId && (
-							<div>
-								<Link
-									to={this.props.teamId ? `/add-api-key/${this.props.teamId}` : `/add-api-key`}
-									className="button"
-								>
-									<span>
-										<IconPlus /> Add
-									</span>
-								</Link>
-							</div>
-						)}
-					</div>
+					<Jumbotron
+						headline="Api keys"
+						text="Create your first API key here."
+						links={[
+							{
+								text: 'Add api key',
+								to: this.props.teamId ? `/add-api-key/${this.props.teamId}` : `/add-api-key`,
+								icon: <IconPlus />
+							}
+						]}
+					/>
 				)}
 			</div>
 		)

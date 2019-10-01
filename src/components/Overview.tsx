@@ -1,6 +1,5 @@
 import { Link } from '@reach/router'
 import React, { Component } from 'react'
-import Button from '../components/button'
 import CardList from '../components/cardList'
 import TagSearch from '../components/TagSearch'
 import { Layout } from '../parts/Layout'
@@ -20,6 +19,7 @@ import IconPlus from 'shapes/plus'
 import PlatformIcon from 'ui/PlatformIcon'
 import * as browserStorage from '../utils/browserStorage'
 import pageTitle from '../utils/pageTitle'
+import Jumbotron from "./Jumbotron";
 
 export enum SortDirection {
 	ASC = 'asc',
@@ -284,13 +284,18 @@ export default class Overview extends Component<OverviewProps, OverviewState> {
 		return (
 			<>
 				{this.props.teamId ? (
-					<div className="page-upload">
-						<p className="page-upload-text">Upload your first app here.</p>
-						<Button onClick={this.props.layout.openDropzone}>
-							<span>
-								<IconPlus /> Upload
-							</span>
-						</Button>
+					<div>
+						<Jumbotron
+							headline="Available apps"
+							text="Upload your first app here."
+							buttons={[
+								{
+									text: this.props.layout.state.uploading ? 'Uploading' : 'Upload',
+									action: this.props.layout.openDropzone,
+									icon: <IconPlus />,
+								}
+							]}
+						/>
 					</div>
 				) : (
 					<div className="page-upload">
