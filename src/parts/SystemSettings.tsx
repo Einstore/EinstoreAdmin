@@ -45,7 +45,7 @@ class SystemImageForm extends React.Component<
 				window.Einstore.uploadServerImage(this.fileInputRef.current.files[i])
 					.then(() => window.location.reload())
 					.catch((err) => {
-						alert(err.ref.description)
+						alert(err)
 					})
 			}
 
