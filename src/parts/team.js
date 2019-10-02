@@ -22,7 +22,7 @@ export default class Team extends Component {
 	}
 
 	handleChangeTeam = (team) => {
-		this.setState({ activeTeam: team }, () => {
+		this.setState({ activeTeam: team === 'all' ? '' : team  }, () => {
 			this.refreshUsers()
 		})
 	}
@@ -41,17 +41,32 @@ export default class Team extends Component {
 
 	refreshUsers = () => {
 		const c = ++this.counter
-		window.Einstore.teamUsers(this.state.activeTeam)
-			.then((result) => {
-				if (this.counter === c) {
-					this.setState({
-						users: result,
-					})
-				}
-			})
-			.catch((error) => {
-				console.log(error)
-			})
+		if(this.state.activeTeam) {
+			window.Einstore.teamUsers(this.state.activeTeam)
+				.then((result) => {
+					if (this.counter === c) {
+						this.setState({
+							users: result,
+						})
+					}
+				})
+				.catch((error) => {
+					console.log(error)
+				})
+		} else {
+			window.Einstore.users('')
+				.then((result) => {
+					if (this.counter === c) {
+						this.setState({
+							users: result,
+						})
+					}
+				})
+				.catch((error) => {
+					console.log(error)
+				})
+
+		}
 	}
 
 	handleChange = (e) => {
@@ -101,60 +116,78 @@ export default class Team extends Component {
 		const { activeTeam, teams } = this.state
 		return (
 			<div className="page">
-				<EditTeam teamId={this.state.activeTeam} key={'editbox' + this.state.activeTeam} />
+				{activeTeam &&
+					<EditTeam teamId={this.state.activeTeam} key={'editbox' + this.state.activeTeam}/>
+				}
+
+				{!activeTeam &&
+				<div className="notice">
+					<h2 className="notice-title">
+						<IconInfo /> To manage users, please select team
+					</h2>
+					<TeamSelect
+						activeTeam={activeTeam}
+						teams={teams || []}
+						onChangeTeam={this.handleChangeTeam}
+					/>
+				</div>
+				}
 
 				<div className="card">
-					<div className="card-footer">
-						<div className="card-footer-heading">Invite new members to the team:</div>
-						<form className="card-footer-form" onSubmit={this.handleSubmit}>
-							<div className="card-footer-form-group">
-								<div className="card-footer-form-group-item view-small">
-									<TeamSelect
-										activeTeam={activeTeam}
-										teams={teams || []}
-										onChangeTeam={this.handleChangeTeam}
-									/>
+					{activeTeam &&
+						<div className="card-footer">
+							<div className="card-footer-heading">Invite new members to the team:</div>
+							<form className="card-footer-form" onSubmit={this.handleSubmit}>
+								<div className="card-footer-form-group">
+									<div className="card-footer-form-group-item view-small">
+										<TeamSelect
+											activeTeam={activeTeam}
+											teams={teams || []}
+											onChangeTeam={this.handleChangeTeam}
+											allowAll={true}
+										/>
+									</div>
 								</div>
-							</div>
-							<div className="card-footer-form-group">
-								<span className="card-footer-form-group-item">
-									<input
-										type="text"
-										name="firstName"
-										placeholder="First name"
-										className="textInput"
-										required
-										ref={this.firstNameRef}
-									/>
-								</span>
-								<span className="card-footer-form-group-item">
-									<input
-										type="text"
-										name="lastName"
-										placeholder="Last name"
-										className="textInput"
-										required
-										ref={this.lastNameRef}
-									/>
-								</span>
-							</div>
-							<div className="card-footer-form-group">
-								<span className="card-footer-form-group-item">
-									<input
-										type="email"
-										name="lastName"
-										placeholder="E-mail or username…"
-										className="textInput"
-										required
-										ref={this.emailRef}
-									/>
-								</span>
-								<span className="card-footer-form-group-item">
-									<Button>Send invite</Button>
-								</span>
-							</div>
-						</form>
-					</div>
+								<div className="card-footer-form-group">
+									<span className="card-footer-form-group-item">
+										<input
+											type="text"
+											name="firstName"
+											placeholder="First name"
+											className="textInput"
+											required
+											ref={this.firstNameRef}
+										/>
+									</span>
+									<span className="card-footer-form-group-item">
+										<input
+											type="text"
+											name="lastName"
+											placeholder="Last name"
+											className="textInput"
+											required
+											ref={this.lastNameRef}
+										/>
+									</span>
+								</div>
+								<div className="card-footer-form-group">
+									<span className="card-footer-form-group-item">
+										<input
+											type="email"
+											name="lastName"
+											placeholder="E-mail or username…"
+											className="textInput"
+											required
+											ref={this.emailRef}
+										/>
+									</span>
+									<span className="card-footer-form-group-item">
+										<Button>Send invite</Button>
+									</span>
+								</div>
+							</form>
+						</div>
+					}
 					<div className="card-content">
 						<div className="card-content-members">
 							{this.state.users.map((item) => (
@@ -167,13 +200,16 @@ export default class Team extends Component {
 									username={item.username}
 									email={item.email}
 									teamId={this.state.activeTeam}
+									preventDelete={!activeTeam}
 								/>
 							))}
 						</div>
 					</div>
 				</div>
 
-				<DeleteTeamBox key={'deletebox' + this.state.activeTeam} teamId={this.state.activeTeam} />
+				{activeTeam &&
+					<DeleteTeamBox key={'deletebox' + this.state.activeTeam} teamId={this.state.activeTeam}/>
+				}
 			</div>
 		)
 	}
@@ -204,7 +240,7 @@ class DeleteTeamBox extends React.PureComponent {
 	render() {
 		return (
 			this.state.team && (
-				<div className="notice">
+				<div className="notice has-top-margin">
 					<h2 className="notice-title">
 						<IconInfo /> Want to delete team '{this.state.team.name}'?
 					</h2>

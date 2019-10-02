@@ -25,13 +25,13 @@ export default class TeamMember extends Component {
 							{this.props.firstname} {this.props.lastname}
 						</div>
 						<div className="card-content-member-info-text-contact">
-							{this.props.username} • {this.props.email}
+							{this.props.username}{this.props.email ? ' • ' + this.props.email : ''}
 						</div>
 					</div>
 				</div>
-				{this.props.su ? <div className="card-content-member-isSU">this user is superadmin</div> : <div className="card-content-member-action" onClick={this.removeFromTeam}>
+				{this.props.su ? <div className="card-content-member-isSU">this user is superadmin</div> : (this.props.preventDelete ? '' : <div className="card-content-member-action" onClick={this.removeFromTeam}>
 					<IconTrash /> Remove from team
-				</div>}
+				</div>)}
 			</div>
 		)
 	}
