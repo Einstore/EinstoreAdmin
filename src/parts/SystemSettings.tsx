@@ -140,9 +140,8 @@ class SystemConfigForm extends React.Component<{
 		const { value } = this.state
 
 		return (
-			<form className="systemSettingsForm-control view-configControl" onSubmit={this.handleSubmit}>
-				{console.log(config)}
-				<label className="systemSettingsForm-control-label">{this.styleNames[config.name] || config.name}</label>
+			<form className="account-form-item" onSubmit={this.handleSubmit}>
+				<label className="account-form-item-label">{this.styleNames[config.name] || config.name}</label>
 				<input
 					type={this.customTypes[config.name] || 'text'}
 					value={value}
@@ -151,7 +150,7 @@ class SystemConfigForm extends React.Component<{
 					className="systemSettingsForm-control-input"
 				/>
 				<div className="systemSettingsForm-control-actions">
-					<Button>Save</Button>
+					<Button className="button-sm">Save</Button>
 				</div>
 			</form>
 		)
@@ -167,7 +166,7 @@ class SystemConfigsForm extends React.Component {
 	}
 	render() {
 		return (
-			<div className="systemSettingsForm">
+			<div className="account-form">
 				{this.state.current &&
 					this.state.current.map((conf: any) => <SystemConfigForm key={conf.id} config={conf} />)}
 				<div />

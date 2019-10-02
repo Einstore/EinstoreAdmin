@@ -1,0 +1,28 @@
+.sheet
+	max-width: 800px
+	background: #fff
+	margin: 1em auto
+	box-shadow: 0 0 4px rgba(#000, .1)
+	border-radius: 4px
+
+	&-title
+		margin: 0
+		padding: 0
+		margin-bottom: .5em
+
+	&-main
+		padding: 1em
+
+	&-form
+		&-control
+			position: relative
+
+			&-indicator
+				pointer-events: none
+				position: absolute
+				bottom: -.25em
+				right: -.25em
+
+	@media(min-width: 768px)
+		&-main
+			padding: 1em 125px
