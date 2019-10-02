@@ -69,9 +69,19 @@ export default class Account extends Component {
 		const { old, form } = this.state
 
 		return (
-			<div className="page account">
-				<div className="account-photo">
-					<div className="account-photo-image">{old && <Gravatar email={old.email} />}</div>
+			<div className="sheet">
+				<div className="sheet-main">
+					<h2 className="sheet-title">My profile</h2>
+				<div className="systemSettingsForm view-image">
+					<div className="systemSettingsForm-current">
+						<div className="IconField">
+							<div className="IconField-in">
+								<div className="IconField-image view-old">
+									{old && <Gravatar email={old.email} />}
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div className="account-form">
 					<form onSubmit={this.handleSubmit}>
@@ -125,6 +135,7 @@ export default class Account extends Component {
 							<Button className="account-form-submit">Save changes</Button>
 						</fieldset>
 					</form>
+				</div>
 				</div>
 			</div>
 		)

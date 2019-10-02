@@ -20,7 +20,7 @@ export default class Gravatar extends React.PureComponent<GravatarProps> {
 		return (
 			<div className={cn('gravatar', this.props.className)}>
 				<Squircle
-					radius={SquircleRadius.L}
+					radius={SquircleRadius.M}
 					src={`https://www.gravatar.com/avatar/${hash}?s=${size}`}
 					srcSet={`https://www.gravatar.com/avatar/${hash}?s=${size} ${size}w, https://www.gravatar.com/avatar/${hash}?s=${size *
 						2} ${size * 2}w`}
