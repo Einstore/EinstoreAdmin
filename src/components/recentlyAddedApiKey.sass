@@ -1,16 +1,23 @@
+table tr td.recentlyAddedApiKey
+	padding-top: 0
+
 .recentlyAddedApiKey
-	//
+	&-important
+		background: #eea
+		padding: .5em
+		display: inline-block
+		border-radius: 3px
 
-	&-values
-		th, td
-			padding: .25em
+		pre
+			margin: 0
 
-		th
-			text-align: left
-			padding-right: 2em
+	&-copy
+		cursor: pointer
+		margin-left: .5em
+		padding: .5em
+		display: inline-block
+		font-size: 13px
+		width: 150px
 
-		.important
-			background: #eea
-			padding: .5em
-			display: inline-block
-			border-radius: 3px
+		svg
+			vertical-align: middle
