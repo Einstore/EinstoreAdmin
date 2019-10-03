@@ -115,6 +115,12 @@ class SystemConfigForm extends React.Component<{
 		style_header_background_color: 'color',
 		style_primary_action_color: 'color',
 	}
+	styleNames = {
+		style_primary_action_color: 'Primary action color',
+		style_primary_action_background_color: 'Primary action background color',
+		style_header_color: 'Header color',
+		style_header_background_color: 'Header background color',
+	}
 	handleSubmit = (e: FormEvent) => {
 		e.preventDefault()
 
@@ -132,9 +138,10 @@ class SystemConfigForm extends React.Component<{
 	render() {
 		const { config } = this.props
 		const { value } = this.state
+
 		return (
-			<form className="systemSettingsForm-control view-configControl" onSubmit={this.handleSubmit}>
-				<label className="systemSettingsForm-control-label">{config.name}</label>
+			<form className="account-form-item" onSubmit={this.handleSubmit}>
+				<label className="account-form-item-label">{this.styleNames[config.name] || config.name}</label>
 				<input
 					type={this.customTypes[config.name] || 'text'}
 					value={value}
@@ -143,7 +150,7 @@ class SystemConfigForm extends React.Component<{
 					className="systemSettingsForm-control-input"
 				/>
 				<div className="systemSettingsForm-control-actions">
-					<Button>Save</Button>
+					<Button className="button-sm">Save</Button>
 				</div>
 			</form>
 		)
@@ -159,7 +166,7 @@ class SystemConfigsForm extends React.Component {
 	}
 	render() {
 		return (
-			<div className="systemSettingsForm">
+			<div className="account-form">
 				{this.state.current &&
 					this.state.current.map((conf: any) => <SystemConfigForm key={conf.id} config={conf} />)}
 				<div />
