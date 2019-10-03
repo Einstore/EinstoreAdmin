@@ -143,9 +143,11 @@ export default class LoadMore extends React.Component<LoadMoreProps, LoadMoreSta
 				)}
 			>
 				{this.props.renderHeader && this.props.renderHeader(this)}
-				<div className={cn('LoadMore-items', this.props.itemsClassName)}>
-					{this.state.items && this.state.items.map(this.renderItem)}
-				</div>
+				{!!this.state.items &&
+					<div className={cn('LoadMore-items', this.props.itemsClassName)}>
+						{this.state.items && this.state.items.map(this.renderItem)}
+					</div>
+				}
 				<div className="LoadMore-tail" ref={this.tailRef} />
 				{this.state.isLoadingPages && <div className="LoadMore-loadingIndicator"></div>}
 				{this.renderEnd()}
