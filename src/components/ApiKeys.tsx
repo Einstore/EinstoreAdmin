@@ -1,19 +1,19 @@
-import React, { Component, ChangeEvent, FormEvent } from 'react'
+import React, { Component } from 'react'
 import '../components/card.sass'
 import { ApiKey } from '../connector/Model/ApiKey'
 import '../parts/api.sass'
 import IconPen from '../shapes/pen'
 import IconTrash from '../shapes/trash'
 import TeamName from './TeamName'
+import Tag from '../ui/Tag'
 import usure from '../utils/usure'
-import TextInput from './textInput'
-import Button from './button'
 import prettyDate from '../utils/prettyDate'
 import { ApiKeyType, apiKeyTypePairs } from '../api/types/ApiKeyType'
 import { Link } from '@reach/router'
 import IconPlus from 'shapes/plus'
 import pageTitle from '../utils/pageTitle'
 import CopyToClipboard from 'react-copy-to-clipboard'
+import filter from 'lodash'
 
 import { ReactComponent as IconCopy } from '../shapes/copy.svg'
 import { ReactComponent as IconCheck } from '../shapes/check.svg'
@@ -26,6 +26,7 @@ const apiKeyTypeClassnames = {
 
 interface RowProps {
 	name?: string
+	tags?: string
 	id?: string
 	team?: string
 	created?: string
@@ -52,23 +53,6 @@ export class Row extends React.Component<RowProps> {
 		})
 	}
 
-	handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-		this.setState({ name: e.target.value })
-	}
-
-	handleEditSubmit = (e: FormEvent) => {
-		e.preventDefault()
-		this.setState({ editing: false })
-
-		if (this.props.onChange && this.props.id) {
-			this.props.onChange({
-				id: this.props.id,
-				name: this.state.name,
-				type: this.props.type,
-			})
-		}
-	}
-
 	inputRef = (ref?: HTMLInputElement) => ref && ref.select()
 
 	render() {
@@ -90,23 +74,21 @@ export class Row extends React.Component<RowProps> {
 					<td>{this.props.team && <TeamName teamId={this.props.team} iconSize={32} />}</td>
 				)}
 				<td>
-					{this.state.editing ? (
-						<form className="card-editApiNameForm" onSubmit={this.handleEditSubmit}>
-							<TextInput
-								value={this.state.name}
-								onChange={this.handleNameChange}
-								inputRef={this.inputRef}
-							/>
-							<Button>Save</Button>
-						</form>
-					) : (
-						<span onClick={() => this.setState({ editing: true, name: this.props.name })}>
-							{this.props.name}
-						</span>
-					)}
+					<span onClick={() => {window.location.href = 'add-api-key/' + this.props.id}}>
+						{this.props.name}
+					</span>
 				</td>
 				<td className="apiKey-type" title={typeName}>
 					<span className={typeClassname}>{typeName}</span>
+				</td>
+				<td className="apiKey-tags">
+					{this.props.tags && (
+						<span>
+							{filter(this.props.tags.split(',')).map((tag: string) => (
+								<Tag value={tag} />
+							))}
+						</span>
+					)}
 				</td>
 				<td className="apiKey-date" title={this.props.created}>
 					{this.props.created && prettyDate(this.props.created)}
@@ -114,7 +96,7 @@ export class Row extends React.Component<RowProps> {
 				<td className="text-right">
 					<span
 						className="api-action api-action-blue"
-						onClick={() => this.setState({ editing: true, name: this.props.name })}
+						onClick={() => {window.location.href = 'edit-api-key/' + this.props.id}}
 					>
 						<IconPen /> Edit
 					</span>
@@ -171,7 +153,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 	}
 
 	componentWillUnmount() {
-		window.recentlyAddedApiKeys = []
+		window.recentlyAddedApiKeys = {}
 	}
 
 	handleDeleteKey = (id: string) => {
@@ -210,6 +192,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 										{!this.props.teamId && <td>Team</td>}
 										<td>Name/note</td>
 										<td>Type</td>
+										<td>Tags</td>
 										<td>Created</td>
 										<td className="text-right">Actions</td>
 									</tr>
@@ -222,6 +205,7 @@ export default class ApiKeys extends Component<ApiKeysProps, ApiKeysState> {
 												onChange={this.handleChangeKey}
 												key={item.id}
 												name={item.name}
+												tags={item.tags}
 												type={item.type}
 												created={item.created}
 												id={item.id}

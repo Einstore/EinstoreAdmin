@@ -89,6 +89,10 @@ function AddApiKeyRoute({ params }: LayoutChildProps) {
 	return <AddApiKey teamId={params.teamId} />
 }
 
+function EditApiKeyRoute({ params }: LayoutChildProps) {
+	return <AddApiKey apiKeyId={params.apiKeyId} />
+}
+
 interface AppState {
 	server?: {
 		icons: any
@@ -303,6 +307,7 @@ body {
 							)}
 							{auth && <Layout path="add-api-key" body={AddApiKeyRoute} header={Header} />}
 							{auth && <Layout path="add-api-key/:teamId" body={AddApiKeyRoute} header={Header} />}
+							{auth && <Layout path="edit-api-key/:apiKeyId" body={EditApiKeyRoute} header={Header} />}
 							{auth && <Layout path="team/new" body={AddTeamRoute} header={Header} />}
 							{auth && <Layout path="team/:teamId" body={TeamRoute} header={Header} />}
 							{auth && <Layout path="team" body={TeamRoute} header={Header} />}

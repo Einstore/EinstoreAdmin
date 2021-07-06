@@ -19,6 +19,7 @@ interface LayoutProps {
 	body: ComponentType<LayoutChildProps>
 	header: ComponentType<LayoutChildProps>
 	teamId?: string
+	apiKeyId?: string
 	appId?: string
 	buildId?: string
 	headerButtonView?: HeaderButtonView
@@ -119,6 +120,7 @@ export class Layout extends React.Component<RouteComponentProps<LayoutProps>, La
 	render() {
 		const params = {
 			teamId: this.props.teamId,
+			apiKeyId: this.props.apiKeyId,
 			appId: this.props.appId,
 			buildId: this.props.buildId,
 		}
