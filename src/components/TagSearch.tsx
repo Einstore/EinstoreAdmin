@@ -1,5 +1,5 @@
 import React from 'react'
-import AsyncSelect from 'react-select/lib/Async'
+import AsyncSelect from 'react-select/async'
 import { SearchSuggestionType, SearchSuggestion } from '../connector/Model/SearchSuggestion'
 import { App } from '../connector/Model/App'
 import { AppTag } from '../connector/Model/AppTag'
@@ -88,12 +88,6 @@ export default class WithCallbacks extends React.Component<Props, State> {
 		return inputValue
 	}
 
-	handleChange = (val: any[]) => {
-		if (this.props.onChange) {
-			this.props.onChange(val.map((item) => item.value))
-		}
-	}
-
 	componentDidMount() {
 		window.Einstore.commonTags(this.props.teamId || undefined).then((commonTags: any) => {
 			this.setState({
@@ -114,7 +108,11 @@ export default class WithCallbacks extends React.Component<Props, State> {
 				onInputChange={this.handleInputChange}
 				isMulti
 				placeholder="Search…"
-				onChange={this.handleChange}
+				onChange={(val) => {
+					if (this.props.onChange) {
+						this.props.onChange(val.map((item) => item?.value ?? null))
+					}
+				}}
 			/>
 		)
 	}

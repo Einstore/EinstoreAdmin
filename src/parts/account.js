@@ -66,7 +66,7 @@ export default class Account extends Component {
 	}
 
 	render() {
-		const { old, form } = this.state
+		const { old } = this.state
 
 		return (
 			<div className="sheet">

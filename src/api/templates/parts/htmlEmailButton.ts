@@ -1,4 +1,4 @@
-export default function(blocks: { label: string; href: string; center?: boolean }, params: any) {
+export default function htmlEmailButton(blocks: { label: string; href: string; center?: boolean }, params: any) {
 	const { label, href } = blocks
 	const center = blocks.center
 	const styles = {
