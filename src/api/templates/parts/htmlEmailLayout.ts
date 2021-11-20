@@ -1,4 +1,4 @@
-export default function(blocks: any, params: any) {
+export default function htmlEmailLayout(blocks: any, params: any) {
 	const { footer, content } = blocks
 	const center = blocks.center || false
 	const styles = {

@@ -61,7 +61,7 @@ services:
       start_period: 10s
 
   admin:
-    image: node:11-alpine
+    image: node:14-alpine
     command: yarn start
     working_dir: /src
     volumes:

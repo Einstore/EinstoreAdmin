@@ -12,4 +12,4 @@ docker_run \
 	--workdir "$(pwd)" \
 	--user "1000:1000" \
 	--entrypoint node \
-	node:11-alpine "$@"
+	node:14-alpine "$@"
