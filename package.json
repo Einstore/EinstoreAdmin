@@ -30,7 +30,7 @@
 		"fstream": ">=1.0.12",
 		"get-best-contrast-color": "^0.2.2",
 		"jwt-decode": "^2.2.0",
-		"lodash-es": "^4.17.11",
+		"lodash-es": "^4.17.21",
 		"md5": "^2.2.1",
 		"memoize-one": "^5.0.4",
 		"node-sass": "^4.12.0",
